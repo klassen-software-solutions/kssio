@@ -22,6 +22,9 @@
 		AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A92188ED5A006D635F /* http_error_category.hpp */; };
 		AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AA2188ED5A006D635F /* http_error_category.cpp */; };
 		AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AD2188F2E9006D635F /* http_error_category.cpp */; };
+		AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780AF2188F5E9006D635F /* curl_error_category.hpp */; };
+		AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B02188F5E9006D635F /* curl_error_category.cpp */; };
+		AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B42188FEDF006D635F /* curl_error_category.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,10 @@
 		AA4780A92188ED5A006D635F /* http_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = http_error_category.hpp; sourceTree = "<group>"; };
 		AA4780AA2188ED5A006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
 		AA4780AD2188F2E9006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
+		AA4780AF2188F5E9006D635F /* curl_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = curl_error_category.hpp; sourceTree = "<group>"; };
+		AA4780B02188F5E9006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
+		AA4780B32188F9D6006D635F /* _raii.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _raii.hpp; sourceTree = "<group>"; };
+		AA4780B42188FEDF006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +134,9 @@
 		AA4780802188E3EC006D635F /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AA4780B32188F9D6006D635F /* _raii.hpp */,
+				AA4780B02188F5E9006D635F /* curl_error_category.cpp */,
+				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
 				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
@@ -142,10 +152,11 @@
 		AA47808C2188E435006D635F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AA4780B42188FEDF006D635F /* curl_error_category.cpp */,
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
+				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
 				AA4780932188E5F8006D635F /* ksstest.hpp */,
-				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
 				AA4780962188E613006D635F /* main.cpp */,
 				AA4780A72188EA09006D635F /* net_utility.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
@@ -167,6 +178,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* net_utility.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
@@ -277,6 +289,7 @@
 				AA4780A52188E95A006D635F /* net_utility.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
+				AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */,
 				AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */,
 				AA4780A82188EA09006D635F /* net_utility.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
@@ -426,6 +440,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -439,6 +454,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

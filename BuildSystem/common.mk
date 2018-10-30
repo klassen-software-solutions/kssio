@@ -144,7 +144,7 @@ Sources/_license_internal.h: LICENSE
 	@echo "" >> $@
 
 Sources/all.h: $(HDRS)
-	(cd Sources ; $(BUILDSYSTEMDIR)/generate_all_h.sh) > $@
+	(cd Sources ; PREFIX=$(LIBNAME) $(BUILDSYSTEMDIR)/generate_all_h.sh) > $@
 
 $(HEADERDIR):
 	echo build $(HEADERDIR)

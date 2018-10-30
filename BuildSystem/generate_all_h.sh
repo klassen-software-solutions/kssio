@@ -1,10 +1,7 @@
 #!/bin/sh
 
-cwd=`pwd`
-prefix=`basename $cwd`
-
-echo "#ifndef ${prefix}_all_h"
-echo "#define ${prefix}_all_h"
+echo "#ifndef ${PREFIX}_all_h"
+echo "#define ${PREFIX}_all_h"
 echo ""
 echo "/* This file is auto-generated and should not be edited. */"
 echo ""

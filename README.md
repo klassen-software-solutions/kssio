@@ -1,6 +1,10 @@
 # kssio
 C++ I/O library (networking, files, and streams)
 
+## Dependancies
+
+* libcurl
+
 ## Contributing
 
 If you wish to make changes to this library that you believe will be useful to others, you can
