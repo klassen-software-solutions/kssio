@@ -1,7 +1,7 @@
 .build
 docs
 docs.zip
-project.workspace
+project.xcworkspace
 REVISION
 Sources/_license_internal.h
 Sources/_version_internal.h

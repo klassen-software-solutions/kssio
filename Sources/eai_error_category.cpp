@@ -21,11 +21,11 @@ using namespace std;
 namespace {
     class EaiErrorCategory : public error_category {
     public:
-        virtual const char* name() const noexcept override {
+        const char* name() const noexcept override {
             return "eai";
         }
 
-        virtual string message(int val) const override {
+        string message(int val) const override {
             const char* msg = gai_strerror(val);
             assert(msg != nullptr);
             return (msg == nullptr ? string() : string(msg));
@@ -35,8 +35,8 @@ namespace {
 
 
 const error_category& kss::io::net::eaiErrorCategory() noexcept {
-    static EaiErrorCategory _instance;
-    return _instance;
+    static EaiErrorCategory instance;
+    return instance;
 }
 
 error_code kss::io::net::eaiErrorCode(int error) noexcept {

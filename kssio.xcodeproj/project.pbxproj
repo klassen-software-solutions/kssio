@@ -19,6 +19,9 @@
 		AA4780A52188E95A006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A32188E95A006D635F /* net_utility.cpp */; };
 		AA4780A62188E95A006D635F /* net_utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A42188E95A006D635F /* net_utility.hpp */; };
 		AA4780A82188EA09006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A72188EA09006D635F /* net_utility.cpp */; };
+		AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A92188ED5A006D635F /* http_error_category.hpp */; };
+		AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AA2188ED5A006D635F /* http_error_category.cpp */; };
+		AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AD2188F2E9006D635F /* http_error_category.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,9 @@
 		AA4780A32188E95A006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
 		AA4780A42188E95A006D635F /* net_utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_utility.hpp; sourceTree = "<group>"; };
 		AA4780A72188EA09006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
+		AA4780A92188ED5A006D635F /* http_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = http_error_category.hpp; sourceTree = "<group>"; };
+		AA4780AA2188ED5A006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
+		AA4780AD2188F2E9006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +129,8 @@
 			children = (
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
+				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
+				AA4780A92188ED5A006D635F /* http_error_category.hpp */,
 				AA4780A32188E95A006D635F /* net_utility.cpp */,
 				AA4780A42188E95A006D635F /* net_utility.hpp */,
 				AA47808E2188E5A7006D635F /* version.cpp */,
@@ -137,6 +145,7 @@
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
 				AA4780932188E5F8006D635F /* ksstest.hpp */,
+				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
 				AA4780962188E613006D635F /* main.cpp */,
 				AA4780A72188EA09006D635F /* net_utility.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
@@ -158,6 +167,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* net_utility.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
 				AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */,
@@ -265,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA4780A52188E95A006D635F /* net_utility.cpp in Sources */,
+				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
 			);
@@ -279,6 +290,7 @@
 				AA4780972188E613006D635F /* version.cpp in Sources */,
 				AA4780942188E5F8006D635F /* ksstest.cpp in Sources */,
 				AA4780982188E613006D635F /* main.cpp in Sources */,
+				AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
