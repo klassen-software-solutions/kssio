@@ -1,6 +1,6 @@
 //
 //  version.hpp
-//  ksstnet
+//  kssio
 //
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
 //  Licensing follows the MIT License.

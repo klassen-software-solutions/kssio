@@ -13,6 +13,12 @@
 		AA4780972188E613006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780952188E613006D635F /* version.cpp */; };
 		AA4780982188E613006D635F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780962188E613006D635F /* main.cpp */; };
 		AA47809C2188E70D006D635F /* libkssio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AA4780722188E29F006D635F /* libkssio.dylib */; };
+		AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47809D2188E871006D635F /* eai_error_category.cpp */; };
+		AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA47809E2188E871006D635F /* eai_error_category.hpp */; };
+		AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A12188E917006D635F /* eai_error_category.cpp */; };
+		AA4780A52188E95A006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A32188E95A006D635F /* net_utility.cpp */; };
+		AA4780A62188E95A006D635F /* net_utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A42188E95A006D635F /* net_utility.hpp */; };
+		AA4780A82188EA09006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A72188EA09006D635F /* net_utility.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +58,12 @@
 		AA4780932188E5F8006D635F /* ksstest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ksstest.hpp; sourceTree = "<group>"; };
 		AA4780952188E613006D635F /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = version.cpp; sourceTree = "<group>"; };
 		AA4780962188E613006D635F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		AA47809D2188E871006D635F /* eai_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = eai_error_category.cpp; sourceTree = "<group>"; };
+		AA47809E2188E871006D635F /* eai_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = eai_error_category.hpp; sourceTree = "<group>"; };
+		AA4780A12188E917006D635F /* eai_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = eai_error_category.cpp; sourceTree = "<group>"; };
+		AA4780A32188E95A006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
+		AA4780A42188E95A006D635F /* net_utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_utility.hpp; sourceTree = "<group>"; };
+		AA4780A72188EA09006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +121,10 @@
 		AA4780802188E3EC006D635F /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AA47809D2188E871006D635F /* eai_error_category.cpp */,
+				AA47809E2188E871006D635F /* eai_error_category.hpp */,
+				AA4780A32188E95A006D635F /* net_utility.cpp */,
+				AA4780A42188E95A006D635F /* net_utility.hpp */,
 				AA47808E2188E5A7006D635F /* version.cpp */,
 				AA47808F2188E5A7006D635F /* version.hpp */,
 			);
@@ -118,9 +134,11 @@
 		AA47808C2188E435006D635F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AA4780A12188E917006D635F /* eai_error_category.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
 				AA4780932188E5F8006D635F /* ksstest.hpp */,
 				AA4780962188E613006D635F /* main.cpp */,
+				AA4780A72188EA09006D635F /* net_utility.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
 			);
 			path = Tests;
@@ -140,7 +158,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780A62188E95A006D635F /* net_utility.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
+				AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +264,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780A52188E95A006D635F /* net_utility.cpp in Sources */,
+				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,6 +274,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */,
+				AA4780A82188EA09006D635F /* net_utility.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
 				AA4780942188E5F8006D635F /* ksstest.cpp in Sources */,
 				AA4780982188E613006D635F /* main.cpp in Sources */,
