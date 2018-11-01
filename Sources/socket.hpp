@@ -37,7 +37,7 @@ namespace kss {
              @param socket the socket we wish to bind
              @param port the port we wish to bind to, may be nextAvailablePort to automatically
                 choose one.
-             @param addr details of the address we wish to bind. The port of this address
+             @param addr detas of the address we wish to bind. The port of this address
              will be changed as part of the binding. If NULL, then an address that assumes
              the AF_INET family and INADDR_ANY address will be used.
              @param addrLen the length of whatever was passed to addr.
