@@ -10,10 +10,6 @@
 #ifndef kssio_net_utility_hpp
 #define kssio_net_utility_hpp
 
-/*!
- * @file general network utility methods
- */
-
 #include <cassert>
 #include <cstdint>
 #include <limits>

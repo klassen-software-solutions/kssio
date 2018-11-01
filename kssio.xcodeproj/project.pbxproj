@@ -57,6 +57,7 @@
 		AA16FA40218A556C0059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
 		AA16FA41218A556C0059E8DB /* socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = socket.hpp; sourceTree = "<group>"; };
 		AA16FA44218A56950059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
+		AA16FA47218A66D70059E8DB /* intro.dox */ = {isa = PBXFileReference; lastKnownFileType = text; path = intro.dox; sourceTree = "<group>"; };
 		AA4780722188E29F006D635F /* libkssio.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libkssio.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4780792188E309006D635F /* BuildSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildSystem; sourceTree = "<group>"; };
 		AA47807B2188E329006D635F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -149,6 +150,7 @@
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
 				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
 				AA4780A92188ED5A006D635F /* http_error_category.hpp */,
+				AA16FA47218A66D70059E8DB /* intro.dox */,
 				AA4780A32188E95A006D635F /* net_utility.cpp */,
 				AA4780A42188E95A006D635F /* net_utility.hpp */,
 				AA16FA40218A556C0059E8DB /* socket.cpp */,
