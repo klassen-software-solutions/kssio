@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
-#include <kss/io/net_utility.hpp>
+#include <kss/io/utility.hpp>
 #include "ksstest.hpp"
 
 using namespace std;

@@ -1,5 +1,5 @@
 //
-//  net_utility.cpp
+//  utility.cpp
 //  kssio
 //
 //  Created by Steven W. Klassen on 2014-04-11.
@@ -10,11 +10,13 @@
 #include <cstddef>
 #include <cstring>
 
-#include "net_utility.hpp"
+#include "utility.hpp"
 
 using namespace std;
 using namespace kss::io::net;
 
+
+// MARK: namespace kss::io::net
 
 // This is a simple, compile-time means of determining the endianness of our architecture.
 // At least I think the compiler should optimize this down to either 1 or 0.

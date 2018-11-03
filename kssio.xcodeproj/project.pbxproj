@@ -19,15 +19,22 @@
 		AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47809D2188E871006D635F /* eai_error_category.cpp */; };
 		AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA47809E2188E871006D635F /* eai_error_category.hpp */; };
 		AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A12188E917006D635F /* eai_error_category.cpp */; };
-		AA4780A52188E95A006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A32188E95A006D635F /* net_utility.cpp */; };
-		AA4780A62188E95A006D635F /* net_utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A42188E95A006D635F /* net_utility.hpp */; };
-		AA4780A82188EA09006D635F /* net_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A72188EA09006D635F /* net_utility.cpp */; };
+		AA4780A52188E95A006D635F /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A32188E95A006D635F /* utility.cpp */; };
+		AA4780A62188E95A006D635F /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A42188E95A006D635F /* utility.hpp */; };
+		AA4780A82188EA09006D635F /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780A72188EA09006D635F /* utility.cpp */; };
 		AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780A92188ED5A006D635F /* http_error_category.hpp */; };
 		AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AA2188ED5A006D635F /* http_error_category.cpp */; };
 		AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780AD2188F2E9006D635F /* http_error_category.cpp */; };
 		AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780AF2188F5E9006D635F /* curl_error_category.hpp */; };
 		AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B02188F5E9006D635F /* curl_error_category.cpp */; };
 		AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B42188FEDF006D635F /* curl_error_category.cpp */; };
+		AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF0E218BA04E000540E4 /* interface.hpp */; };
+		AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF0F218BA04F000540E4 /* interface.cpp */; };
+		AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */; };
+		AAC8CF17218BA6AB000540E4 /* _tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */; };
+		AAC8CF1B218C334D000540E4 /* iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF1A218C334D000540E4 /* iterator.hpp */; };
+		AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF1F218CF928000540E4 /* iterator.cpp */; };
+		AAC8CF22218DF82B000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF21218DF82B000540E4 /* interface.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,9 +82,9 @@
 		AA47809D2188E871006D635F /* eai_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = eai_error_category.cpp; sourceTree = "<group>"; };
 		AA47809E2188E871006D635F /* eai_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = eai_error_category.hpp; sourceTree = "<group>"; };
 		AA4780A12188E917006D635F /* eai_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = eai_error_category.cpp; sourceTree = "<group>"; };
-		AA4780A32188E95A006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
-		AA4780A42188E95A006D635F /* net_utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_utility.hpp; sourceTree = "<group>"; };
-		AA4780A72188EA09006D635F /* net_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_utility.cpp; sourceTree = "<group>"; };
+		AA4780A32188E95A006D635F /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
+		AA4780A42188E95A006D635F /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
+		AA4780A72188EA09006D635F /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		AA4780A92188ED5A006D635F /* http_error_category.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = http_error_category.hpp; sourceTree = "<group>"; };
 		AA4780AA2188ED5A006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
 		AA4780AD2188F2E9006D635F /* http_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_error_category.cpp; sourceTree = "<group>"; };
@@ -85,6 +92,13 @@
 		AA4780B02188F5E9006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
 		AA4780B32188F9D6006D635F /* _raii.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _raii.hpp; sourceTree = "<group>"; };
 		AA4780B42188FEDF006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
+		AAC8CF0E218BA04E000540E4 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
+		AAC8CF0F218BA04F000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
+		AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _tokenizer.hpp; sourceTree = "<group>"; };
+		AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = _tokenizer.cpp; sourceTree = "<group>"; };
+		AAC8CF1A218C334D000540E4 /* iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iterator.hpp; sourceTree = "<group>"; };
+		AAC8CF1F218CF928000540E4 /* iterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iterator.cpp; sourceTree = "<group>"; };
+		AAC8CF21218DF82B000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,15 +158,20 @@
 			isa = PBXGroup;
 			children = (
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
+				AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */,
+				AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */,
 				AA4780B02188F5E9006D635F /* curl_error_category.cpp */,
 				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
 				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
 				AA4780A92188ED5A006D635F /* http_error_category.hpp */,
+				AAC8CF0F218BA04F000540E4 /* interface.cpp */,
+				AAC8CF0E218BA04E000540E4 /* interface.hpp */,
 				AA16FA47218A66D70059E8DB /* intro.dox */,
-				AA4780A32188E95A006D635F /* net_utility.cpp */,
-				AA4780A42188E95A006D635F /* net_utility.hpp */,
+				AAC8CF1A218C334D000540E4 /* iterator.hpp */,
+				AA4780A32188E95A006D635F /* utility.cpp */,
+				AA4780A42188E95A006D635F /* utility.hpp */,
 				AA16FA40218A556C0059E8DB /* socket.cpp */,
 				AA16FA41218A556C0059E8DB /* socket.hpp */,
 				AA47808E2188E5A7006D635F /* version.cpp */,
@@ -167,10 +186,12 @@
 				AA4780B42188FEDF006D635F /* curl_error_category.cpp */,
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
 				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
+				AAC8CF21218DF82B000540E4 /* interface.cpp */,
+				AAC8CF1F218CF928000540E4 /* iterator.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
 				AA4780932188E5F8006D635F /* ksstest.hpp */,
 				AA4780962188E613006D635F /* main.cpp */,
-				AA4780A72188EA09006D635F /* net_utility.cpp */,
+				AA4780A72188EA09006D635F /* utility.cpp */,
 				AA16FA44218A56950059E8DB /* socket.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
 			);
@@ -193,10 +214,13 @@
 			files = (
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
-				AA4780A62188E95A006D635F /* net_utility.hpp in Headers */,
+				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
 				AA16FA43218A556C0059E8DB /* socket.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
+				AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */,
 				AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */,
+				AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */,
+				AAC8CF1B218C334D000540E4 /* iterator.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,9 +324,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA4780A52188E95A006D635F /* net_utility.cpp in Sources */,
+				AA4780A52188E95A006D635F /* utility.cpp in Sources */,
+				AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
+				AAC8CF17218BA6AB000540E4 /* _tokenizer.cpp in Sources */,
 				AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */,
 				AA16FA42218A556C0059E8DB /* socket.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
@@ -315,8 +341,10 @@
 			files = (
 				AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */,
 				AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */,
-				AA4780A82188EA09006D635F /* net_utility.cpp in Sources */,
+				AA4780A82188EA09006D635F /* utility.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
+				AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */,
+				AAC8CF22218DF82B000540E4 /* interface.cpp in Sources */,
 				AA16FA45218A56950059E8DB /* socket.cpp in Sources */,
 				AA4780942188E5F8006D635F /* ksstest.cpp in Sources */,
 				AA4780982188E613006D635F /* main.cpp in Sources */,

@@ -1,5 +1,5 @@
 //
-//  net_utility.hpp
+//  utility.hpp
 //  kssio
 //
 //  Created by Steven W. Klassen on 2014-04-11.
@@ -12,13 +12,82 @@
 
 #include <cassert>
 #include <cstdint>
+#include <exception>
 #include <limits>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 #include <arpa/inet.h>
 
 namespace kss {
     namespace io {
+        namespace _private {
+            // This is not part of the public API. Don't use anything in this namespace
+            // directly.
+
+
+            /*!
+             By subclassing your type T from add_rel_ops<T> this will add the "missing" operators
+             provided that T defines operator== and operator<.
+
+             This is similar to "using namespace rel_ops;" but does not have the potential
+             side effects of adding a namespace.
+
+             This is "borrowed" from kssutil.
+             */
+            template <class T>
+            struct add_rel_ops {
+                inline bool operator!=(const T& t) const noexcept {
+                    const T* self = static_cast<const T*>(this);
+                    return !(*self == t);
+                }
+
+                inline bool operator<=(const T& t) const noexcept {
+                    const T* self = static_cast<const T*>(this);
+                    return (*self < t || *self == t);
+                }
+
+                inline bool operator>(const T& t) const noexcept {
+                    const T* self = static_cast<const T*>(this);
+                    return (!(*self == t) && !(*self < t));
+                }
+
+                inline bool operator>=(const T& t) const noexcept {
+                    const T* self = static_cast<const T*>(this);
+                    return !(*self < t);
+                }
+            };
+
+        }
+
+
+        
+        /*!
+         Thrown by operations that attempt to read something past its end. This is intended
+         to be used to handle cases where we cannot efficiently determine the end until we
+         attempt the read and allow it to fail. For example, the input_iterator class
+         will trap this exception if thrown by the operator>>() method in order to handle
+         the cases were eof() cannot be determined until operator>>() is called.
+         */
+        class Eof : public std::exception {
+        public:
+            virtual const char* what() const noexcept { return "eof"; }
+        };
+
+        /*!
+         Thrown by classes when they are called in methods not allowed in their current state.
+         A typical example is the kss::iterators classes which throw this if you reference
+         an iterator that is not currently dereferenceable (e.g. because it == end() for
+         example.
+         */
+        class InvalidState : public std::logic_error {
+        public:
+            explicit InvalidState(const char* what_arg) : std::logic_error(what_arg) {}
+            explicit InvalidState(const std::string& what_arg) : std::logic_error(what_arg) {}
+        };
+
+
         namespace net {
 
             /*!
@@ -117,6 +186,7 @@ namespace kss {
                 return "text/plain";
             }
         }
+
     }
 }
 
