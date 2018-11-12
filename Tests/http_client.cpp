@@ -198,7 +198,7 @@ static TestSuite ts("net::http_client", {
         c.asyncHead("/hello", http_header_t(), cb2);
         c.asyncPut("/hello", http_header_t(), s1, cb3);
         c.asyncPost("/hello", http_header_t(), s2, cb4);
-        post(c, "/hello11", "This error will also be ignored.", false);
+        post(c, "/hello", "This error will also be ignored.", false);
         c.wait();
 
         const auto err = error_code(CURLE_COULDNT_RESOLVE_HOST, curlErrorCategory());
@@ -206,5 +206,31 @@ static TestSuite ts("net::http_client", {
         KSS_ASSERT(cb2.code == err);
         KSS_ASSERT(cb3.code == err);
         KSS_ASSERT(cb4.code == err);
-   })
+    }),
+    make_pair("maxQueueSize", [](TestSuite&) {
+        // Not sure how to test for the general case - perhaps create a server that
+        // never responds. But we can test the logic by setting a queue size of 0, which
+        // effectively disables asynchronous operations.
+        HttpClient c("http://127.0.0.1:8080/", 0);
+        const auto err = error_code(EAGAIN, system_category());
+        OurResponseCallback cb1, cb2, cb3, cb4;
+        stringstream s1, s2;
+        s1 << "Hello world" << endl;
+        s2 << "Hello world" << endl;
+        KSS_ASSERT(throwsSystemErrorWithCode(err, [&] {
+            c.asyncGet("/hello", http_header_t(), cb1);
+        }));
+        KSS_ASSERT(throwsSystemErrorWithCode(err, [&] {
+            c.asyncHead("/hello", http_header_t(), cb2);
+        }));
+        KSS_ASSERT(throwsSystemErrorWithCode(err, [&] {
+            c.asyncPut("/hello", http_header_t(), s1, cb3);
+        }));
+        KSS_ASSERT(throwsSystemErrorWithCode(err, [&] {
+            c.asyncPost("/hello", http_header_t(), s2, cb4);
+        }));
+        KSS_ASSERT(throwsSystemErrorWithCode(err, [&] {
+            post(c, "/hello", "Hi!");
+        }));
+    })
 });

@@ -18,7 +18,7 @@ namespace kss {
         namespace _private {
 
             // "Borrowed" from kssthread
-// TODO: add a "maxPending" option
+
             /*!
              An action queue provides a single-thread processing queue that performs
              the actions it is given in order. As long as actions are pending, it will

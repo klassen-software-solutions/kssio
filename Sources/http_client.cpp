@@ -177,12 +177,13 @@ namespace {
 
 struct HttpClient::Impl {
     string      url;
-    ActionQueue pendingActions { 50 };
+    ActionQueue pendingActions;
 
     // Items protected by the sending lock.
     mutex       curlLock;
     CURL*       curl = nullptr;
 
+    Impl(size_t maxQueueSize) : pendingActions(ActionQueue(maxQueueSize)) {}
     void sendRequest(request& req);
 };
 
@@ -277,8 +278,7 @@ HttpClient::HttpClient() {
     _impl = nullptr;
 }
 
-HttpClient::HttpClient(const string& url) {
-    _impl = new Impl();
+HttpClient::HttpClient(const string& url, size_t maxQueueSize) : _impl(new Impl(maxQueueSize)) {
     _impl->curl = curl_easy_init();
     if (!_impl->curl) {
         delete _impl;
@@ -289,8 +289,9 @@ HttpClient::HttpClient(const string& url) {
     rtrim(_impl->url, '/');
 }
 
-HttpClient::HttpClient(const string& protocol, const string& machine, unsigned port)
-: HttpClient(protocol + "://" + machine + ":" + to_string(port))
+HttpClient::HttpClient(const string& protocol, const string& machine, unsigned port,
+                       size_t maxQueueSize)
+: HttpClient(protocol + "://" + machine + ":" + to_string(port), maxQueueSize)
 {
 }
 

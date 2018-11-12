@@ -7,10 +7,11 @@
 //  Licensing follows the MIT License.
 //
 
-#ifndef __KSSCore_net_http__
-#define __KSSCore_net_http__
+#ifndef kssio_http_client_hpp
+#define kssio_http_client_hpp
 
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -75,6 +76,8 @@ namespace kss {
              */
             class HttpClient {
             public:
+                static constexpr size_t noLimit = std::numeric_limits<size_t>::max();
+
                 /*!
                  Construct a client with a connection to the given url. Note that there is
                  a "lazy connection" in that the connection to the url is not made until
@@ -85,12 +88,15 @@ namespace kss {
 
                   - url the fully qualified url
                   - protocol, machine, port the items used to make a url.
+                  - maxQueueSize, the maximum number of asynchronous operations allowed
+                        to be pending.
                  */
                 HttpClient();
-                explicit HttpClient(const std::string& url);
+                explicit HttpClient(const std::string& url, size_t maxQueueSize = noLimit);
                 HttpClient(const std::string& protocol,
                            const std::string& machine,
-                           unsigned port);
+                           unsigned port,
+                           size_t maxQueueSize = noLimit);
                 HttpClient(HttpClient&& c);
                 HttpClient(const HttpClient&) = delete;
                 ~HttpClient() noexcept;
@@ -160,9 +166,12 @@ namespace kss {
                     must remain valid at least until the asynchronous call has been
                     completed.
                  @throws system_error if anything goes wrong writing the request. If this error
-                    is EAGAIN it may mean another thread has called wait(). In that cause you
-                    may wish to try the request again as it will be allowed once wait has
-                    completed.
+                    is EAGAIN it may be mean following, all of which imply trying again later:
+                      - Another thread has called wait. No additional operations will be
+                        accepted until the wait has completed.
+                      - There are too many pending asynchronous operations (as defined by
+                        maxQueueSize in the constructor). No additional operations will be
+                        accepted until some of the existing ones have completed.
                  */
                 void asyncGet(const std::string& path,
                               http_header_t&& requestHeader,
@@ -259,6 +268,9 @@ namespace kss {
              @param path the path of the request (may be empty if the client url is sufficient)
              @param t the object to serialize to the stream and send.
              @param verbose if false then syslog will not be called, even for errors
+             @throws system_error with EAGAIN if the queue is currently in wait mode, or if
+                there are too many pending asynchronous operations. In either event, you
+                can try again later.
              */
             template <class T>
             void post(HttpClient& c, const std::string& path, const T& t, bool verbose=true) {
