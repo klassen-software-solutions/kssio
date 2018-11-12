@@ -68,8 +68,8 @@ static TestSuite ts("net::utility", {
     make_pair("mime types", [](TestSuite&) {
         int i = 0;
         string s;
-        KSS_ASSERT(guess_mime_type(i) == "text/plain");
-        KSS_ASSERT(guess_mime_type<long>() == "text/plain");
-        KSS_ASSERT(guess_mime_type(s) == "text/plain");
+        KSS_ASSERT(guessMimeType(i) == "text/plain");
+        KSS_ASSERT(guessMimeType<long>() == "text/plain");
+        KSS_ASSERT(guessMimeType(s) == "text/plain");
     })
 });

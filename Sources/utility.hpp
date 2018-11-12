@@ -182,7 +182,7 @@ namespace kss {
              types T unless they are specialized to return something else.
              */
             template <class T>
-            std::string guess_mime_type(const T& t = T()) {
+            std::string guessMimeType(const T& t = T()) {
                 return "text/plain";
             }
         }

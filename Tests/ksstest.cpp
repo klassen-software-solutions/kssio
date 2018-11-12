@@ -4,12 +4,8 @@
 //
 //  Created by Steven W. Klassen on 2018-04-03.
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
+//  Licensing follows the MIT License.
 //
-// However a license is hereby granted for this code to be used, modified and redistributed
-// without restriction or requirement, other than you cannot hinder anyone else from doing
-// the same.
-
-#include "ksstest.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -34,6 +30,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
+
+#include "ksstest.hpp"
 
 using namespace std;
 using namespace kss::test;
@@ -78,9 +76,9 @@ namespace { namespace xml {
          combined with an optional child generator (which become the children).
          */
         struct node {
-            string                                name;
-            map<string, string>                    attributes;
-            string                                text;
+            string                               name;
+            map<string, string>                  attributes;
+            string                               text;
             mutable vector<node_generator_fn>    children;
 
             /*!
@@ -234,7 +232,7 @@ namespace { namespace json {
          quoted, all others will assumed to be strings and will be escaped and quoted.
          */
         struct node {
-            map<string, string>                attributes;
+            map<string, string>              attributes;
             mutable vector<array_child_t>    arrays;
 
             /*!
@@ -378,7 +376,7 @@ namespace {
     }
 
     struct TestError {
-        string errorType;            // The name of the exception.
+        string errorType;           // The name of the exception.
         string errorMessage;        // The what() of the exception.
 
         operator string() const {
@@ -394,12 +392,12 @@ namespace {
     };
 
     struct TestCaseWrapper {
-        string                    name;
-        TestSuite*                owner = nullptr;
-        TestSuite::test_case_fn    fn;
+        string                  name;
+        TestSuite*              owner = nullptr;
+        TestSuite::test_case_fn fn;
         unsigned int            assertions = 0;
-        vector<TestError>        errors;
-        vector<string>            failures;
+        vector<TestError>       errors;
+        vector<string>          failures;
         bool                    skipped = false;
         fractional_seconds_t    durationOfTest;
 
@@ -409,9 +407,9 @@ namespace {
     };
 
     struct TestSuiteWrapper {
-        TestSuite*                 suite;
+        TestSuite*              suite;
         bool                    filteredOut = false;
-        string                    timestamp;
+        string                  timestamp;
         fractional_seconds_t    durationOfTestSuite;
         unsigned                numberOfErrors = 0;
         unsigned                numberOfFailedAssertions = 0;
@@ -423,14 +421,14 @@ namespace {
         }
     };
 
-    thread_local static TestSuiteWrapper*    currentSuite = nullptr;
+    thread_local static TestSuiteWrapper*   currentSuite = nullptr;
     thread_local static TestCaseWrapper*    currentTest = nullptr;
-    static bool                                isQuiet = false;
-    static bool                                isVerbose = false;
-    static bool                                isParallel = true;
-    static string                            filter;
-    static string                            xmlReportFilename;
-    static string                            jsonReportFilename;
+    static bool                             isQuietMode = false;
+    static bool                             isVerboseMode = false;
+    static bool                             isParallel = true;
+    static string                           filter;
+    static string                           xmlReportFilename;
+    static string                           jsonReportFilename;
 
     // Lazy instantiation of the testSuites singleton.
     vector<TestSuiteWrapper>* testSuites() {
@@ -442,11 +440,11 @@ namespace {
 
     // Summary of test results.
     struct TestResultSummary {
-        mutex                    lock;
-        string                    programName;
-        string                     nameOfTestRun;
-        string                    nameOfHost;
-        string                    timeOfTestRun;
+        mutex                   lock;
+        string                  programName;
+        string                  nameOfTestRun;
+        string                  nameOfHost;
+        string                  timeOfTestRun;
         fractional_seconds_t    durationOfTestRun;
         unsigned                numberOfErrors = 0;
         unsigned                numberOfFailures = 0;
@@ -623,10 +621,10 @@ namespace {
                         printUsageMessage(cout);
                         return false;
                     case 'q':
-                        isQuiet = true;
+                        isQuietMode = true;
                         break;
                     case 'v':
-                        isVerbose = true;
+                        isVerboseMode = true;
                         break;
                     case 'N':
                         isParallel = false;
@@ -644,10 +642,10 @@ namespace {
             }
 
             // Fix any command line dependances.
-            if (isQuiet) {
-                isVerbose = false;
+            if (isQuietMode) {
+                isVerboseMode = false;
             }
-            if (isVerbose) {
+            if (isVerboseMode) {
                 isParallel = false;
             }
         }
@@ -711,8 +709,8 @@ namespace {
 
 struct TestSuite::Impl {
     TestSuite*                parent = nullptr;
-    string                     name;
-    vector<TestCaseWrapper>    tests;
+    string                    name;
+    vector<TestCaseWrapper>   tests;
 
     // Add the BeforeAll and AfterAll "tests" if appropriate.
     void addBeforeAndAfterAll() {
@@ -748,18 +746,18 @@ struct TestSuite::Impl {
         }
         catch (const SkipTestCase&) {
             t.skipped = true;
-            if (isVerbose) {
+            if (isVerboseMode) {
                 cout << "SKIPPED";
             }
         }
         catch (const exception& e) {
-            if (isVerbose) {
+            if (isVerboseMode) {
                 cout << "E";
             }
             t.errors.push_back(TestError::makeError(e));
         }
         catch (...) {
-            if (isVerbose) {
+            if (isVerboseMode) {
                 cout << "E";
             }
             TestError err;
@@ -824,9 +822,9 @@ struct TestSuite::Impl {
 
 namespace {
     void printTestRunHeader() {
-        if (!isQuiet) {
+        if (!isQuietMode) {
             cout << "Running test suites for " << reportSummary.nameOfTestRun << "..." << endl;;
-            if (!isVerbose) {
+            if (!isVerboseMode) {
                 cout << "  ";
                 flush(cout);    // Need flush before we start any threads.
             }
@@ -834,11 +832,11 @@ namespace {
     }
 
     void outputStandardSummary() {
-        if (!isQuiet) {
+        if (!isQuietMode) {
             if (isParallel) {
                 flush(cout);    // Ensure all the thread output is flushed.
             }
-            if (!isVerbose) {
+            if (!isVerboseMode) {
                 cout << endl;
             }
 
@@ -881,7 +879,7 @@ namespace {
             }
             cout << endl;
 
-            if (!isVerbose) {
+            if (!isVerboseMode) {
                 // If we are not verbose we need to identify the errors and failures. If
                 // we are verbose, then that information was displayed earlier.
                 if (numberOfErrors > 0) {
@@ -1001,14 +999,18 @@ namespace {
 
     void printXmlReport() {
         if (xmlReportFilename == "-") {
-            if (!isQuiet || jsonReportFilename == "-") cout << "==XML=REPORT===================================" << endl;
+            if (!isQuietMode || jsonReportFilename == "-") {
+                cout << "==XML=REPORT===================================" << endl;
+            }
             writeXmlReportToStream(cout);
         }
         else {
             write_file(xmlReportFilename, [&](ofstream& strm) {
                 writeXmlReportToStream(strm);
             });
-            if (!isQuiet) cout << "  Wrote XML report to " << xmlReportFilename << endl;
+            if (!isQuietMode) {
+                cout << "  Wrote XML report to " << xmlReportFilename << endl;
+            }
         }
     }
 
@@ -1060,19 +1062,23 @@ namespace {
 
     void printJsonReport() {
         if (jsonReportFilename == "-") {
-            if (!isQuiet || xmlReportFilename == "-") cout << "==JSON=REPORT==================================" << endl;
+            if (!isQuietMode || xmlReportFilename == "-") {
+                cout << "==JSON=REPORT==================================" << endl;
+            }
             writeJsonReportToStream(cout);
         }
         else {
             write_file(jsonReportFilename, [&](ofstream& strm) {
                 writeJsonReportToStream(strm);
             });
-            if (!isQuiet) cout << "  Wrote JSON report to " << jsonReportFilename << endl;
+            if (!isQuietMode) {
+                cout << "  Wrote JSON report to " << jsonReportFilename << endl;
+            }
         }
     }
 
     void printTestRunSummary() {
-        if (!isQuiet) {
+        if (!isQuietMode) {
             outputStandardSummary();
         }
         if (!xmlReportFilename.empty()) {
@@ -1084,13 +1090,15 @@ namespace {
     }
 
     void printTestSuiteHeader(const TestSuite& ts) {
-        if (isVerbose) cout << "  " << ts.name() << endl;
+        if (isVerboseMode) {
+            cout << "  " << ts.name() << endl;
+        }
     }
 
     void printTestSuiteSummary(const TestSuiteWrapper& w) {
-        if (!isQuiet) {
+        if (!isQuietMode) {
             const auto* impl = w.suite->_implementation();
-            if (isVerbose) {
+            if (isVerboseMode) {
                 unsigned numberOfAssertions = 0;
                 for (const auto& t : impl->tests) {
                     numberOfAssertions += t.assertions;
@@ -1138,13 +1146,13 @@ namespace {
     }
 
     void printTestCaseHeader(const TestCaseWrapper& t) {
-        if (isVerbose) {
+        if (isVerboseMode) {
             cout << "    " << t.name << " ";
         }
     }
 
     void printTestCaseSummary(const TestCaseWrapper& t) {
-        if (isVerbose) {
+        if (isVerboseMode) {
             cout << endl;
         }
     }
@@ -1226,6 +1234,14 @@ namespace kss { namespace test {
     void skip() {
         throw SkipTestCase();
     }
+
+    bool isQuiet() noexcept {
+        return isQuietMode;
+    }
+
+    bool isVerbose() noexcept {
+        return isVerboseMode;
+    }
 }}
 
 
@@ -1233,18 +1249,44 @@ namespace kss { namespace test {
 
 namespace kss { namespace test {
 
-    bool doesNotThrowException(function<void(void)> fn) {
+    bool doesNotThrowException(const function<void()>& fn) {
         bool caughtSomething = false;
         try {
             fn();
         }
-        catch (...) {
+        catch (const exception&) {
             caughtSomething = true;
         }
         return !caughtSomething;
     }
 
-    bool terminates(function<void(void)> fn) {
+    bool throwsSystemErrorWithCategory(const error_category& cat, const function<void()>& fn) {
+        bool caughtCorrectCategory = false;
+        try {
+            fn();
+        }
+        catch (const system_error& e) {
+            caughtCorrectCategory = (e.code().category() == cat);
+        }
+        catch (const exception&) {
+        }
+        return caughtCorrectCategory;
+    }
+
+    bool throwsSystemErrorWithCode(const error_code& code, const function<void()>& fn) {
+        bool caughtCorrectCode = false;
+        try {
+            fn();
+        }
+        catch (const system_error& e) {
+            caughtCorrectCode = (e.code() == code);
+        }
+        catch (const exception&) {
+        }
+        return caughtCorrectCode;
+    }
+
+    bool terminates(const function<void()>& fn) {
         // Need to ignore SIGCHLD for this test to work. We restore after the test. For some
         // reason we need to specify an empty signal handler and not just SIG_IGN.
         sig_t oldHandler = signal(SIGCHLD, my_signal_handler);
@@ -1323,7 +1365,7 @@ namespace kss { namespace test { namespace _private {
 
     void _success(void) noexcept {
         ++currentTest->assertions;
-        if (isVerbose) {
+        if (isVerboseMode) {
             cout << ".";
         }
     }
@@ -1331,7 +1373,7 @@ namespace kss { namespace test { namespace _private {
     void _failure(const char* expr, const char* filename, unsigned int line) noexcept {
         ++currentTest->assertions;
         currentTest->failures.push_back(basename(filename) + ": " + to_string(line) + ", " + expr);
-        if (isVerbose) {
+        if (isVerboseMode) {
             cout << "F";
         }
     }

@@ -20,7 +20,7 @@ static TestSuite ts("net::http_error_category", {
         const auto& cat = httpErrorCategory();
         KSS_ASSERT(string(cat.name()) == "http");
 
-        const error_code ec = httpErrorCode(HttpStatusCode::NoContent);
+        const error_code ec = make_error_code(HttpStatusCode::NoContent);
         KSS_ASSERT(ec.category() == cat);
         KSS_ASSERT(ec.value() == static_cast<int>(HttpStatusCode::NoContent));
     })

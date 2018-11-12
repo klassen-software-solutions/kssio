@@ -10,6 +10,8 @@
 		AA16FA42218A556C0059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA40218A556C0059E8DB /* socket.cpp */; };
 		AA16FA43218A556C0059E8DB /* socket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA16FA41218A556C0059E8DB /* socket.hpp */; };
 		AA16FA45218A56950059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA44218A56950059E8DB /* socket.cpp */; };
+		AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */; };
+		AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */; };
 		AA4780902188E5A7006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47808E2188E5A7006D635F /* version.cpp */; };
 		AA4780912188E5A7006D635F /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA47808F2188E5A7006D635F /* version.hpp */; };
 		AA4780942188E5F8006D635F /* ksstest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780922188E5F8006D635F /* ksstest.cpp */; };
@@ -28,6 +30,9 @@
 		AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA4780AF2188F5E9006D635F /* curl_error_category.hpp */; };
 		AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B02188F5E9006D635F /* curl_error_category.cpp */; };
 		AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B42188FEDF006D635F /* curl_error_category.cpp */; };
+		AA6184EE21937A8400901F6B /* http_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA6184ED21937A8400901F6B /* http_client.cpp */; };
+		AA70FB74219634D500EBFBC7 /* _action_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA70FB72219634D500EBFBC7 /* _action_queue.cpp */; };
+		AA70FB75219634D500EBFBC7 /* _action_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA70FB73219634D500EBFBC7 /* _action_queue.hpp */; };
 		AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF0E218BA04E000540E4 /* interface.hpp */; };
 		AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF0F218BA04F000540E4 /* interface.cpp */; };
 		AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */; };
@@ -35,6 +40,8 @@
 		AAC8CF1B218C334D000540E4 /* iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF1A218C334D000540E4 /* iterator.hpp */; };
 		AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF1F218CF928000540E4 /* iterator.cpp */; };
 		AAC8CF22218DF82B000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF21218DF82B000540E4 /* interface.cpp */; };
+		AAC8CF25218F92D7000540E4 /* http_client.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF23218F92D7000540E4 /* http_client.hpp */; };
+		AAC8CF26218F92D7000540E4 /* http_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF24218F92D7000540E4 /* http_client.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +72,8 @@
 		AA16FA41218A556C0059E8DB /* socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = socket.hpp; sourceTree = "<group>"; };
 		AA16FA44218A56950059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
 		AA16FA47218A66D70059E8DB /* intro.dox */ = {isa = PBXFileReference; lastKnownFileType = text; path = intro.dox; sourceTree = "<group>"; };
+		AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _stringutil.cpp; sourceTree = "<group>"; };
+		AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _stringutil.hpp; sourceTree = "<group>"; };
 		AA4780722188E29F006D635F /* libkssio.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libkssio.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4780792188E309006D635F /* BuildSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildSystem; sourceTree = "<group>"; };
 		AA47807B2188E329006D635F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -92,6 +101,10 @@
 		AA4780B02188F5E9006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
 		AA4780B32188F9D6006D635F /* _raii.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _raii.hpp; sourceTree = "<group>"; };
 		AA4780B42188FEDF006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
+		AA6184ED21937A8400901F6B /* http_client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_client.cpp; sourceTree = "<group>"; };
+		AA6184EF21937BBC00901F6B /* http_test_server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = http_test_server.py; sourceTree = "<group>"; };
+		AA70FB72219634D500EBFBC7 /* _action_queue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _action_queue.cpp; sourceTree = "<group>"; };
+		AA70FB73219634D500EBFBC7 /* _action_queue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _action_queue.hpp; sourceTree = "<group>"; };
 		AAC8CF0E218BA04E000540E4 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
 		AAC8CF0F218BA04F000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
 		AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _tokenizer.hpp; sourceTree = "<group>"; };
@@ -99,6 +112,8 @@
 		AAC8CF1A218C334D000540E4 /* iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iterator.hpp; sourceTree = "<group>"; };
 		AAC8CF1F218CF928000540E4 /* iterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iterator.cpp; sourceTree = "<group>"; };
 		AAC8CF21218DF82B000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
+		AAC8CF23218F92D7000540E4 /* http_client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = http_client.hpp; sourceTree = "<group>"; };
+		AAC8CF24218F92D7000540E4 /* http_client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_client.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,23 +172,29 @@
 		AA4780802188E3EC006D635F /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AA70FB72219634D500EBFBC7 /* _action_queue.cpp */,
+				AA70FB73219634D500EBFBC7 /* _action_queue.hpp */,
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
+				AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */,
+				AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */,
 				AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */,
 				AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */,
 				AA4780B02188F5E9006D635F /* curl_error_category.cpp */,
 				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
+				AAC8CF24218F92D7000540E4 /* http_client.cpp */,
+				AAC8CF23218F92D7000540E4 /* http_client.hpp */,
 				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
 				AA4780A92188ED5A006D635F /* http_error_category.hpp */,
 				AAC8CF0F218BA04F000540E4 /* interface.cpp */,
 				AAC8CF0E218BA04E000540E4 /* interface.hpp */,
 				AA16FA47218A66D70059E8DB /* intro.dox */,
 				AAC8CF1A218C334D000540E4 /* iterator.hpp */,
-				AA4780A32188E95A006D635F /* utility.cpp */,
-				AA4780A42188E95A006D635F /* utility.hpp */,
 				AA16FA40218A556C0059E8DB /* socket.cpp */,
 				AA16FA41218A556C0059E8DB /* socket.hpp */,
+				AA4780A32188E95A006D635F /* utility.cpp */,
+				AA4780A42188E95A006D635F /* utility.hpp */,
 				AA47808E2188E5A7006D635F /* version.cpp */,
 				AA47808F2188E5A7006D635F /* version.hpp */,
 			);
@@ -185,7 +206,9 @@
 			children = (
 				AA4780B42188FEDF006D635F /* curl_error_category.cpp */,
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
+				AA6184ED21937A8400901F6B /* http_client.cpp */,
 				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
+				AA6184EF21937BBC00901F6B /* http_test_server.py */,
 				AAC8CF21218DF82B000540E4 /* interface.cpp */,
 				AAC8CF1F218CF928000540E4 /* iterator.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
@@ -212,12 +235,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAC8CF25218F92D7000540E4 /* http_client.hpp in Headers */,
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
 				AA16FA43218A556C0059E8DB /* socket.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
 				AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */,
+				AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */,
+				AA70FB75219634D500EBFBC7 /* _action_queue.hpp in Headers */,
 				AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */,
 				AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */,
 				AAC8CF1B218C334D000540E4 /* iterator.hpp in Headers */,
@@ -324,13 +350,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA70FB74219634D500EBFBC7 /* _action_queue.cpp in Sources */,
 				AA4780A52188E95A006D635F /* utility.cpp in Sources */,
 				AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */,
+				AAC8CF26218F92D7000540E4 /* http_client.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
 				AAC8CF17218BA6AB000540E4 /* _tokenizer.cpp in Sources */,
 				AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */,
 				AA16FA42218A556C0059E8DB /* socket.cpp in Sources */,
+				AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +373,7 @@
 				AA4780A82188EA09006D635F /* utility.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
 				AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */,
+				AA6184EE21937A8400901F6B /* http_client.cpp in Sources */,
 				AAC8CF22218DF82B000540E4 /* interface.cpp in Sources */,
 				AA16FA45218A56950059E8DB /* socket.cpp in Sources */,
 				AA4780942188E5F8006D635F /* ksstest.cpp in Sources */,

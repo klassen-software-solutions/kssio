@@ -78,14 +78,23 @@ namespace kss {
              The category used to identify HTTP error codes.
              */
             const std::error_category& httpErrorCategory() noexcept;
-
-            /*!
-             Convert an HttpStatusCode to an error code.
-             */
-            inline std::error_code httpErrorCode(HttpStatusCode code) noexcept {
-                return std::error_code(static_cast<int>(code), httpErrorCategory());
-            }
         }
+    }
+}
+
+namespace std {
+
+    /*!
+     Specialization of is_error_code_enum to signify that http_error is an error code
+     enumeration.
+     */
+    template<> struct is_error_code_enum<kss::io::net::HttpStatusCode> : true_type {};
+
+    /*!
+     Override of make_error_code to handle an http_error.
+     */
+    inline error_code make_error_code(kss::io::net::HttpStatusCode sc) {
+        return error_code(static_cast<int>(sc), kss::io::net::httpErrorCategory());
     }
 }
 

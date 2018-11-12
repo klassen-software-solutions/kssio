@@ -4,18 +4,18 @@
 //
 //  Created by Steven W. Klassen on 2018-04-03.
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
+//  Licensing follows the MIT License.
 //
-// However a license is hereby granted for this code to be used, modified and redistributed
-// without restriction or requirement, other than you cannot hinder anyone else from doing
-// the same.
 
 #ifndef ksstest_ksstest_hpp
 #define ksstest_ksstest_hpp
 
+#include <exception>
 #include <functional>
 #include <initializer_list>
 #include <memory>
 #include <string>
+#include <system_error>
 #include <utility>
 
 namespace kss {
@@ -48,13 +48,32 @@ namespace kss {
 		 */
 		void skip();
 
+        /*!
+         After run() has begun this will return true if we are running in quiet mode
+         and false otherwise. You can use this in your test code if you want to suppress
+         output that would otherwise be shown.
+
+         If called before run(), this will return false.
+         */
+        bool isQuiet() noexcept;
+
+        /*!
+         After run() has begun this will return true if we are running in verbose mode
+         and false otherwise. You can use this in your test code if you want to add
+         output that would otherwise not be shown.
+
+         If called before run(), this will return false.
+         */
+        bool isVerbose() noexcept;
+        
+
 		// MARK: Assertions
 
 		/*!
 		 Macro to perform a single test. This works like assert but instead of halting
 		 execution it updates the internal status of the test suit.
 		 */
-#		define KSS_ASSERT(expr) ((void) ((expr) ? _private::_success() : _private::_failure(#expr, __FILE__, __LINE__)))
+#		define KSS_ASSERT(expr) ((void) ((expr) ? kss::test::_private::_success() : kss::test::_private::_failure(#expr, __FILE__, __LINE__)))
 
 		// The following are intended to be used inside KSS_ASSERT in order to make the
 		// test intent clearer. They are especially useful if your test contains multiple
@@ -82,14 +101,14 @@ namespace kss {
 		 example:
 		   KSS_ASSERT(isTrue([]{ return true; }));
 		 */
-		inline bool isTrue(std::function<bool(void)> fn) { return fn(); }
+		inline bool isTrue(const std::function<bool()>& fn) { return fn(); }
 
 		/*!
 		 Returns true if the lambda returns false.
 		 example:
 		   KSS_ASSERT(isFalse([]{ return false; }));
 		 */
-		inline bool isFalse(std::function<bool(void)> fn) { return !fn(); }
+		inline bool isFalse(const std::function<bool()>& fn) { return !fn(); }
 
 		/*!
 		 Returns true if the lambda returns a value that is equal to a.
@@ -97,7 +116,7 @@ namespace kss {
 		   KSS_ASSERT(isEqualTo(23, []{ return 21+2; }));
 		 */
 		template <class T>
-		bool isEqualTo(const T& a, std::function<T(void)> fn) {
+		bool isEqualTo(const T& a, const std::function<T()>& fn) {
 			return (fn() == a);
 		}
 
@@ -107,19 +126,22 @@ namespace kss {
 		   KSS_ASSERT(isNotEqualTo(23, []{ return 21-2; }));
 		 */
 		template <class T>
-		bool isNotEqualTo(const T& a, std::function<T(void)> fn) {
+		bool isNotEqualTo(const T& a, const std::function<T()>& fn) {
 			return (!(fn() == a));
 		}
 
 		/*!
-		 Returns true if the lambda throws an exception of the given type.
+		 Returns true if the lambda throws an exception of the given type. Note that if
+         it throws an exception not descended from std::exception, that exception will
+         be passed up the stack.
+         
 		 example:
 		   KSS_ASSERT(throwsException<std::runtime_error>([]{
 		       throw std::runtime_error("hello");
 		   }));
 		 */
 		template <class Exception>
-		bool throwsException(std::function<void(void)> fn) {
+		bool throwsException(const std::function<void()>& fn) {
 			bool caughtCorrectException = false;
 			try {
 				fn();
@@ -127,17 +149,47 @@ namespace kss {
 			catch (const Exception&) {
 				caughtCorrectException = true;
 			}
-			catch (...) {
+			catch (const std::exception&) {
 			}
 			return caughtCorrectException;
 		}
 
+        /*!
+         Returns true if the lambda throws a system_error with the given error category.
+         Note that if it throws an exception not descended from std::exception, that
+         exception will be passed up the stack.
+
+         example:
+           KSS_ASSERT(throwsSystemErrorWithCategory(std::system_category(), []{
+               throw std::system_error(EAGAIN, std::system_category(), "hi");
+           }));
+         */
+        bool throwsSystemErrorWithCategory(const std::error_category& cat,
+                                           const std::function<void()>& fn);
+
+        /*!
+         Returns true if the lambda throws a system_error with the given error code. Note
+         that the code includes both the integer error code plus the category.
+         Note that if it throws an exception not descended from std::exception, that
+         exception will be passed up the stack.
+
+         example:
+           KSS_ASSERT(throwsSystemErrorWithCode(std::error_code(EAGAIN, std::system_category()), []{
+               throw std::system_error(EAGAIN, std::system_category(), "hi");
+           }));
+         */
+        bool throwsSystemErrorWithCode(const std::error_code& code,
+                                       const std::function<void()>& fn);
+
 		/*!
 		 Returns true if the lambda does not throw any exception.
-		 example:
+         Note that if it throws an exception not descended from std::exception, that
+         exception will be passed up the stack.
+
+         example:
 		   KSS_ASSERT(doesNotThrowException([]{ doSomeWork(); }));
 		 */
-		bool doesNotThrowException(std::function<void(void)> fn);
+		bool doesNotThrowException(const std::function<void()>& fn);
 
 		/*!
 		 Returns true if the lambda causes terminate to be called.
@@ -145,7 +197,7 @@ namespace kss {
 		   inline void cannot_throw() noexcept { throw std::runtime_error("hi"); }
 		   KSS_ASSERT(terminates([]{ cannot_throw() }));
 		 */
-		bool terminates(std::function<void(void)> fn);
+		bool terminates(const std::function<void()>& fn);
 
 
 		// MARK: TestSuite
@@ -169,7 +221,7 @@ namespace kss {
 			 Note that the lambdas are not run in the construction. They will be run at
 			 the appropriate time when kss::testing::run is called.
 			 */
-			explicit TestSuite(const std::string& testSuiteName, test_case_list fns);
+			TestSuite(const std::string& testSuiteName, test_case_list fns);
 			virtual ~TestSuite() noexcept;
 
 			TestSuite(TestSuite&&);
