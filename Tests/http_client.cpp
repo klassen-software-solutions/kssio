@@ -11,18 +11,21 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <typeinfo>
 
 #include <unistd.h>
 #include <curl/curl.h>
 
 #include <kss/io/curl_error_category.hpp>
+#include <kss/io/fileutil.hpp>
 #include <kss/io/http_client.hpp>
 
 #include "ksstest.hpp"
 
 
 using namespace std;
+using namespace kss::io::file;
 using namespace kss::io::net;
 using namespace kss::test;
 
@@ -42,7 +45,6 @@ namespace {
         error_code      code;
     };
 
-#if 0
     class TestSuiteWithServer : public TestSuite, public HasBeforeAll, public HasAfterAll {
     public:
         TestSuiteWithServer(const string& name, test_case_list fns) : TestSuite(name, fns) {}
@@ -50,10 +52,22 @@ namespace {
         void beforeAll() override {
             pid = fork();
             if (pid == 0) {
-                int ret = system("Tests/http_test_server.py >> http_test_server.log 2>&1");
+                string serverPy;
+                if (isFile("../../../Tests/http_test_server.py")) { // Run from Xcode
+                    serverPy = "../../../Tests/http_test_server.py";
+                }
+                else {
+                    throw runtime_error("Could not find http_test_server.py");
+                }
+
+                const auto command = serverPy + ">> http_test_server.log 2>&1";
+                int ret = system(command.c_str());
                 if (ret) {
                     throw runtime_error("system returned: " + to_string(ret));
                 }
+            }
+            else {
+                this_thread::sleep_for(1s);
             }
         }
 
@@ -68,13 +82,11 @@ namespace {
     private:
         int pid;
     };
-#endif
 }
 
 
 
-//static TestSuiteWithServer ts("net::http_client", {
-static TestSuite ts("net::http_client", {
+static TestSuiteWithServer ts("net::http_client", {
     make_pair("construction and moving", [](TestSuite&) {
         HttpClient c1("http", "127.0.0.1", 8080);
         KSS_ASSERT(c1.get("/hello") == "Hello World");

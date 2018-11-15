@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA03030D219A2FEF00231AA8 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA03030B219A2FEF00231AA8 /* fileutil.cpp */; };
+		AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA03030C219A2FEF00231AA8 /* fileutil.hpp */; };
 		AA16FA42218A556C0059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA40218A556C0059E8DB /* socket.cpp */; };
 		AA16FA43218A556C0059E8DB /* socket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA16FA41218A556C0059E8DB /* socket.hpp */; };
 		AA16FA45218A56950059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA44218A56950059E8DB /* socket.cpp */; };
+		AA2E38EF219CA93000BA6909 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA2E38EE219CA93000BA6909 /* fileutil.cpp */; };
 		AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */; };
 		AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */; };
 		AA4780902188E5A7006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47808E2188E5A7006D635F /* version.cpp */; };
@@ -67,11 +70,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA03030B219A2FEF00231AA8 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
+		AA03030C219A2FEF00231AA8 /* fileutil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fileutil.hpp; sourceTree = "<group>"; };
 		AA16FA3F218A51DE0059E8DB /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		AA16FA40218A556C0059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
 		AA16FA41218A556C0059E8DB /* socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = socket.hpp; sourceTree = "<group>"; };
 		AA16FA44218A56950059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
 		AA16FA47218A66D70059E8DB /* intro.dox */ = {isa = PBXFileReference; lastKnownFileType = text; path = intro.dox; sourceTree = "<group>"; };
+		AA2E38EE219CA93000BA6909 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
 		AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _stringutil.cpp; sourceTree = "<group>"; };
 		AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _stringutil.hpp; sourceTree = "<group>"; };
 		AA4780722188E29F006D635F /* libkssio.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libkssio.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +189,8 @@
 				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
+				AA03030B219A2FEF00231AA8 /* fileutil.cpp */,
+				AA03030C219A2FEF00231AA8 /* fileutil.hpp */,
 				AAC8CF24218F92D7000540E4 /* http_client.cpp */,
 				AAC8CF23218F92D7000540E4 /* http_client.hpp */,
 				AA4780AA2188ED5A006D635F /* http_error_category.cpp */,
@@ -206,6 +214,7 @@
 			children = (
 				AA4780B42188FEDF006D635F /* curl_error_category.cpp */,
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
+				AA2E38EE219CA93000BA6909 /* fileutil.cpp */,
 				AA6184ED21937A8400901F6B /* http_client.cpp */,
 				AA4780AD2188F2E9006D635F /* http_error_category.cpp */,
 				AA6184EF21937BBC00901F6B /* http_test_server.py */,
@@ -239,6 +248,7 @@
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
+				AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */,
 				AA16FA43218A556C0059E8DB /* socket.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
 				AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */,
@@ -361,6 +371,7 @@
 				AA16FA42218A556C0059E8DB /* socket.cpp in Sources */,
 				AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */,
 				AA4780902188E5A7006D635F /* version.cpp in Sources */,
+				AA03030D219A2FEF00231AA8 /* fileutil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +390,7 @@
 				AA4780942188E5F8006D635F /* ksstest.cpp in Sources */,
 				AA4780982188E613006D635F /* main.cpp in Sources */,
 				AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */,
+				AA2E38EF219CA93000BA6909 /* fileutil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
