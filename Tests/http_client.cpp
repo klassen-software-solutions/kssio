@@ -60,7 +60,7 @@ namespace {
                     throw runtime_error("Could not find http_test_server.py");
                 }
 
-                const auto command = serverPy + ">> http_test_server.log 2>&1";
+                const auto command = serverPy + "&> http_test_server.log";
                 int ret = system(command.c_str());
                 if (ret) {
                     throw runtime_error("system returned: " + to_string(ret));
@@ -83,7 +83,6 @@ namespace {
         int pid;
     };
 }
-
 
 
 static TestSuiteWithServer ts("net::http_client", {
