@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#  configure
+#  kssio
+#
+
+source BuildSystem/configure_common.sh
