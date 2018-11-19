@@ -15,6 +15,7 @@
 
 using namespace std;
 using namespace kss::io::net;
+using namespace kss::io::stream;
 using namespace kss::test;
 
 static TestSuite ts("net::utility", {
@@ -71,5 +72,26 @@ static TestSuite ts("net::utility", {
         KSS_ASSERT(guessMimeType(i) == "text/plain");
         KSS_ASSERT(guessMimeType<long>() == "text/plain");
         KSS_ASSERT(guessMimeType(s) == "text/plain");
+    })
+});
+
+static TestSuite ts1("stream::utility", {
+    make_pair("capture", [](TestSuite&) {
+        auto s = capture(cout, []{
+            cout << "hello world!" << endl;
+        });
+        KSS_ASSERT(s == "hello world!\n");
+
+        string errS;
+        s = capture(cout, [&]{
+            errS = capture(cerr, []{
+                cout << "this is a test" << endl;
+                cerr << "something wrong?";
+                cout << "done!";
+            });
+        });
+        KSS_ASSERT(s == "this is a test\ndone!");
+        KSS_ASSERT(errS == "something wrong?");
+
     })
 });

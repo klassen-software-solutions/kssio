@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <exception>
 #include <limits>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -187,6 +188,22 @@ namespace kss {
             }
         }
 
+        namespace stream {
+
+            /*!
+             Temporarily redirect and stream and "capture" it in a string. On exit the stream
+             is restored again. This is typically used to capture the output of cout or cerr
+             during unit tests.
+
+             This method is based on examples and discussions found at
+             https://stackoverflow.com/questions/1881589/redirected-cout-stdstringstream-not-seeing-eol
+
+             @return the captured string data
+             @throws anything that may be thrown by the stream libraries.
+             */
+            std::string capture(std::ostream& os, const std::function<void()>& fn);
+
+        }
     }
 }
 

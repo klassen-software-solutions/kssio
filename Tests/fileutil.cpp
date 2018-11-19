@@ -29,7 +29,6 @@
 using namespace std;
 using namespace kss::io::file;
 using namespace kss::test;
-//using kss::util::strings::starts_with;
 
 static int sockfd = -1;
 

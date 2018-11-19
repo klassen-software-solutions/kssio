@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <cstring>
+#include <sstream>
 
 #include "utility.hpp"
 
@@ -111,4 +112,17 @@ double kss::io::net::ntohd(double netdouble) noexcept {
         memcpy(((uint8_t*)&d)+sizeof(uint32_t), &u1, sizeof(uint32_t));
         return d;
     }
+}
+
+
+// MARK: namespace kss::io::stream
+
+string kss::io::stream::capture(ostream &os, const function<void ()>& fn) {
+    os.flush();
+    stringstream redirectStream;
+    streambuf* oldbuf = os.rdbuf(redirectStream.rdbuf());
+    fn();
+    os.flush();
+    os.rdbuf(oldbuf);
+    return redirectStream.str();
 }

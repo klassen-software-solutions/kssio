@@ -4,10 +4,11 @@
 //
 //  Created by Steven W. Klassen on 2018-11-05.
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
+//  Licensing follows the MIT License.
 //
 
-#ifndef _stringutil_hpp
-#define _stringutil_hpp
+#ifndef kssio_stringutil_hpp
+#define kssio_stringutil_hpp
 
 #include <string>
 
