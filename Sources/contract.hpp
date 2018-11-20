@@ -36,32 +36,28 @@ namespace kss { namespace contract {
             return (pos == std::string::npos ? path.c_str() : path.c_str() + pos + 1);
         }
 
-        void throwingCheck(const char* conditionType,
-                           const kss::contract::_private::Expression& exp)
+        template <bool IsThrowing>
+        void performCheck(const char* conditionType,
+                          const kss::contract::_private::Expression& exp)
         {
             if (!exp.result) {
                 assert(exp.expr != nullptr);
                 assert(exp.functionName != nullptr);
                 assert(exp.fileName != nullptr);
-                throw std::invalid_argument(std::string(conditionType)
-                                            + " failed: '" + exp.expr
-                                            + "' in " + exp.functionName
-                                            + ", file " + localBasename(exp.fileName)
-                                            + ", line " + std::to_string(exp.lineNo));
-            }
-        }
 
-        void terminatingCheck(const char* conditionType,
-                              const kss::contract::_private::Expression& exp)
-        {
-            if (!exp.result) {
-                assert(exp.expr != nullptr);
-                assert(exp.functionName != nullptr);
-                assert(exp.fileName != nullptr);
-                std::cerr << conditionType << " failed: '" << exp.expr << "'" << std::endl;
-                std::cerr << "   in " << exp.functionName << std::endl;
-                std::cerr << "   file: " << exp.fileName << ", line: " << exp.lineNo << std::endl;
-                std::terminate();
+                if (IsThrowing) {
+                    throw std::invalid_argument(std::string(conditionType)
+                                                + " failed: '" + exp.expr
+                                                + "' in " + exp.functionName
+                                                + ", file " + localBasename(exp.fileName)
+                                                + ", line " + std::to_string(exp.lineNo));
+                }
+                else {
+                    std::cerr << conditionType << " failed: '" << exp.expr << "'" << std::endl;
+                    std::cerr << "   in " << exp.functionName << std::endl;
+                    std::cerr << "   file: " << exp.fileName << ", line: " << exp.lineNo << std::endl;
+                    std::terminate();
+                }
             }
         }
     }
@@ -94,7 +90,7 @@ namespace kss { namespace contract {
      @throws any other exception that the expression may throw
      */
     inline void parameter(const kss::contract::_private::Expression& exp) {
-        kss::contract::_private::throwingCheck("Parameter", exp);
+        kss::contract::_private::performCheck<true>("Parameter", exp);
     }
 
     /*!
@@ -138,7 +134,7 @@ namespace kss { namespace contract {
      @throws any exception that the expression may throw
      */
     inline void precondition(const kss::contract::_private::Expression& exp) {
-        kss::contract::_private::terminatingCheck("Precondition", exp);
+        kss::contract::_private::performCheck<false>("Precondition", exp);
     }
 
     /*!
@@ -180,7 +176,7 @@ namespace kss { namespace contract {
      @throws any exception that the expression may throw
      */
     inline void condition(const kss::contract::_private::Expression& exp) {
-        kss::contract::_private::terminatingCheck("Condition", exp);
+        kss::contract::_private::performCheck<false>("Condition", exp);
     }
 
     /*!
@@ -224,7 +220,7 @@ namespace kss { namespace contract {
      @throws any exception that the expression may throw
      */
     inline void postcondition(const kss::contract::_private::Expression& exp) {
-        kss::contract::_private::terminatingCheck("Postcondition", exp);
+        kss::contract::_private::performCheck<false>("Postcondition", exp);
     }
 
     /*!

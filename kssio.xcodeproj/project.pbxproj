@@ -43,6 +43,9 @@
 		AA9D9D9621A024D7002222EF /* binary_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA9D9D9421A024D7002222EF /* binary_file.cpp */; };
 		AA9D9D9821A05D72002222EF /* contract.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA9D9D9721A05D72002222EF /* contract.hpp */; };
 		AA9D9D9A21A200B0002222EF /* binary_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA9D9D9921A200B0002222EF /* binary_file.cpp */; };
+		AAB2573521A3B1250003F519 /* directory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB2573321A3B1250003F519 /* directory.hpp */; };
+		AAB2573621A3B1250003F519 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2573421A3B1250003F519 /* directory.cpp */; };
+		AAB2573821A3BD850003F519 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2573721A3BD850003F519 /* directory.cpp */; };
 		AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF0E218BA04E000540E4 /* interface.hpp */; };
 		AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF0F218BA04F000540E4 /* interface.cpp */; };
 		AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */; };
@@ -125,6 +128,9 @@
 		AA9D9D9421A024D7002222EF /* binary_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binary_file.cpp; sourceTree = "<group>"; };
 		AA9D9D9721A05D72002222EF /* contract.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = contract.hpp; sourceTree = "<group>"; };
 		AA9D9D9921A200B0002222EF /* binary_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binary_file.cpp; sourceTree = "<group>"; };
+		AAB2573321A3B1250003F519 /* directory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = directory.hpp; sourceTree = "<group>"; };
+		AAB2573421A3B1250003F519 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
+		AAB2573721A3BD850003F519 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
 		AAC8CF0E218BA04E000540E4 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
 		AAC8CF0F218BA04F000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
 		AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _tokenizer.hpp; sourceTree = "<group>"; };
@@ -204,6 +210,8 @@
 				AA9D9D9721A05D72002222EF /* contract.hpp */,
 				AA4780B02188F5E9006D635F /* curl_error_category.cpp */,
 				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
+				AAB2573421A3B1250003F519 /* directory.cpp */,
+				AAB2573321A3B1250003F519 /* directory.hpp */,
 				AA47809D2188E871006D635F /* eai_error_category.cpp */,
 				AA47809E2188E871006D635F /* eai_error_category.hpp */,
 				AA03030B219A2FEF00231AA8 /* fileutil.cpp */,
@@ -233,6 +241,7 @@
 			children = (
 				AA9D9D9921A200B0002222EF /* binary_file.cpp */,
 				AA4780B42188FEDF006D635F /* curl_error_category.cpp */,
+				AAB2573721A3BD850003F519 /* directory.cpp */,
 				AA4780A12188E917006D635F /* eai_error_category.cpp */,
 				AA2E38EE219CA93000BA6909 /* fileutil.cpp */,
 				AA6184ED21937A8400901F6B /* http_client.cpp */,
@@ -267,6 +276,7 @@
 			files = (
 				AAC8CF25218F92D7000540E4 /* http_client.hpp in Headers */,
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
+				AAB2573521A3B1250003F519 /* directory.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
 				AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */,
@@ -387,6 +397,7 @@
 				AA70FB74219634D500EBFBC7 /* _action_queue.cpp in Sources */,
 				AA4780A52188E95A006D635F /* utility.cpp in Sources */,
 				AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */,
+				AAB2573621A3B1250003F519 /* directory.cpp in Sources */,
 				AA2E38F3219E190700BA6909 /* poller.cpp in Sources */,
 				AAC8CF26218F92D7000540E4 /* http_client.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
@@ -408,6 +419,7 @@
 				AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */,
 				AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */,
 				AA4780A82188EA09006D635F /* utility.cpp in Sources */,
+				AAB2573821A3BD850003F519 /* directory.cpp in Sources */,
 				AA2E38F5219E1DB400BA6909 /* poller.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
 				AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */,

@@ -35,6 +35,7 @@ namespace kss {
                 return (str.substr(0, prefix.size()) == prefix);
             }
 
+            bool endsWith(const std::string& str, const std::string& suffix) noexcept;
         }
     }
 }
