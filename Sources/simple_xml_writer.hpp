@@ -1,5 +1,5 @@
 //
-//  simple_xml_writer.h
+//  simple_xml_writer.hpp
 //  kssio
 //
 //  Created by Steven W. Klassen on 2018-04-20.

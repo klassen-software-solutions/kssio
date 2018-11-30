@@ -18,6 +18,8 @@
 using namespace std;
 using namespace kss::io::file;
 
+namespace contract = kss::contract;
+
 
 // MARK: BinaryFile
 

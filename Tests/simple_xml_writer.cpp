@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <kss/io/simple_xml_writer.h>
+#include <kss/io/simple_xml_writer.hpp>
 #include "ksstest.hpp"
 
 using namespace std;

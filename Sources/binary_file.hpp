@@ -152,9 +152,7 @@ namespace kss { namespace io { namespace file {
         f.writeFully(&rec, sizeof(rec));
 
         kss::contract::postconditions({
-            KSS_EXPR(f.isOpenFor(BinaryFile::appending)
-                     ? true
-                     : f.tell() == (pos + sizeof(rec)))
+            KSS_EXPR(f.isOpenFor(BinaryFile::appending) || (f.tell() == (pos + sizeof(rec))))
         });
     }
 
@@ -192,19 +190,19 @@ namespace kss { namespace io { namespace file {
         : BinaryFile(filename, openMode)
         {
             kss::contract::postconditions({
-                KSS_EXPR(isOpenFor(BinaryFile::appending) ? true : position() == 0)
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
             });
         }
 
         explicit FileOf(FILE* fp) : BinaryFile(fp) {
             kss::contract::postconditions({
-                KSS_EXPR(isOpenFor(BinaryFile::appending) ? true : position() == 0)
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
             });
         }
 
         explicit FileOf(int filedes) : BinaryFile(filedes) {
             kss::contract::postconditions({
-                KSS_EXPR(isOpenFor(BinaryFile::appending) ? true : position() == 0)
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
             });
         }
 
@@ -276,7 +274,7 @@ namespace kss { namespace io { namespace file {
                 KSS_EXPR(isOpenFor(writing)),
                 KSS_EXPR(!isOpenFor(appending))
             });
-            
+
             setPosition(recNo);
             write(r);
         }
@@ -303,7 +301,7 @@ namespace kss { namespace io { namespace file {
          */
         input_iterator begin() {
             kss::contract::preconditions({
-                KSS_EXPR(isOpenFor(BinaryFile::reading)),
+                KSS_EXPR(isOpenFor(BinaryFile::reading))
             });
 
             rewind();
@@ -345,6 +343,7 @@ namespace kss { namespace io { namespace file {
 
         void setPosition(size_t recNo)  {
             BinaryFile::seek(recNo * sizeof(Record));
+
             kss::contract::postconditions({
                 KSS_EXPR(position() == recNo)
             });

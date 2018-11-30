@@ -257,11 +257,6 @@ static TestSuite ts("file::binary_file", {
             KSS_ASSERT(fo.position() == 16);
 
             sr.i = sr.l = 16;
-            kss::io::stream::capture(cerr, [&] {
-                KSS_ASSERT(terminates([&] { fo.write(sr, 8); }));
-            });
-            KSS_ASSERT(fo.position() == 16);
-
             fo << sr;
 
             int i = 0;

@@ -63,7 +63,6 @@ namespace kss {
         }
 
 
-        
         /*!
          Thrown by operations that attempt to read something past its end. This is intended
          to be used to handle cases where we cannot efficiently determine the end until we
@@ -86,6 +85,16 @@ namespace kss {
         public:
             explicit InvalidState(const char* what_arg) : std::logic_error(what_arg) {}
             explicit InvalidState(const std::string& what_arg) : std::logic_error(what_arg) {}
+        };
+
+        /*!
+         Thrown by operations that fail to properly parse input from file or stream
+         based reading.
+         */
+        class ParsingError : public std::runtime_error {
+        public:
+            explicit ParsingError(const char* what_arg) : std::runtime_error(what_arg) {}
+            explicit ParsingError(const std::string& what_arg) : std::runtime_error(what_arg) {}
         };
 
 

@@ -46,8 +46,15 @@
 		AAB2573521A3B1250003F519 /* directory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB2573321A3B1250003F519 /* directory.hpp */; };
 		AAB2573621A3B1250003F519 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2573421A3B1250003F519 /* directory.cpp */; };
 		AAB2573821A3BD850003F519 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2573721A3BD850003F519 /* directory.cpp */; };
-		AAB2574121A4F2110003F519 /* simple_xml_writer.h in Headers */ = {isa = PBXBuildFile; fileRef = AAB2574021A4F2110003F519 /* simple_xml_writer.h */; };
+		AAB2574121A4F2110003F519 /* simple_xml_writer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB2574021A4F2110003F519 /* simple_xml_writer.hpp */; };
 		AAB2574321A4F3F70003F519 /* simple_xml_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2574221A4F3F70003F519 /* simple_xml_writer.cpp */; };
+		AAB2574521A4F7350003F519 /* simple_json_writer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB2574421A4F7350003F519 /* simple_json_writer.hpp */; };
+		AAB2574721A4F7420003F519 /* simple_json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2574621A4F7420003F519 /* simple_json_writer.cpp */; };
+		AAB4FEBA21A64C5F009AFDB2 /* jsonstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4FEB821A64C5E009AFDB2 /* jsonstream.cpp */; };
+		AAB4FEBB21A64C5F009AFDB2 /* jsonstream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB4FEB921A64C5F009AFDB2 /* jsonstream.hpp */; };
+		AAB4FEBD21A65457009AFDB2 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4FEBC21A65456009AFDB2 /* jsoncpp.cpp */; };
+		AAB4FEBF21A65469009AFDB2 /* _json.h in Headers */ = {isa = PBXBuildFile; fileRef = AAB4FEBE21A65469009AFDB2 /* _json.h */; };
+		AAC5BDA021A7C4D6001FFD01 /* jsonstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC5BD9F21A7C4D6001FFD01 /* jsonstream.cpp */; };
 		AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF0E218BA04E000540E4 /* interface.hpp */; };
 		AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAC8CF0F218BA04F000540E4 /* interface.cpp */; };
 		AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */; };
@@ -133,8 +140,15 @@
 		AAB2573321A3B1250003F519 /* directory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = directory.hpp; sourceTree = "<group>"; };
 		AAB2573421A3B1250003F519 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
 		AAB2573721A3BD850003F519 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
-		AAB2574021A4F2110003F519 /* simple_xml_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_xml_writer.h; sourceTree = "<group>"; };
+		AAB2574021A4F2110003F519 /* simple_xml_writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = simple_xml_writer.hpp; sourceTree = "<group>"; };
 		AAB2574221A4F3F70003F519 /* simple_xml_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_xml_writer.cpp; sourceTree = "<group>"; };
+		AAB2574421A4F7350003F519 /* simple_json_writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = simple_json_writer.hpp; sourceTree = "<group>"; };
+		AAB2574621A4F7420003F519 /* simple_json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_json_writer.cpp; sourceTree = "<group>"; };
+		AAB4FEB821A64C5E009AFDB2 /* jsonstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsonstream.cpp; sourceTree = "<group>"; };
+		AAB4FEB921A64C5F009AFDB2 /* jsonstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsonstream.hpp; sourceTree = "<group>"; };
+		AAB4FEBC21A65456009AFDB2 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
+		AAB4FEBE21A65469009AFDB2 /* _json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _json.h; sourceTree = "<group>"; };
+		AAC5BD9F21A7C4D6001FFD01 /* jsonstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsonstream.cpp; sourceTree = "<group>"; };
 		AAC8CF0E218BA04E000540E4 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
 		AAC8CF0F218BA04F000540E4 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
 		AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _tokenizer.hpp; sourceTree = "<group>"; };
@@ -204,6 +218,7 @@
 			children = (
 				AA70FB72219634D500EBFBC7 /* _action_queue.cpp */,
 				AA70FB73219634D500EBFBC7 /* _action_queue.hpp */,
+				AAB4FEBE21A65469009AFDB2 /* _json.h */,
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
 				AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */,
 				AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */,
@@ -228,9 +243,13 @@
 				AAC8CF0E218BA04E000540E4 /* interface.hpp */,
 				AA16FA47218A66D70059E8DB /* intro.dox */,
 				AAC8CF1A218C334D000540E4 /* iterator.hpp */,
+				AAB4FEBC21A65456009AFDB2 /* jsoncpp.cpp */,
+				AAB4FEB821A64C5E009AFDB2 /* jsonstream.cpp */,
+				AAB4FEB921A64C5F009AFDB2 /* jsonstream.hpp */,
 				AA2E38F1219E190700BA6909 /* poller.cpp */,
 				AA2E38F0219E190700BA6909 /* poller.hpp */,
-				AAB2574021A4F2110003F519 /* simple_xml_writer.h */,
+				AAB2574421A4F7350003F519 /* simple_json_writer.hpp */,
+				AAB2574021A4F2110003F519 /* simple_xml_writer.hpp */,
 				AA16FA40218A556C0059E8DB /* socket.cpp */,
 				AA16FA41218A556C0059E8DB /* socket.hpp */,
 				AA4780A32188E95A006D635F /* utility.cpp */,
@@ -254,11 +273,13 @@
 				AA6184EF21937BBC00901F6B /* http_test_server.py */,
 				AAC8CF21218DF82B000540E4 /* interface.cpp */,
 				AAC8CF1F218CF928000540E4 /* iterator.cpp */,
+				AAC5BD9F21A7C4D6001FFD01 /* jsonstream.cpp */,
 				AA4780922188E5F8006D635F /* ksstest.cpp */,
 				AA4780932188E5F8006D635F /* ksstest.hpp */,
 				AA4780962188E613006D635F /* main.cpp */,
 				AA2E38F4219E1DB400BA6909 /* poller.cpp */,
 				AA4780A72188EA09006D635F /* utility.cpp */,
+				AAB2574621A4F7420003F519 /* simple_json_writer.cpp */,
 				AAB2574221A4F3F70003F519 /* simple_xml_writer.cpp */,
 				AA16FA44218A56950059E8DB /* socket.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
@@ -280,6 +301,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAB4FEBB21A64C5F009AFDB2 /* jsonstream.hpp in Headers */,
 				AAC8CF25218F92D7000540E4 /* http_client.hpp in Headers */,
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AAB2573521A3B1250003F519 /* directory.hpp in Headers */,
@@ -288,8 +310,10 @@
 				AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */,
 				AA16FA43218A556C0059E8DB /* socket.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
+				AAB4FEBF21A65469009AFDB2 /* _json.h in Headers */,
 				AA9D9D9821A05D72002222EF /* contract.hpp in Headers */,
-				AAB2574121A4F2110003F519 /* simple_xml_writer.h in Headers */,
+				AAB2574121A4F2110003F519 /* simple_xml_writer.hpp in Headers */,
+				AAB2574521A4F7350003F519 /* simple_json_writer.hpp in Headers */,
 				AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */,
 				AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */,
 				AA70FB75219634D500EBFBC7 /* _action_queue.hpp in Headers */,
@@ -406,11 +430,13 @@
 				AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */,
 				AAB2573621A3B1250003F519 /* directory.cpp in Sources */,
 				AA2E38F3219E190700BA6909 /* poller.cpp in Sources */,
+				AAB4FEBA21A64C5F009AFDB2 /* jsonstream.cpp in Sources */,
 				AAC8CF26218F92D7000540E4 /* http_client.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
 				AAC8CF17218BA6AB000540E4 /* _tokenizer.cpp in Sources */,
 				AA9D9D9621A024D7002222EF /* binary_file.cpp in Sources */,
+				AAB4FEBD21A65457009AFDB2 /* jsoncpp.cpp in Sources */,
 				AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */,
 				AA16FA42218A556C0059E8DB /* socket.cpp in Sources */,
 				AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */,
@@ -426,6 +452,7 @@
 				AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */,
 				AA4780A22188E917006D635F /* eai_error_category.cpp in Sources */,
 				AA4780A82188EA09006D635F /* utility.cpp in Sources */,
+				AAC5BDA021A7C4D6001FFD01 /* jsonstream.cpp in Sources */,
 				AAB2573821A3BD850003F519 /* directory.cpp in Sources */,
 				AA2E38F5219E1DB400BA6909 /* poller.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
@@ -438,6 +465,7 @@
 				AAB2574321A4F3F70003F519 /* simple_xml_writer.cpp in Sources */,
 				AA4780982188E613006D635F /* main.cpp in Sources */,
 				AA4780AE2188F2E9006D635F /* http_error_category.cpp in Sources */,
+				AAB2574721A4F7420003F519 /* simple_json_writer.cpp in Sources */,
 				AA2E38EF219CA93000BA6909 /* fileutil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
