@@ -103,8 +103,10 @@ namespace kss { namespace contract {
          void myfn(int minValue, int maxValue) {
              parameters({
                  KSS_EXPR(minValue > 0),
-                 KSS_EXPR(minValue <= maxValue);
+                 KSS_EXPR(minValue <= maxValue)
              });
+             ... function code ...
+         }
 
      @throws std::invalid_argument (actually kss::contract::InvalidArgument) if one or
             more of the expressions fail
@@ -149,6 +151,8 @@ namespace kss { namespace contract {
                  KSS_EXPR(minValue > 0),
                  KSS_EXPR(minValue <= maxValue);
              });
+             ... your function code ...
+         }
 
      @throws any exception that the expressions may throw
      */
@@ -169,6 +173,7 @@ namespace kss { namespace contract {
 
      Example:
          void myfn(int minValue, int maxValue) {
+             ... your function code ...
              condition(KSS_EXPR(minValue <= maxValue));
              ... your function code ...
          }
@@ -187,10 +192,13 @@ namespace kss { namespace contract {
 
      Example:
          void myfn(int minValue, int maxValue) {
+             ... your function code ...
              conditions({
                  KSS_EXPR(minValue > 0),
-                 KSS_EXPR(minValue <= maxValue);
+                 KSS_EXPR(minValue <= maxValue)
              });
+             ... your function code ...
+         }
 
      @throws std::invalid_argument (actually kss::contract::InvalidArgument) if one or
             more of the expressions fail.
@@ -213,8 +221,8 @@ namespace kss { namespace contract {
 
      Example:
          void myfn(int minValue, int maxValue) {
-             postcondition(KSS_EXPR(minValue <= maxValue));
              ... your function code ...
+             postcondition(KSS_EXPR(minValue <= maxValue));
          }
 
      @throws any exception that the expression may throw
@@ -231,10 +239,12 @@ namespace kss { namespace contract {
 
      Example:
          void myfn(int minValue, int maxValue) {
+             ... your function code ...
              postconditions({
                  KSS_EXPR(minValue > 0),
-                 KSS_EXPR(minValue <= maxValue);
+                 KSS_EXPR(minValue <= maxValue)
              });
+         }
 
      @throws any exception that the expressions may throw
      */
