@@ -14,6 +14,8 @@
 #include <memory>
 #include <vector>
 
+#include "utility.hpp"
+
 
 namespace kss { namespace io { namespace stream { namespace json {
 
@@ -201,5 +203,11 @@ namespace kss { namespace io { namespace stream { namespace json {
     };
 
 } } } }
+
+// Override the mime type guess.
+template <>
+inline std::string kss::io::net::guessMimeType(const kss::io::stream::json::Document&) {
+    return "application/json";
+}
 
 #endif

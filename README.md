@@ -3,7 +3,9 @@ C++ I/O library (networking, files, and streams)
 
 ## Dependancies
 
+* JsonCpp
 * libcurl
+* libyaml
 
 ## Contributing
 

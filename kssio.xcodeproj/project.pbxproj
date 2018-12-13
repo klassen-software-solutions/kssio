@@ -18,6 +18,14 @@
 		AA2E38F5219E1DB400BA6909 /* poller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA2E38F4219E1DB400BA6909 /* poller.cpp */; };
 		AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */; };
 		AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */; };
+		AA450A5F21B2336100643D40 /* yamlstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA450A5D21B2336000643D40 /* yamlstream.cpp */; };
+		AA450A6021B2336100643D40 /* yamlstream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A5E21B2336000643D40 /* yamlstream.hpp */; };
+		AA450A6221B237C200643D40 /* random_access_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6121B237C200643D40 /* random_access_iterator.hpp */; };
+		AA450A6421B23A1C00643D40 /* add_rel_ops.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6321B23A1C00643D40 /* add_rel_ops.hpp */; };
+		AA450A6721B3293A00643D40 /* yaml_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA450A6521B3293A00643D40 /* yaml_error_category.cpp */; };
+		AA450A6821B3293A00643D40 /* yaml_error_category.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6621B3293A00643D40 /* yaml_error_category.hpp */; };
+		AA450A6A21B3316C00643D40 /* yaml_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA450A6921B3316C00643D40 /* yaml_error_category.cpp */; };
+		AA450A6C21B37EF500643D40 /* _substring.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6B21B37EF500643D40 /* _substring.hpp */; };
 		AA4780902188E5A7006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47808E2188E5A7006D635F /* version.cpp */; };
 		AA4780912188E5A7006D635F /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA47808F2188E5A7006D635F /* version.hpp */; };
 		AA4780942188E5F8006D635F /* ksstest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780922188E5F8006D635F /* ksstest.cpp */; };
@@ -37,6 +45,7 @@
 		AA4780B22188F5E9006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B02188F5E9006D635F /* curl_error_category.cpp */; };
 		AA4780B52188FEDF006D635F /* curl_error_category.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780B42188FEDF006D635F /* curl_error_category.cpp */; };
 		AA6184EE21937A8400901F6B /* http_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA6184ED21937A8400901F6B /* http_client.cpp */; };
+		AA6485FF21C1C37300D5CDB8 /* yamlstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA6485FE21C1C37300D5CDB8 /* yamlstream.cpp */; };
 		AA70FB74219634D500EBFBC7 /* _action_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA70FB72219634D500EBFBC7 /* _action_queue.cpp */; };
 		AA70FB75219634D500EBFBC7 /* _action_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA70FB73219634D500EBFBC7 /* _action_queue.hpp */; };
 		AA9D9D9521A024D7002222EF /* binary_file.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA9D9D9321A024D7002222EF /* binary_file.hpp */; };
@@ -102,6 +111,14 @@
 		AA2E38F4219E1DB400BA6909 /* poller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poller.cpp; sourceTree = "<group>"; };
 		AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _stringutil.cpp; sourceTree = "<group>"; };
 		AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _stringutil.hpp; sourceTree = "<group>"; };
+		AA450A5D21B2336000643D40 /* yamlstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yamlstream.cpp; sourceTree = "<group>"; };
+		AA450A5E21B2336000643D40 /* yamlstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = yamlstream.hpp; sourceTree = "<group>"; };
+		AA450A6121B237C200643D40 /* random_access_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = random_access_iterator.hpp; sourceTree = "<group>"; };
+		AA450A6321B23A1C00643D40 /* add_rel_ops.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = add_rel_ops.hpp; sourceTree = "<group>"; };
+		AA450A6521B3293A00643D40 /* yaml_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yaml_error_category.cpp; sourceTree = "<group>"; };
+		AA450A6621B3293A00643D40 /* yaml_error_category.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = yaml_error_category.hpp; sourceTree = "<group>"; };
+		AA450A6921B3316C00643D40 /* yaml_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yaml_error_category.cpp; sourceTree = "<group>"; };
+		AA450A6B21B37EF500643D40 /* _substring.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _substring.hpp; sourceTree = "<group>"; };
 		AA4780722188E29F006D635F /* libkssio.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libkssio.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4780792188E309006D635F /* BuildSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildSystem; sourceTree = "<group>"; };
 		AA47807B2188E329006D635F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -131,6 +148,7 @@
 		AA4780B42188FEDF006D635F /* curl_error_category.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curl_error_category.cpp; sourceTree = "<group>"; };
 		AA6184ED21937A8400901F6B /* http_client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_client.cpp; sourceTree = "<group>"; };
 		AA6184EF21937BBC00901F6B /* http_test_server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = http_test_server.py; sourceTree = "<group>"; };
+		AA6485FE21C1C37300D5CDB8 /* yamlstream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yamlstream.cpp; sourceTree = "<group>"; };
 		AA70FB72219634D500EBFBC7 /* _action_queue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _action_queue.cpp; sourceTree = "<group>"; };
 		AA70FB73219634D500EBFBC7 /* _action_queue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _action_queue.hpp; sourceTree = "<group>"; };
 		AA9D9D9321A024D7002222EF /* binary_file.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = binary_file.hpp; sourceTree = "<group>"; };
@@ -222,8 +240,10 @@
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
 				AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */,
 				AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */,
+				AA450A6B21B37EF500643D40 /* _substring.hpp */,
 				AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */,
 				AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */,
+				AA450A6321B23A1C00643D40 /* add_rel_ops.hpp */,
 				AA9D9D9421A024D7002222EF /* binary_file.cpp */,
 				AA9D9D9321A024D7002222EF /* binary_file.hpp */,
 				AA9D9D9721A05D72002222EF /* contract.hpp */,
@@ -248,6 +268,7 @@
 				AAB4FEB921A64C5F009AFDB2 /* jsonstream.hpp */,
 				AA2E38F1219E190700BA6909 /* poller.cpp */,
 				AA2E38F0219E190700BA6909 /* poller.hpp */,
+				AA450A6121B237C200643D40 /* random_access_iterator.hpp */,
 				AAB2574421A4F7350003F519 /* simple_json_writer.hpp */,
 				AAB2574021A4F2110003F519 /* simple_xml_writer.hpp */,
 				AA16FA40218A556C0059E8DB /* socket.cpp */,
@@ -256,6 +277,10 @@
 				AA4780A42188E95A006D635F /* utility.hpp */,
 				AA47808E2188E5A7006D635F /* version.cpp */,
 				AA47808F2188E5A7006D635F /* version.hpp */,
+				AA450A6521B3293A00643D40 /* yaml_error_category.cpp */,
+				AA450A6621B3293A00643D40 /* yaml_error_category.hpp */,
+				AA450A5D21B2336000643D40 /* yamlstream.cpp */,
+				AA450A5E21B2336000643D40 /* yamlstream.hpp */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -283,6 +308,8 @@
 				AAB2574221A4F3F70003F519 /* simple_xml_writer.cpp */,
 				AA16FA44218A56950059E8DB /* socket.cpp */,
 				AA4780952188E613006D635F /* version.cpp */,
+				AA450A6921B3316C00643D40 /* yaml_error_category.cpp */,
+				AA6485FE21C1C37300D5CDB8 /* yamlstream.cpp */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -302,14 +329,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAB4FEBB21A64C5F009AFDB2 /* jsonstream.hpp in Headers */,
+				AA450A6021B2336100643D40 /* yamlstream.hpp in Headers */,
+				AA450A6C21B37EF500643D40 /* _substring.hpp in Headers */,
 				AAC8CF25218F92D7000540E4 /* http_client.hpp in Headers */,
 				AA4780B12188F5E9006D635F /* curl_error_category.hpp in Headers */,
 				AAB2573521A3B1250003F519 /* directory.hpp in Headers */,
 				AA4780AB2188ED5A006D635F /* http_error_category.hpp in Headers */,
 				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
+				AA450A6421B23A1C00643D40 /* add_rel_ops.hpp in Headers */,
 				AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */,
 				AA16FA43218A556C0059E8DB /* socket.hpp in Headers */,
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
+				AA450A6221B237C200643D40 /* random_access_iterator.hpp in Headers */,
 				AAB4FEBF21A65469009AFDB2 /* _json.h in Headers */,
 				AA9D9D9821A05D72002222EF /* contract.hpp in Headers */,
 				AAB2574121A4F2110003F519 /* simple_xml_writer.hpp in Headers */,
@@ -321,6 +352,7 @@
 				AA4780A02188E871006D635F /* eai_error_category.hpp in Headers */,
 				AAC8CF16218BA6AB000540E4 /* _tokenizer.hpp in Headers */,
 				AAC8CF1B218C334D000540E4 /* iterator.hpp in Headers */,
+				AA450A6821B3293A00643D40 /* yaml_error_category.hpp in Headers */,
 				AA9D9D9521A024D7002222EF /* binary_file.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,7 +464,9 @@
 				AA2E38F3219E190700BA6909 /* poller.cpp in Sources */,
 				AAB4FEBA21A64C5F009AFDB2 /* jsonstream.cpp in Sources */,
 				AAC8CF26218F92D7000540E4 /* http_client.cpp in Sources */,
+				AA450A6721B3293A00643D40 /* yaml_error_category.cpp in Sources */,
 				AA4780AC2188ED5A006D635F /* http_error_category.cpp in Sources */,
+				AA450A5F21B2336100643D40 /* yamlstream.cpp in Sources */,
 				AA47809F2188E871006D635F /* eai_error_category.cpp in Sources */,
 				AAC8CF17218BA6AB000540E4 /* _tokenizer.cpp in Sources */,
 				AA9D9D9621A024D7002222EF /* binary_file.cpp in Sources */,
@@ -456,8 +490,10 @@
 				AAB2573821A3BD850003F519 /* directory.cpp in Sources */,
 				AA2E38F5219E1DB400BA6909 /* poller.cpp in Sources */,
 				AA4780972188E613006D635F /* version.cpp in Sources */,
+				AA450A6A21B3316C00643D40 /* yaml_error_category.cpp in Sources */,
 				AAC8CF20218CF928000540E4 /* iterator.cpp in Sources */,
 				AA6184EE21937A8400901F6B /* http_client.cpp in Sources */,
+				AA6485FF21C1C37300D5CDB8 /* yamlstream.cpp in Sources */,
 				AAC8CF22218DF82B000540E4 /* interface.cpp in Sources */,
 				AA9D9D9A21A200B0002222EF /* binary_file.cpp in Sources */,
 				AA16FA45218A56950059E8DB /* socket.cpp in Sources */,
@@ -532,10 +568,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/Homebrew/include;
+				LIBRARY_SEARCH_PATHS = /opt/Homebrew/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lyaml",
+				);
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -586,9 +628,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/Homebrew/include;
+				LIBRARY_SEARCH_PATHS = /opt/Homebrew/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lyaml",
+				);
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -602,7 +650,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
-				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -616,7 +663,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
-				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -627,7 +673,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";
+				HEADER_SEARCH_PATHS = (
+					/opt/Homebrew/include,
+					"$(PROJECT_DIR)/.build/Darwin-x86_64/include",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -637,7 +686,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";
+				HEADER_SEARCH_PATHS = (
+					/opt/Homebrew/include,
+					"$(PROJECT_DIR)/.build/Darwin-x86_64/include",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

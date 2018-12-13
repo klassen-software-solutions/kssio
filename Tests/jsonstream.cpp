@@ -116,5 +116,9 @@ static TestSuite ts("stream::json::jsonstream", {
         KSS_ASSERT(!Node::none.isScalar());
         KSS_ASSERT(!Node::none.isArray());
         KSS_ASSERT(!Node::none.isObject());
+    }),
+    make_pair("mime type", [](TestSuite&) {
+        KSS_ASSERT(kss::io::net::guessMimeType<Document>() == "application/json");
+        KSS_ASSERT(kss::io::net::guessMimeType(Document()) == "application/json");
     })
 });
