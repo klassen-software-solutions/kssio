@@ -138,7 +138,7 @@ namespace kss {
          Note that this class is intended to be a "final" class and should in general
          not be subclassed. Instead you modify its behaviour by using its delegate.
          */
-        class Poller {
+        class Poller final {
         public:
 
             Poller();

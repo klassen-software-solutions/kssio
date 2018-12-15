@@ -22,11 +22,14 @@
 #include "_raii.hpp"
 #include "_substring.hpp"
 #include "_tokenizer.hpp"
+#include "contract.hpp"
 #include "yaml_error_category.hpp"
 #include "yamlstream.hpp"
 
 using namespace std;
 using namespace kss::io::stream::yaml;
+
+namespace contract = kss::contract;
 
 using kss::io::_private::finally;
 using kss::io::_private::substring_t;
@@ -393,10 +396,20 @@ Node::Node(const Node& n) {
         _impl->doc = n._impl->doc;
         _impl->node = n._impl->node;
     }
+
+    contract::postconditions({
+        KSS_EXPR((bool)n._impl
+                 ? (_impl->doc == n._impl->doc && _impl->node == n._impl->node)
+                 : _impl.get() == nullptr)
+    });
 }
 
 Node::Node(Node::NodeImpl* impl) {
     _impl.reset(impl);
+
+    contract::postconditions({
+        KSS_EXPR(_impl.get() == impl)
+    });
 }
 
 Node& Node::operator=(const Node& n) {
@@ -410,6 +423,12 @@ Node& Node::operator=(const Node& n) {
             _impl->node = n._impl->node;
         }
     }
+
+    contract::postconditions({
+        KSS_EXPR((bool)n._impl
+                 ? (_impl->doc == n._impl->doc && _impl->node == n._impl->node)
+                 : _impl.get() == nullptr)
+    });
     return *this;
 }
 
@@ -610,6 +629,10 @@ string Node::canonical() const noexcept {
     oss << "---" << endl;
     append_node(oss, _impl->doc, _impl->node, 0, true);
     oss << endl;
+
+    contract::postconditions({
+        KSS_EXPR(!oss.str().empty())
+    });
     return oss.str();
 }
 
@@ -635,6 +658,10 @@ string Node::value() const {
     if (_impl->node->data.scalar.length == 0) {
         return string();
     }
+
+    contract::postconditions({
+        KSS_EXPR(_impl->node->data.scalar.value != nullptr)
+    });
     return string((const char*)_impl->node->data.scalar.value);
 }
 
@@ -717,12 +744,20 @@ Node Node::operator[](size_t i) const {
     
     const yaml_node_item_t* start = _impl->node->data.sequence.items.start;
     const yaml_node_item_t* end = _impl->node->data.sequence.items.top;
-    assert(end >= start);
+    contract::conditions({
+        KSS_EXPR(end >= start)
+    });
+
     ptrdiff_t len = (end - start);
     if (len <= 0 || i >= size_t(len)) {
         return none;
     }
 
+    contract::postconditions({
+        KSS_EXPR(_impl->doc != nullptr),
+        KSS_EXPR(_impl->node->data.sequence.items.start != nullptr),
+        KSS_EXPR(i < len)
+    });
     return Node(new Node::NodeImpl(_impl->doc, _impl->node->data.sequence.items.start[i]));
 }
 
@@ -759,13 +794,18 @@ static bool tokenIsIndex(const string& token, size_t& idx) {
 }
 
 vector<Node> Node::select(const string& path) const {
+    contract::parameters({
+        KSS_EXPR(!path.empty())
+    });
+    contract::preconditions({
+        KSS_EXPR(_impl->doc != nullptr)
+    });
 
     // Step 1, parse the path into a list of tokens. Note that if the first character is '/'
     // we insert a special "start at root node" token, then parse the rest of the string.
     // Once done we scan the tokens to check that none are empty (which would be invalid).
     vector<string> pathTokens;
     {
-        if (path.empty()) throw invalid_argument("path should not be empty");
         size_t startPos = 0;
         if (path[0] == '/') {
             pathTokens.push_back(ROOT);
@@ -780,6 +820,9 @@ vector<Node> Node::select(const string& path) const {
             }
         }
     }
+    contract::conditions({
+        KSS_EXPR(!pathTokens.empty())
+    });
 
     // Step 2, traverse the path until we reach the end, collecting the matching nodes.
     vector<const yaml_node_t*> nodesToConsider;
@@ -858,13 +901,17 @@ vector<Node> Node::select(const string& path) const {
 
 Node Node::find(const string& path) const {
     vector<Node> matches = select(path);
-    if (matches.empty()) return none;
+    if (matches.empty()) {
+        return none;
+    }
     return matches.front();
 }
 
 string Node::value(const string& path) const {
     vector<Node> matches = select(path);
-    if (matches.empty()) return string();
+    if (matches.empty()) {
+        return string();
+    }
     return matches.front().value();
 }
 
@@ -887,6 +934,11 @@ Sequence::Sequence(const Node& n) {
     _impl = make_unique<Node::NodeImpl>();
     _impl->doc = n._impl->doc;
     _impl->node = n._impl->node;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->doc != nullptr),
+        KSS_EXPR(_impl->node != nullptr)
+    });
 }
 
 Sequence::Sequence(Node&& n) {
@@ -894,6 +946,11 @@ Sequence::Sequence(Node&& n) {
         throw std::bad_cast();
     }
     _impl = move(n._impl);
+
+    contract::postconditions({
+        KSS_EXPR(_impl->doc != nullptr),
+        KSS_EXPR(_impl->node != nullptr)
+    });
 }
 
 Sequence::~Sequence() noexcept = default;
@@ -933,6 +990,11 @@ Mapping::Mapping(const Node& n) {
     _impl = make_unique<Node::NodeImpl>();
     _impl->doc = n._impl->doc;
     _impl->node = n._impl->node;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->doc != nullptr),
+        KSS_EXPR(_impl->node != nullptr)
+    });
 }
 
 Mapping::Mapping(Node&& n) {
@@ -940,6 +1002,11 @@ Mapping::Mapping(Node&& n) {
         throw std::bad_cast();
     }
     _impl = move(n._impl);
+
+    contract::postconditions({
+        KSS_EXPR(_impl->doc != nullptr),
+        KSS_EXPR(_impl->node != nullptr)
+    });
 }
 
 Mapping::~Mapping() noexcept = default;
@@ -1104,6 +1171,10 @@ void Document::ensureUnique() {
         }
         _impl = newImpl;
     }
+
+    contract::postconditions({
+        KSS_EXPR(_impl.unique())
+    });
 }
 
 
@@ -1137,6 +1208,10 @@ void Document::clear() noexcept {
     if (_impl->haveDoc) {
         _impl = shared_ptr<DocumentImpl>(new DocumentImpl());
     }
+
+    contract::postconditions({
+        KSS_EXPR(empty())
+    });
 }
 
 // Return the root node.
