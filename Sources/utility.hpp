@@ -23,6 +23,7 @@
 
 namespace kss {
     namespace io {
+
         namespace _private {
             // This is not part of the public API. Don't use anything in this namespace
             // directly.
