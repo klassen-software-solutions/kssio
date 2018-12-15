@@ -13,6 +13,7 @@
 #include <cassert>
 #include <cstdint>
 #include <exception>
+#include <iostream>
 #include <limits>
 #include <ostream>
 #include <stdexcept>
@@ -27,6 +28,11 @@ namespace kss {
         namespace _private {
             // This is not part of the public API. Don't use anything in this namespace
             // directly.
+
+            // Use these macros if a condition fails in a header file. (In a cpp file
+            // use the contract API.)
+#           define _KSSIO_PRECONDITIONS_FAILED { std::cerr << "preconditions failed " << __FILE__ << ", " << __LINE__ << std::endl; std::terminate(); }
+#           define _KSSIO_POSTCONDITIONS_FAILED { std::cerr << "postconditions failed " << __FILE__ << ", " << __LINE__ << std::endl; std::terminate(); }
 
 
             /*!

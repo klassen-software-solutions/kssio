@@ -19,7 +19,7 @@
 #include <string>
 
 #include "add_rel_ops.hpp"
-#include "contract.hpp"
+#include "utility.hpp"
 
 namespace kss { namespace io { namespace _private {
 
@@ -65,12 +65,14 @@ namespace kss { namespace io { namespace _private {
             _i = (i >= len ? std::basic_string<Char, Traits, Alloc>::npos : i);
             _n = std::min(n, len - _i);
 
+            // postconditions
             constexpr auto npos = std::basic_string<Char, Traits, Alloc>::npos;
-            kss::contract::postconditions({
-                KSS_EXPR(_i == i || _i == npos),
-                KSS_EXPR(_n <= n),
-                KSS_EXPR(_cstr == nullptr)
-            });
+            if (!(_i == i || i == npos)
+                || !(_n <= n)
+                || !(_cstr == nullptr))
+            {
+                _KSSIO_POSTCONDITIONS_FAILED
+            }
         }
 
         /*!
@@ -88,11 +90,13 @@ namespace kss { namespace io { namespace _private {
                 _n = str2.length();
             }
 
-            kss::contract::postconditions({
-                KSS_EXPR(_i >= i),
-                KSS_EXPR(_n == str2.length() || _n == 0),
-                KSS_EXPR(_cstr == nullptr)
-            });
+            // postconditions
+            if (!(_i >= i)
+                || !(_n == str2.length() || _n == 0)
+                || !(_cstr == nullptr))
+            {
+                _KSSIO_POSTCONDITIONS_FAILED
+            }
         }
 
         /*!
@@ -239,15 +243,17 @@ namespace kss { namespace io { namespace _private {
                 _cstr = nullptr;
             }
 
-            kss::contract::postconditions({
-                KSS_EXPR(_cstr == nullptr)
-            });
+            // postconditions
+            if (!(_cstr == nullptr)) {
+                _KSSIO_POSTCONDITIONS_FAILED
+            }
         }
 
         SubString& assign(const const_pointer ptr, size_type new_n) {
-            kss::contract::preconditions({
-                KSS_EXPR(ptr != nullptr)
-            });
+            // preconditions
+            if (!(ptr != nullptr)) {
+                _KSSIO_PRECONDITIONS_FAILED
+            }
 
             if (_i >= _str.length()) {
                 throw std::out_of_range("Substring is out of range of the original.");

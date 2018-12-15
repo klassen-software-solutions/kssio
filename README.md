@@ -27,11 +27,16 @@ In addition, code should follow our coding standards as described below:
 If you choose to write code that breaks one of these, be prepared to justify your decision.
 2. Favour reliability and readability over strict formatting guidelines, but if choose to break a 
 formatting guideline, be prepared to justify your decision.
-3. Follow the C++14 standard. (We won't switch to C++17 until 2020.)
-4. Don't work on the master branch - create your own suitably named branch to work on.
-6. Don't merge your branch into master - create a suitable pull request so we have an opportunity to review your work first.
-6. Write unit tests that cover your code. The code must pass the unit tests before your pull request will be accepted.
-7. Eliminate all compiler warnings. If you absolutely cannot eliminate a warning, then suppress it
+3. Write unit tests that cover your code. The code must pass the unit tests before your pull request will be accepted.
+4. Follow the "programming by contract" patterns. Within a .cpp file use the "contract" API. Within .hpp files,
+do not use the _contract.hpp header as it is considered private to this library. Instead write your
+preconditions and postconditions manually using "if" statements. This is not as readable as the "contract"
+API, but it is more maintainable by ensuring that multiple versions of the contract API (due to using multiple
+kss libraries), do not conflict with each other.
+5. Follow the C++14 standard. (We won't switch to C++17 until 2020.)
+6. Don't work on the master branch - create your own suitably named branch to work on.
+7. Don't merge your branch into master - create a suitable pull request so we have an opportunity to review your work first.
+8. Eliminate all compiler warnings. If you absolutely cannot eliminate a warning, then suppress it
 using the apprpriate #pragma, but be prepared to justify your decision.
 
 ### General Code Formatting

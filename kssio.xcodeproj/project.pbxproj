@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA03030D219A2FEF00231AA8 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA03030B219A2FEF00231AA8 /* fileutil.cpp */; };
 		AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA03030C219A2FEF00231AA8 /* fileutil.hpp */; };
+		AA0C3A6821C4949000D0703C /* _contract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA0C3A6721C4949000D0703C /* _contract.cpp */; };
 		AA16FA42218A556C0059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA40218A556C0059E8DB /* socket.cpp */; };
 		AA16FA43218A556C0059E8DB /* socket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA16FA41218A556C0059E8DB /* socket.hpp */; };
 		AA16FA45218A56950059E8DB /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA16FA44218A56950059E8DB /* socket.cpp */; };
@@ -50,7 +51,7 @@
 		AA70FB75219634D500EBFBC7 /* _action_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA70FB73219634D500EBFBC7 /* _action_queue.hpp */; };
 		AA9D9D9521A024D7002222EF /* binary_file.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA9D9D9321A024D7002222EF /* binary_file.hpp */; };
 		AA9D9D9621A024D7002222EF /* binary_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA9D9D9421A024D7002222EF /* binary_file.cpp */; };
-		AA9D9D9821A05D72002222EF /* contract.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA9D9D9721A05D72002222EF /* contract.hpp */; };
+		AA9D9D9821A05D72002222EF /* _contract.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA9D9D9721A05D72002222EF /* _contract.hpp */; };
 		AA9D9D9A21A200B0002222EF /* binary_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA9D9D9921A200B0002222EF /* binary_file.cpp */; };
 		AAB2573521A3B1250003F519 /* directory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AAB2573321A3B1250003F519 /* directory.hpp */; };
 		AAB2573621A3B1250003F519 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB2573421A3B1250003F519 /* directory.cpp */; };
@@ -100,6 +101,7 @@
 /* Begin PBXFileReference section */
 		AA03030B219A2FEF00231AA8 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
 		AA03030C219A2FEF00231AA8 /* fileutil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fileutil.hpp; sourceTree = "<group>"; };
+		AA0C3A6721C4949000D0703C /* _contract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _contract.cpp; sourceTree = "<group>"; };
 		AA16FA3F218A51DE0059E8DB /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		AA16FA40218A556C0059E8DB /* socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socket.cpp; sourceTree = "<group>"; };
 		AA16FA41218A556C0059E8DB /* socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = socket.hpp; sourceTree = "<group>"; };
@@ -153,7 +155,7 @@
 		AA70FB73219634D500EBFBC7 /* _action_queue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _action_queue.hpp; sourceTree = "<group>"; };
 		AA9D9D9321A024D7002222EF /* binary_file.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = binary_file.hpp; sourceTree = "<group>"; };
 		AA9D9D9421A024D7002222EF /* binary_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binary_file.cpp; sourceTree = "<group>"; };
-		AA9D9D9721A05D72002222EF /* contract.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = contract.hpp; sourceTree = "<group>"; };
+		AA9D9D9721A05D72002222EF /* _contract.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _contract.hpp; sourceTree = "<group>"; };
 		AA9D9D9921A200B0002222EF /* binary_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binary_file.cpp; sourceTree = "<group>"; };
 		AAB2573321A3B1250003F519 /* directory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = directory.hpp; sourceTree = "<group>"; };
 		AAB2573421A3B1250003F519 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
@@ -236,6 +238,8 @@
 			children = (
 				AA70FB72219634D500EBFBC7 /* _action_queue.cpp */,
 				AA70FB73219634D500EBFBC7 /* _action_queue.hpp */,
+				AA0C3A6721C4949000D0703C /* _contract.cpp */,
+				AA9D9D9721A05D72002222EF /* _contract.hpp */,
 				AAB4FEBE21A65469009AFDB2 /* _json.h */,
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
 				AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */,
@@ -246,7 +250,6 @@
 				AA450A6321B23A1C00643D40 /* add_rel_ops.hpp */,
 				AA9D9D9421A024D7002222EF /* binary_file.cpp */,
 				AA9D9D9321A024D7002222EF /* binary_file.hpp */,
-				AA9D9D9721A05D72002222EF /* contract.hpp */,
 				AA4780B02188F5E9006D635F /* curl_error_category.cpp */,
 				AA4780AF2188F5E9006D635F /* curl_error_category.hpp */,
 				AAB2573421A3B1250003F519 /* directory.cpp */,
@@ -342,7 +345,7 @@
 				AA4780912188E5A7006D635F /* version.hpp in Headers */,
 				AA450A6221B237C200643D40 /* random_access_iterator.hpp in Headers */,
 				AAB4FEBF21A65469009AFDB2 /* _json.h in Headers */,
-				AA9D9D9821A05D72002222EF /* contract.hpp in Headers */,
+				AA9D9D9821A05D72002222EF /* _contract.hpp in Headers */,
 				AAB2574121A4F2110003F519 /* simple_xml_writer.hpp in Headers */,
 				AAB2574521A4F7350003F519 /* simple_json_writer.hpp in Headers */,
 				AAC8CF10218BA04F000540E4 /* interface.hpp in Headers */,
@@ -460,6 +463,7 @@
 				AA70FB74219634D500EBFBC7 /* _action_queue.cpp in Sources */,
 				AA4780A52188E95A006D635F /* utility.cpp in Sources */,
 				AAC8CF11218BA04F000540E4 /* interface.cpp in Sources */,
+				AA0C3A6821C4949000D0703C /* _contract.cpp in Sources */,
 				AAB2573621A3B1250003F519 /* directory.cpp in Sources */,
 				AA2E38F3219E190700BA6909 /* poller.cpp in Sources */,
 				AAB4FEBA21A64C5F009AFDB2 /* jsonstream.cpp in Sources */,

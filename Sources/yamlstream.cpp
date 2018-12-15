@@ -19,17 +19,17 @@
 
 #include <yaml.h>
 
+#include "_contract.hpp"
 #include "_raii.hpp"
 #include "_substring.hpp"
 #include "_tokenizer.hpp"
-#include "contract.hpp"
 #include "yaml_error_category.hpp"
 #include "yamlstream.hpp"
 
 using namespace std;
 using namespace kss::io::stream::yaml;
 
-namespace contract = kss::contract;
+namespace contract = kss::io::contract;
 
 using kss::io::_private::finally;
 using kss::io::_private::substring_t;
