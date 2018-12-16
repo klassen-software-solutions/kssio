@@ -6,15 +6,14 @@
 //  Copyright (c) 2015 Klassen Software Solutions. All rights reserved.
 //
 
-#include <csignal>
 #include <cstdlib>
+#include <future>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <thread>
 #include <typeinfo>
 
-#include <unistd.h>
 #include <curl/curl.h>
 
 #include <kss/io/curl_error_category.hpp>
@@ -50,8 +49,7 @@ namespace {
         TestSuiteWithServer(const string& name, test_case_list fns) : TestSuite(name, fns) {}
 
         void beforeAll() override {
-            pid = fork();
-            if (pid == 0) {
+            server = async([] {
                 string serverPy;
                 if (isFile("../../../Tests/http_test_server.py")) { // Run from Xcode
                     serverPy = "../../../Tests/http_test_server.py";
@@ -61,26 +59,20 @@ namespace {
                 }
 
                 const auto command = serverPy + "&> http_test_server.log";
+
                 int ret = system(command.c_str());
                 if (ret) {
                     throw runtime_error("system returned: " + to_string(ret));
                 }
-            }
-            else {
-                this_thread::sleep_for(1s);
-            }
+            });
         }
 
         void afterAll() override {
-            if (pid != -1 && pid != 0) {
-                kill(pid, SIGTERM);     // the parent
-                kill(pid+1, SIGTERM);   // the shell
-                kill(pid+2, SIGTERM);   // the pythong script
-            }
+            server.wait();
         }
 
     private:
-        int pid;
+        future<void> server;
     };
 }
 

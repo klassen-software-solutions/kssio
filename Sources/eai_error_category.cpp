@@ -7,16 +7,18 @@
 //  Licensing follows the MIT License.
 //
 
-#include <cassert>
 #include <cerrno>
 #include <string>
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#include "_contract.hpp"
 #include "eai_error_category.hpp"
 
 using namespace std;
+
+namespace contract = kss::io::contract;
 
 namespace {
     class EaiErrorCategory : public error_category {
@@ -27,8 +29,10 @@ namespace {
 
         string message(int val) const override {
             const char* msg = gai_strerror(val);
-            assert(msg != nullptr);
-            return (msg == nullptr ? string() : string(msg));
+            contract::postconditions({
+                KSS_EXPR(msg != nullptr)
+            });
+            return string(msg);
         }
     };
 }

@@ -271,5 +271,16 @@ static TestSuite ts("file::fileutil", {
         // Cleanup
         unlink(filename.c_str());
         unlink(filename2.c_str());
+    }),
+    make_pair("empty path arguments", [](TestSuite&) {
+        KSS_ASSERT(throwsException<invalid_argument>([]{ exists(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isFile(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isDirectory(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isSymbolicLink(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isPipe(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isCharacterSpecial(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isBlockSpecial(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isSocket(""); }));
+        KSS_ASSERT(throwsException<invalid_argument>([]{ isWhiteout(""); }));
     })
 });
