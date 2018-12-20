@@ -19,10 +19,13 @@
 #include <poll.h>
 #include <syslog.h>
 
+#include "_contract.hpp"
 #include "poller.hpp"
 
 using namespace std;
 using namespace kss::io;
+
+namespace contract = kss::io::contract;
 
 using std::chrono::milliseconds;
 
@@ -198,47 +201,116 @@ struct Poller::Impl {
 
 Poller::Poller() : _impl(new Impl()) {
 	_impl->parent = this;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(_impl->delegate == nullptr),
+        KSS_EXPR(_impl->resources.empty()),
+        KSS_EXPR(_impl->resourcesHaveChanged == false)
+    });
 }
 
 Poller::~Poller() noexcept = default;
 
 Poller::Poller(Poller&& p) noexcept : _impl(move(p._impl)) {
 	_impl->parent = this;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(!p._impl)
+    });
 }
 
 Poller& Poller::operator=(Poller&& p) noexcept {
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
     if (&p != this) {
         _impl = move(p._impl);
         _impl->parent = this;
     }
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(!p._impl)
+    });
 	return *this;
 }
 
 void Poller::setDelegate(kss::io::PollerDelegate *delegate) noexcept {
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
 	_impl->delegate = delegate;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(_impl->delegate == delegate)
+    });
 }
+
 
 void Poller::add(const kss::io::PolledResource &resource) {
-	lock_guard<mutex> lock(_impl->resourceLock);
-	_impl->resources.push_back(resource);
-	_impl->resourcesHaveChanged = true;
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
+    lock_guard<mutex> lock(_impl->resourceLock);
+    _impl->resources.push_back(resource);
+    _impl->resourcesHaveChanged = true;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(!_impl->resources.empty()),
+        KSS_EXPR(_impl->resourcesHaveChanged == true)
+    });
 }
+
 
 void Poller::remove(const string &resourceName) {
-	lock_guard<mutex> lock(_impl->resourceLock);
-	eraseIf(_impl->resources, [&](const PolledResource& resource) {
-		return (resource.name == resourceName);
-	});
-	_impl->resourcesHaveChanged = true;
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
+    lock_guard<mutex> lock(_impl->resourceLock);
+    const auto n = _impl->resources.size();
+    eraseIf(_impl->resources, [&](const PolledResource& resource) {
+        return (resource.name == resourceName);
+    });
+
+    if (_impl->resources.size() != n) {
+        _impl->resourcesHaveChanged = true;
+    }
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
 }
 
+
 void Poller::removeAll() {
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
 	lock_guard<mutex> lock(_impl->resourceLock);
 	_impl->resources.clear();
 	_impl->resourcesHaveChanged = true;
+
+    contract::postconditions({
+        KSS_EXPR(_impl->parent == this),
+        KSS_EXPR(_impl->resources.empty()),
+        KSS_EXPR(_impl->resourcesHaveChanged == true)
+    });
 }
 
 void Poller::run() {
+    contract::preconditions({
+        KSS_EXPR(_impl->parent == this)
+    });
+
 	if (!_impl->delegate) {
 		throw runtime_error("No delegate has been assigned.");
 	}

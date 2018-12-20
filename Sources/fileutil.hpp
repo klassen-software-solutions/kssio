@@ -16,6 +16,7 @@
 #include <cstring>
 #include <fstream>
 #include <functional>
+#include <stdexcept>
 #include <string>
 #include <system_error>
 
@@ -33,6 +34,7 @@ namespace kss {
              Returns true if the file exists and false otherwise.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             bool exists(const std::string& path, bool followLinks = true);
@@ -41,6 +43,7 @@ namespace kss {
              Returns true if the path exists and is a regular file.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isFile(const std::string& path, bool followLinks = true) {
@@ -51,6 +54,7 @@ namespace kss {
              Returns true if the path exists and is a directory.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isDirectory(const std::string& path, bool followLinks = true) {
@@ -61,6 +65,7 @@ namespace kss {
              Returns true if the path exists and is a symbolic link.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isSymbolicLink(const std::string& path, bool followLinks = true) {
@@ -71,6 +76,7 @@ namespace kss {
              Returns true if the path exists and is a pipe.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isPipe(const std::string& path, bool followLinks = true) {
@@ -81,6 +87,7 @@ namespace kss {
              Returns true if the path exists and is a character special file.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isCharacterSpecial(const std::string& path, bool followLinks = true) {
@@ -91,6 +98,7 @@ namespace kss {
              Returns true if the path exists and is a block special file.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isBlockSpecial(const std::string& path, bool followLinks = true) {
@@ -101,6 +109,7 @@ namespace kss {
              Returns true if the path exists and is a socket.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
             inline bool isSocket(const std::string& path, bool followLinks = true) {
@@ -113,31 +122,34 @@ namespace kss {
              always return false.
              @param path the path to be examined
              @param followLinks if true we follow symbolic links
+             @throws std::invalid_argument if path is empty
              @throws std::system_error if the underlying C call fails
              */
-#if defined(S_IFWHT)
             inline bool isWhiteout(const std::string& path, bool followLinks = true) {
+#if defined(S_IFWHT)
                 return kss::io::file::_private::doStat(path, followLinks, S_IFWHT);
-            }
 #else
-            inline bool isWhiteout(const std::string&, bool = true) {
+                if (path.empty()) {
+                    throw std::invalid_argument("path is empty");
+                }
                 return false;
-            }
 #endif
+            }
 
             /*!
              Return a temporary name/file/stream with the given prefix.
 
-             Warning: Using this can be a security risk as in some architectures the pattern
-             of the returned name can be guessed and there is a pause between obtaining the
-             name and, presumbably, opening the file. For situations where this is a potential
-             problem use temporary_file instead which handles the potential race condition,
-             instead of temporary_filename or temporary_fstream both of which have the potential
-             race condition.
+             Warning: temporaryFilename can be a security risk as in some architectures the
+             pattern of the returned name can be guessed and there is a pause between obtaining
+             the name and, presumbably, opening the file. For situations where this is a
+             potential problem use temporaryFile instead which handles the potential race
+             condition, instead of temporaryFilename or temporaryFStream both of which have the
+             potential race condition.
              
              @return the string version returns a suitable filename. The file version returns
                   a file handle opened for reading and writing. The stream version returns
                   an fstream opened for reading and writing.
+             @throws std::invalid_argument if prefix is empty
              @throws system_error if the underlying C routines return an error condition.
              */
             std::string  temporaryFilename(const std::string& prefix);
@@ -173,7 +185,7 @@ namespace kss {
              */
             class FiledesGuard {
             public:
-                explicit FiledesGuard(int filedes) : _filedes(filedes) {}
+                explicit FiledesGuard(int filedes);
                 ~FiledesGuard() noexcept;
                 int filedes() const noexcept { return _filedes; }
             private:
@@ -187,7 +199,7 @@ namespace kss {
              */
             class FileGuard {
             public:
-                explicit FileGuard(FILE* f) : _file(f) {}
+                explicit FileGuard(FILE* f);
                 ~FileGuard() noexcept;
                 FILE* file() const noexcept { return _file; }
             private:
@@ -201,6 +213,7 @@ namespace kss {
 
              @param filename the name of the file to write
              @param fn a lambda that will write the contents to the stream
+             @throws std::invalid_argument if filename is empty
              @throws std::system_error if there is a problem while opening or writing
              @throws any exception that fn throws
              */
@@ -212,6 +225,7 @@ namespace kss {
 
              @param filename the name of the file to process
              @param fn a lambda that will process the given stream
+             @throws std::invalid_argument if filename is empty
              @throws std::system_error if there is a problem while opening or reading.
              @throws any exception that fn throws
              */
@@ -229,17 +243,13 @@ namespace kss {
             public:
                 typedef std::function<void(const std::string&)> line_processing_fn;
 
-                explicit LineByLine(const line_processing_fn& fn) : _delim('\n'), _fn(fn) {}
-
-                LineByLine(char eolDelimiter, const line_processing_fn& fn)
-                : _delim(eolDelimiter), _fn(fn)
-                {}
-
+                explicit LineByLine(const line_processing_fn& fn) : LineByLine('\n', fn) {}
+                LineByLine(char eolDelimiter, const line_processing_fn& fn);
                 void operator()(std::istream& strm);
 
             private:
-                const char             _delim;
-                line_processing_fn    _fn;
+                const char          _delim;
+                line_processing_fn  _fn;
             };
 
             /*!
@@ -262,6 +272,7 @@ namespace kss {
 
             /*!
              Copy a file.
+             @throws std::invalid_argument if either filename is empty
              @throws std::system_error if a problem occurs.
              */
             void copyFile(const std::string& sourceFilename,

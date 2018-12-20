@@ -18,17 +18,17 @@
 
 #include <sys/param.h>
 
+#include "_contract.hpp"
 #include "_raii.hpp"
 #include "_stringutil.hpp"
 #include "_tokenizer.hpp"
-#include "contract.hpp"
 #include "directory.hpp"
 #include "fileutil.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::contract;
+namespace contract = kss::io::contract;
 
 using kss::io::_private::endsWith;
 using kss::io::_private::finally;

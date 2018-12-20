@@ -11,15 +11,15 @@
 #include <sstream>
 #include <typeinfo>
 
+#include "_contract.hpp"
 #include "_json.h"
-#include "contract.hpp"
 #include "jsonstream.hpp"
 #include "utility.hpp"
 
 using namespace std;
 using namespace kss::io::stream::json;
 
-namespace contract = kss::contract;
+namespace contract = kss::io::contract;
 
 
 // MARK: Node Implementation

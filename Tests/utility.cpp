@@ -10,13 +10,38 @@
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
+#include <vector>
+
 #include <kss/io/utility.hpp>
+
 #include "ksstest.hpp"
 
 using namespace std;
 using namespace kss::io::net;
 using namespace kss::io::stream;
 using namespace kss::test;
+
+namespace {
+    template <class T>
+    bool testByteOrderSequence(T hval, T nval) {
+        vector<T> vec(100, hval);
+        hton(vec.begin(), vec.end());
+        for (const T& v : vec) {
+            if (v != nval) {
+                return false;
+            }
+        }
+
+        ntoh(vec.begin(), vec.end());
+        for (const T& v : vec) {
+            if (v != hval) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 
 static TestSuite ts("net::utility", {
     make_pair("byteorder", [](TestSuite&) {
@@ -50,6 +75,21 @@ static TestSuite ts("net::utility", {
             KSS_ASSERT(*((uint64_t*)&hd) == 0x40c3ba8147ae147b);
             KSS_ASSERT(*((uint64_t*)&nd) == 0x7b14ae4781bac340);
         }
+    }),
+    make_pair("byteorder on a sequence", [](TestSuite&) {
+        uint16_t hu16 = 10101;
+        uint16_t nu16 = hton(hu16);
+        uint32_t hu32 = 1010101;
+        uint32_t nu32 = hton(hu32);
+        float hf = 10101.F;
+        float nf = hton(hf);
+        double hd = 1010101.e-2;
+        double nd = hton(hd);
+
+        KSS_ASSERT(testByteOrderSequence(hu16, nu16));
+        KSS_ASSERT(testByteOrderSequence(hu32, nu32));
+        KSS_ASSERT(testByteOrderSequence(hf, nf));
+        KSS_ASSERT(testByteOrderSequence(hd, nd));
     }),
     make_pair("byte packing & unpacking", [](TestSuite&) {
         KSS_ASSERT((pack<uint16_t, 2>((uint8_t[]) { 0U, 0U })) == 0U);

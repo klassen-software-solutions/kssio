@@ -13,12 +13,13 @@
 
 #include <fcntl.h>
 
+#include "_contract.hpp"
 #include "binary_file.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::contract;
+namespace contract = kss::io::contract;
 
 
 // MARK: BinaryFile

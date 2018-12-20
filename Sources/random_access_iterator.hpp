@@ -19,8 +19,7 @@
 #include <memory>
 #include <utility>
 
-#include "add_rel_ops.hpp"
-#include "contract.hpp"
+#include "utility.hpp"
 
 namespace kss { namespace io { namespace _private {
 
@@ -61,9 +60,10 @@ namespace kss { namespace io { namespace _private {
         {
             _pos = (isEnd ? container.size() : 0);
 
-            kss::contract::postconditions({
-                KSS_EXPR(_container != nullptr)
-            });
+            // postconditions
+            if (!(_container != nullptr)) {
+                _KSSIO_POSTCONDITIONS_FAILED
+            }
         }
 
         /*!

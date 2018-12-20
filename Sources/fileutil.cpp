@@ -18,10 +18,13 @@
 
 #include <unistd.h>
 
+#include "_contract.hpp"
 #include "fileutil.hpp"
 
 using namespace std;
 using namespace kss::io::file;
+
+namespace contract = kss::io::contract;
 
 
 namespace {
@@ -31,6 +34,10 @@ namespace {
 }
 
 bool kss::io::file::_private::doStat(const string &path, bool followLinks, mode_t mode) {
+    contract::parameters({
+        KSS_EXPR(!path.empty())
+    });
+
     struct stat st;
     const int res = (followLinks ? stat(path.c_str(), &st) : lstat(path.c_str(), &st));
     if (!res) {
@@ -46,6 +53,10 @@ bool kss::io::file::_private::doStat(const string &path, bool followLinks, mode_
 }
 
 bool kss::io::file::exists(const string &path, bool followLinks) {
+    contract::parameters({
+        KSS_EXPR(!path.empty())
+    });
+
     struct stat st;
     const int res = (followLinks ? stat(path.c_str(), &st) : lstat(path.c_str(), &st));
     if (!res) {
@@ -67,6 +78,10 @@ namespace {
     // Construct the template from the prefix. Note that for Linux versions mktemp requires
     // that the template end in "XXXXXX" so six characters is our limit for the uniqueness.
     unique_ptr<char, void(*)(void*)> createTemplate(const string& prefix) {
+        contract::parameters({
+            KSS_EXPR(!prefix.empty())
+        });
+
         char* templ = (char*)malloc(prefix.length()+7);
         if (!templ) {
             throw bad_alloc();
@@ -142,15 +157,27 @@ string kss::io::file::dirname(const string &path) {
 
 //// MARK: FILE_GUARD IMPLEMENTATION
 
-FileGuard::~FileGuard() noexcept {
-    if (_file) {
-        fclose(_file);
-    }
+FiledesGuard::FiledesGuard(int filedes) : _filedes(filedes) {
+    contract::postconditions({
+        KSS_EXPR(_filedes == filedes)
+    });
 }
 
 FiledesGuard::~FiledesGuard() noexcept {
     if (_filedes != -1) {
         close(_filedes);
+    }
+}
+
+FileGuard::FileGuard(FILE* f) : _file(f) {
+    contract::postconditions({
+        KSS_EXPR(_file == f)
+    });
+}
+
+FileGuard::~FileGuard() noexcept {
+    if (_file) {
+        fclose(_file);
     }
 }
 
@@ -164,6 +191,10 @@ namespace {
 
     template <class Stream, class Fn>
     void doProcess(const string& filename, const string& mode, const Fn& fn) {
+        contract::parameters({
+            KSS_EXPR(!filename.empty())
+        });
+
         errno = 0;
         Stream strm(filename);
         if (!strm.is_open()) {
@@ -185,6 +216,14 @@ void kss::io::file::processFile(const string& filename, const function<void(ifst
     doProcess<ifstream>(filename, "processing", fn);
 }
 
+LineByLine::LineByLine(char eolDelimiter, const line_processing_fn& fn)
+: _delim(eolDelimiter), _fn(fn)
+{
+    contract::postconditions({
+        KSS_EXPR(_delim == eolDelimiter)
+    });
+}
+
 void LineByLine::operator()(istream& strm) {
     string line;
     while (getline(strm, line, _delim)) {
@@ -200,6 +239,11 @@ void CharByChar::operator()(istream& strm) {
 }
 
 void kss::io::file::copyFile(const string& sourceFilename, const string& destinationFilename) {
+    contract::parameters({
+        KSS_EXPR(!sourceFilename.empty()),
+        KSS_EXPR(!destinationFilename.empty())
+    });
+
     errno = 0;
     FileGuard ifile(fopen(sourceFilename.c_str(), "r"));
     if (!ifile.file()) {
@@ -218,8 +262,28 @@ void kss::io::file::copyFile(const string& sourceFilename, const string& destina
             ostrm.write(buffer, streamsize(n));
         }
     }
+    ostrm.flush();
 
     if (ostrm.bad()) {
         throwProcessingError(destinationFilename, "Failed while writing");
     }
+
+    contract::postconditions({
+        KSS_EXPR(isFile(sourceFilename)),
+        KSS_EXPR(isFile(destinationFilename))
+    });
+
+#if !defined(NDEBUG)
+    // This postcondition is expensive on all but the smallest files. Hence we break
+    // from our standard and only perform this check in debug mode. Also note that this
+    // is not a full check, i.e. we are not comparing the file contents, we are only
+    // ensuring they are the correct size.
+    size_t srcCharCount = 0;
+    size_t dstCharCount = 0;
+    processFile(sourceFilename, CharByChar([&srcCharCount](char) { ++srcCharCount; }));
+    processFile(destinationFilename, CharByChar([&dstCharCount](char) { ++dstCharCount; }));
+    contract::postconditions({
+        KSS_EXPR(srcCharCount == dstCharCount)
+    });
+#endif
 }

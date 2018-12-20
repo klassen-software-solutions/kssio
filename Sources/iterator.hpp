@@ -127,7 +127,7 @@ namespace kss {
                         try {
                             *_stream >> _value;
                         }
-                        catch (kss::io::Eof& e) {
+                        catch (const kss::io::Eof&) {
                             // Not an error, just means we were at the end of the input.
                             _stream = nullptr;
                         }

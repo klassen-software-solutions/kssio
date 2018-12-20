@@ -16,10 +16,13 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#include "_contract.hpp"
 #include "socket.hpp"
 
 using namespace std;
 using namespace kss::io::net;
+
+namespace contract = kss::io::contract;
 
 
 namespace {
@@ -66,8 +69,13 @@ int kss::io::net::bindToPort(int sock, int port,
                              struct sockaddr* addr, size_t addrLen,
                              int startingPort, int endingPort)
 {
+    contract::parameters({
+        KSS_EXPR(sock > 0),
+        KSS_EXPR(addrLen <= numeric_limits<socklen_t>::max())
+    });
+
     // Sanity checks on the inputs.
-    if (sock <= 0) { throw invalid_argument("sock must be positive"); }
+    const int requestedPort = port;
     if (port != nextAvailablePort) {
         verifyPortNumber("port", port);
     }
@@ -80,9 +88,7 @@ int kss::io::net::bindToPort(int sock, int port,
     }
 
     // Setup the default sockaddr if needed.
-    assert(addrLen <= numeric_limits<socklen_t>::max());
     struct sockaddr_in defaultAddr;
-
     if (addr == nullptr) {
         memset(&defaultAddr, 0, sizeof(defaultAddr));
         defaultAddr.sin_family = AF_INET;
@@ -118,6 +124,12 @@ int kss::io::net::bindToPort(int sock, int port,
                            + "] unavailable");
     }
 
+    contract::postconditions({
+        KSS_EXPR(requestedPort == nextAvailablePort
+                 ? port >= startingPort && port <= endingPort
+                 : port == requestedPort)
+    });
+
     return port;
 }
 
@@ -133,5 +145,10 @@ int kss::io::net::findNextAvailablePort(int startingPort, int endingPort) {
     const int port = bindToPort(sock, nextAvailablePort, nullptr, 0, startingPort, endingPort);
     shutdown(sock, SHUT_RDWR);
     close(sock);
+
+    contract::postconditions({
+        KSS_EXPR(port >= startingPort && port <= endingPort)
+    });
+
     return port;
 }

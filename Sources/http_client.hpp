@@ -165,6 +165,7 @@ namespace kss {
                  - cb the callback for processing the response. Note that this reference
                     must remain valid at least until the asynchronous call has been
                     completed.
+                 @throws invalid_argument if path is not empty and does not start with a '/'
                  @throws system_error if anything goes wrong writing the request. If this error
                     is EAGAIN it may be mean following, all of which imply trying again later:
                       - Another thread has called wait. No additional operations will be

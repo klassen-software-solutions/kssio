@@ -13,12 +13,16 @@
 
 #include <curl/curl.h>
 
+#include "_contract.hpp"
 #include "_raii.hpp"
 #include "curl_error_category.hpp"
 
 using namespace std;
 using namespace kss::io::_private;
 using namespace kss::io::net;
+
+namespace contract = kss::io::contract;
+
 
 namespace {
     class CurlErrorCategory : public error_category {
@@ -28,7 +32,11 @@ namespace {
         }
 
         string message(int val) const override {
-            return curl_easy_strerror(CURLcode(val));
+            const char* msg = curl_easy_strerror(CURLcode(val));
+            contract::postconditions({
+                KSS_EXPR(msg != nullptr)
+            });
+            return string(msg);
         }
     };
 

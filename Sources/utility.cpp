@@ -59,7 +59,8 @@ float kss::io::net::ntohf(float netfloat) noexcept {
         uint32_t u = 0;
         float f = 0;
 
-        assert(sizeof(float) == sizeof(uint32_t));
+        static_assert(sizeof(float) == sizeof(uint32_t),
+                      "float and uint32_t must be the same size");
         memcpy(&u, &netfloat, sizeof(uint32_t));
         u = ntohl(u);
         memcpy(&f, &u, sizeof(uint32_t));
