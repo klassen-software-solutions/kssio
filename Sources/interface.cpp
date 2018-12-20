@@ -23,15 +23,18 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+#include "_contract.hpp"
 #include "_raii.hpp"
 #include "_tokenizer.hpp"
 #include "interface.hpp"
 #include "utility.hpp"
 
 
-
 using namespace std;
 using namespace kss::io::net;
+
+namespace contract = kss::io::contract;
+
 using kss::io::_private::finally;
 using kss::io::_private::Tokenizer;
 
@@ -50,7 +53,10 @@ namespace {
 IpV4Address IpV4Address::_fromSockAddr(const struct sockaddr *saddr) {
     IpV4Address ret;
     if (saddr) {
-        assert(saddr->sa_family == AF_INET);
+        contract::conditions({
+            KSS_EXPR(saddr->sa_family == AF_INET)
+        });
+
         const struct sockaddr_in* sin = reinterpret_cast<const struct sockaddr_in*>(saddr);
         ret._addr = ntoh((uint32_t)sin->sin_addr.s_addr);
     }
@@ -58,6 +64,10 @@ IpV4Address IpV4Address::_fromSockAddr(const struct sockaddr *saddr) {
 }
 
 IpV4Address::IpV4Address(const string& addrStr) {
+    contract::parameters({
+        KSS_EXPR(!addrStr.empty())
+    });
+
     Tokenizer tok(addrStr, ".", false);
     uint8_t ar[4];
 
@@ -87,8 +97,14 @@ IpV4Address::operator string() const {
     unpack<uint32_t, 4>(_addr, ar);
 
     ostringstream oss;
-    for (size_t i = 0; i < 3; ++i) oss << (int)ar[i] << ".";
+    for (size_t i = 0; i < 3; ++i) {
+        oss << (int)ar[i] << ".";
+    }
     oss << (int)ar[3];
+
+    contract::postconditions({
+        KSS_EXPR(IpV4Address(oss.str()) == *this)
+    });
     return oss.str();
 }
 
@@ -106,7 +122,10 @@ namespace {
 MacAddress MacAddress::_fromSockAddr(const struct sockaddr *saddr) {
     MacAddress ret;
     if (saddr) {
-        assert(saddr->sa_family == AF_LINK);
+        contract::conditions({
+            KSS_EXPR(saddr->sa_family == AF_LINK)
+        });
+
         const sockaddr_dl* sdl = reinterpret_cast<const sockaddr_dl*>(saddr);
         if (sdl->sdl_alen == 6) {   // Ignore items that cannot be a IPV4 (which all have
             uint8_t ar[6];          // mac address of 6 bytes).
@@ -118,6 +137,10 @@ MacAddress MacAddress::_fromSockAddr(const struct sockaddr *saddr) {
 }
 
 MacAddress::MacAddress(const string& addrStr) {
+    contract::parameters({
+        KSS_EXPR(!addrStr.empty())
+    });
+
     Tokenizer tok(addrStr, ":", false);
     uint8_t ar[6];
 
@@ -152,6 +175,10 @@ MacAddress::operator string() const {
         oss << setw(0) << ":";
     }
     oss << setbase(16) << setfill('0') << setw(2) << (int)ar[5];
+
+    contract::postconditions({
+        KSS_EXPR(MacAddress(oss.str()) == *this)
+    });
     return oss.str();
 }
 
@@ -172,11 +199,6 @@ struct NetworkInterface::Impl {
 
 namespace {
 
-    // Throw an exception based on the current value of errno.
-    inline void throw_system_error() {
-        throw system_error(errno, system_category());
-    }
-
     // Obtain a map from interface names to mac addresses currently available.
     typedef unordered_map<string, MacAddress> mac_addr_map_t;
     typedef pair<const struct ifaddrs*, const mac_addr_map_t*> os_impl_t;
@@ -188,7 +210,9 @@ namespace {
             if (addrs) { freeifaddrs(addrs); }
         });
 
-        if (getifaddrs(&addrs) == -1) { throw_system_error(); }
+        if (getifaddrs(&addrs) == -1) {
+            throw system_error(errno, system_category(), "getifaddrs");
+        }
         for (auto cur = addrs; cur; cur = cur->ifa_next) {
             if (cur->ifa_addr != nullptr && cur->ifa_addr->sa_family == AF_LINK) {
                 MacAddress ma = MacAddress::_fromSockAddr(cur->ifa_addr);
@@ -210,7 +234,9 @@ namespace {
             if (addrs) { freeifaddrs(addrs); }
         });
 
-        if (getifaddrs(&addrs) == -1) { throw_system_error(); }
+        if (getifaddrs(&addrs) == -1) {
+            throw system_error(errno, system_category(), "getifaddrs");
+        }
         auto macAddressMap = getMacAddresses();
         for (auto cur = addrs; cur; cur = cur->ifa_next) {
             if (cur->ifa_addr != nullptr && cur->ifa_addr->sa_family == AF_INET) {
@@ -231,8 +257,13 @@ namespace {
 NetworkInterface::NetworkInterface() : _impl(new Impl()) {}
 NetworkInterface::~NetworkInterface() noexcept = default;
 NetworkInterface::NetworkInterface(NetworkInterface&& ni) = default;
+
 NetworkInterface::NetworkInterface(const NetworkInterface& ni) : _impl(new Impl()) {
     *_impl = *ni._impl;
+
+    contract::postconditions({
+        KSS_EXPR(ni == *this)
+    });
 }
 
 NetworkInterface& NetworkInterface::operator=(NetworkInterface&&) noexcept = default;
@@ -240,6 +271,10 @@ NetworkInterface& NetworkInterface::operator=(const NetworkInterface& rhs) {
     if (&rhs != this) {
         *_impl = *rhs._impl;
     }
+
+    contract::postconditions({
+        KSS_EXPR(rhs == *this)
+    });
     return *this;
 }
 

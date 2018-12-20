@@ -10,6 +10,7 @@
 #ifndef kssio_net_utility_hpp
 #define kssio_net_utility_hpp
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <exception>
@@ -45,7 +46,7 @@ namespace kss {
              This is "borrowed" from kssutil.
              */
             template <class T>
-            struct add_rel_ops {
+            struct AddRelOps {
                 inline bool operator!=(const T& t) const noexcept {
                     const T* self = static_cast<const T*>(this);
                     return !(*self == t);
@@ -139,6 +140,30 @@ namespace kss {
             inline uint32_t ntoh(uint32_t netlong) noexcept     { return ntohl(netlong); }
             inline float    ntoh(float netfloat) noexcept       { return ntohf(netfloat); }
             inline double   ntoh(double netdouble) noexcept     { return ntohd(netdouble); }
+
+            /*!
+             In-place conversion of a series of values to/from network and host byte ordering.
+             */
+            template <class InputIterator>
+            void hton(InputIterator first, InputIterator last) {
+                if (!isBigEndian()) {
+                    while (first != last) {
+                        *first = hton(*first);
+                        ++first;
+                    }
+                }
+            }
+
+            template <class InputIterator>
+            void ntoh(InputIterator first, InputIterator last) {
+                if (!isBigEndian()) {
+                    while (first != last) {
+                        *first = ntoh(*first);
+                        ++first;
+                    }
+                }
+            }
+
 
             /*!
              Byte packing. Given an array of N bytes, pack it into a single unsigned integer

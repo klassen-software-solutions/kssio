@@ -25,17 +25,13 @@ In addition, code should follow our coding standards as described below:
 
 1. Be very familiar with [C++ Core Guidelines](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 If you choose to write code that breaks one of these, be prepared to justify your decision.
-2. Favour reliability and readability over strict formatting guidelines, but if choose to break a 
+2. Favour reliability and readability over strict formatting guidelines, but if you choose to break a 
 formatting guideline, be prepared to justify your decision.
 3. Write unit tests that cover your code. The code must pass the unit tests before your pull request will be accepted.
-4. Follow the "programming by contract" patterns. Within a .cpp file use the "contract" API. Within .hpp files,
-do not use the _contract.hpp header as it is considered private to this library. Instead write your
-preconditions and postconditions manually using "if" statements. This is not as readable as the "contract"
-API, but it is more maintainable by ensuring that multiple versions of the contract API (due to using multiple
-kss libraries), do not conflict with each other.
+4. Follow the "programming by contract" patterns. 
 5. Follow the C++14 standard. (We won't switch to C++17 until 2020.)
 6. Don't work on the master branch - create your own suitably named branch to work on.
-7. Don't merge your branch into master - create a suitable pull request so we have an opportunity to review your work first.
+7. Don't merge your branch into master - create a pull request so we have an opportunity to review your work first.
 8. Eliminate all compiler warnings. If you absolutely cannot eliminate a warning, then suppress it
 using the apprpriate #pragma, but be prepared to justify your decision.
 
@@ -45,14 +41,14 @@ using the apprpriate #pragma, but be prepared to justify your decision.
 
 * C++ header files should use the extention '.hpp' and be all lower case.
 * C header files should user the extention '.h' and be all lower case.
-* C/C++ mixed header files should use '.hpp' and must have appropriate '#if defined __cplusplus' statements.
-* Header files do not have to be limited to a single class. But everthing in them should be
+* C/C++ mixed header files should use '.h' and must have appropriate '#if defined __cplusplus' statements.
+* Header files do not have to be limited to a single class. But everything in them should be
 reasonably related.
 * Names of headers files that are for compiling only (i.e. that do not need to be installed with the library) should start with an underscore.
-* Header files must be protected using an '#ifdef' of the form 'kssio_<filenamebase>_hpp'.
+* Header files must be protected using an `#ifdef` of the form `kssio_<filenamebase>_hpp`.
 * Keep implementation details out of the header except for very simple classes and structures. Make use of the [PIMPL Pattern](https://en.cppreference.com/w/cpp/language/pimpl) when suitable.
 * Include documenting comments with the public portion of an API. Use a syntax that will work both for Doxygen and Xcode Documentation.
-* Do not use 'using namespace ...' in your header files except where they are reasonably scope limited.
+* Do not use `using namespace ...` in your header files except where they are reasonably scope limited.
 
 #### Source files
 
@@ -65,9 +61,12 @@ need to use a 12pt font - but assume that the code reviewers are.)
 * Keep methods and other blocks to no more than 50 lines in length. (It should be possible to
 view an entire block on a reasonable laptop screen.)
 * Prefer the use of anonymous namespaces over the "static" keyword.
-* When including header files group them in the order of "standard c++ libraries" (e.g. #include <string>), "standard OS libraries" (e.g. #include <sys/wait.h>), "third party libraries", "local includes".
-* Local includes should use the form '#include "filename"'. All other includes should use the form '#include <filename>'.
-* Use 'using namespace ...' and 'use something_t = ...' to reduce the need to explicitly refer to namespaces in your code.
+* When including header files group them in the order of "standard c++ libraries" (e.g. `#include <string>`), 
+"standard OS libraries" (e.g. `#include <sys/wait.h>`), 
+"third party libraries" (e.g. `#include <curl/curl.h>`, 
+and finally "local includes" (e.g. `#include "binary_file.hpp"`).
+* Local includes should use the form `#include "filename"`. All other includes should use the form `#include <filename>`.
+* Use `using namespace ...`, `namespace = ...` and `use something_t = ...` to reduce the need to explicitly refer to namespaces in your code.
 * Don't repeat the "documentation" comments that are already in the header file in the source file.
 (Our Doxygen configuration ignores the source files and only examines the header files on the
 assumption that the API does not depend on the implementation.)
@@ -83,7 +82,7 @@ navigable in the IDEs (e.g. MARK: and TODO:).
 * Variables (local and member): camelCase.
 * Member variables that would conflict with a method name: _underscorePrefixedCamelCase.
 * "Private" items: This refers to things that should be treated as private but for technical reasons cannot be explicitly made private. They should either be placed in a sub-namespace named "_private" or just given a single underscore prefix.
-* Type aliases: lowercase_t (e.g. 'use requestlist_t = list<T>;')
+* Type aliases: lowercase_t (e.g. `use requestlist_t = list<Request>;`)
 * Macros: ALL_UPPERCASE - but keep macros scarce. Work hard to avoid them if possible,
 and be prepared to justify their use.
 
@@ -95,27 +94,29 @@ don't put the opening brace on a separate line, unless the statement requires mo
 
 The following are acceptable:
 
-if (somethingIsTrue) { ...do something... }
+    if (somethingIsTrue) { ...do something... }
 
-if (somethingIsTrue) {
-...do something... 
-}
+    if (somethingIsTrue) {
+        ...do something... 
+    }
 
-if (somethingIsTrue 
-&& thisVariable == "hello world"
-&& userHasPermissionToDoThis(action))
-{
-...do something...
-}
+    if (somethingIsTrue 
+        && thisVariable == "hello world"
+        && userHasPermissionToDoThis(action))
+    {
+        ...do something...
+    }
 
 The following are not acceptable:
 
-if (somethingIsTrue) doSomething();
+    if (somethingIsTrue) doSomething();
+    
+    if (somethingIsTrue) { doSomething(); doSomethingElse(); }
 
-if (somethingIsTrue)
-{
-...do something...
-}
+    if (somethingIsTrue)
+    {
+        ...do something...
+    }
 
 #### Whitespace
 

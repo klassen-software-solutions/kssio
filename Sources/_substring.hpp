@@ -18,7 +18,6 @@
 #include <stdexcept>
 #include <string>
 
-#include "add_rel_ops.hpp"
 #include "utility.hpp"
 
 namespace kss { namespace io { namespace _private {

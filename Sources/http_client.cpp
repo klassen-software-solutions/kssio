@@ -18,6 +18,7 @@
 #include <curl/curl.h>
 
 #include "_action_queue.hpp"
+#include "_contract.hpp"
 #include "_raii.hpp"
 #include "_stringutil.hpp"
 #include "_tokenizer.hpp"
@@ -25,10 +26,11 @@
 #include "http_client.hpp"
 
 
-
 using namespace std;
 using namespace kss::io;
 using namespace kss::io::net;
+
+namespace contract = kss::io::contract;
 
 using kss::io::_private::ActionQueue;
 using kss::io::_private::finally;
@@ -73,6 +75,15 @@ namespace {
     // Callback for curl to read the request data.
     size_t readRequestCallback(char* buffer, size_t size, size_t nitems, void* userdata) noexcept
     {
+        // Note that we are using preconditions instead of parameters since we cannot
+        // allow this to throw exceptions. These should confirm that curl is calling
+        // the callbacks properly.
+        contract::preconditions({
+            KSS_EXPR(buffer != nullptr),
+            KSS_EXPR((size * nitems) != 0),
+            KSS_EXPR(userdata != nullptr)
+        });
+
         streamsize n = 0;
         try {
             request* req = reinterpret_cast<request*>(userdata);
@@ -84,7 +95,7 @@ namespace {
                 n = req->data->gcount();
             }
         }
-        catch (exception& e) {
+        catch (const exception& e) {
             syslog(LOG_WARNING, "Exception in %s: %s", __func__, e.what());
         }
         return (size_t)n;
@@ -96,6 +107,15 @@ namespace {
     // "Response" which contains the HTTP version and response code.
     size_t readHeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata) noexcept
     {
+        // Note that we are using preconditions instead of parameters since we cannot
+        // allow this to throw exceptions. These should confirm that curl is calling
+        // the callbacks properly.
+        contract::preconditions({
+            KSS_EXPR(buffer != nullptr),
+            KSS_EXPR((size * nitems) != 0),
+            KSS_EXPR(userdata != nullptr)
+        });
+
         try {
             response* resp = reinterpret_cast<response*>(userdata);
             if (!resp->haveStartedHeaderRead) {
@@ -148,10 +168,18 @@ namespace {
 
     // Callback to write response data into the response stream.
     size_t readResponseCallback(char* ptr, size_t size, size_t nmemb, void* userdata) noexcept {
-        try {
-            response* resp = reinterpret_cast<response*>(userdata);
+        // Note that we are using preconditions instead of parameters since we cannot
+        // allow this to throw exceptions. These should confirm that curl is calling
+        // the callbacks properly.
+        contract::preconditions({
+            KSS_EXPR(ptr != nullptr),
+            KSS_EXPR((size * nmemb) != 0),
+            KSS_EXPR(userdata != nullptr)
+        });
 
+        try {
             // If we are just starting the data read, we can send out the header response.
+            response* resp = reinterpret_cast<response*>(userdata);
             if (!resp->haveStartedDataRead) {
                 resp->haveStartedDataRead = true;
                 if (resp->req->callback) {
@@ -210,6 +238,10 @@ void HttpClient::Impl::sendRequest(request &req) {
 
     lock_guard<mutex> l(curlLock);
     {
+        contract::preconditions({
+            KSS_EXPR(curl != nullptr),
+        });
+
         curl_slist* hdrs = nullptr;
 
         finally cleanup([&]{
@@ -354,9 +386,10 @@ namespace {
                            http_header_t&& requestHeader, istream* requestData,
                            HttpResponseListener* cb)
     {
-        if (!path.empty() && path[0] != '/') {
-            throw invalid_argument("path must be empty or start with /");
-        }
+        contract::parameters({
+            KSS_EXPR(path.empty() || (path[0] == '/'))
+        });
+
         request req;
         req.op = op;
         req.uri = url + (path.empty() ? string("/") : path);
