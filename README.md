@@ -3,9 +3,14 @@ C++ I/O library (networking, files, and streams)
 
 ## Dependancies
 
-* JsonCpp
-* libcurl
-* libyaml
+The JSON library is built into this one and is regularly updated. You don't need to do anything special
+to obtain it. The other two libraries at present need to be installed manually before you can build this
+library. (At some point I hope to change that so that they can be automatically downloaded and built. 
+But that isn't going to make it into this version.)
+
+* JsonCpp (built in - you do not need to install this)
+* libcurl (https://curl.haxx.se/libcurl/)
+* libyaml (https://github.com/yaml/libyaml)
 
 ## Contributing
 
