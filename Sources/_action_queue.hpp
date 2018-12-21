@@ -2,7 +2,7 @@
 //  _action_queue.hpp
 //  kssio
 //
-//  Created by Steven W. Klassen on 2018-12-20.
+//  Created by Steven W. Klassen on 2018-11-09.
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
 //  Licensing follows the MIT License.
 //
@@ -40,7 +40,7 @@ namespace kss { namespace io { namespace _private {
      is that multiple timed things can be added, all shared with a single thread. In
      particular, if you have two or three threads that each loop and call wait_for(), you
      can replace them with a single instance of this class (and its single thread) and
-     its helpers. (See TimedActionGenerator.)
+     its helpers. 
 
      Another use of an action queue is to serialize accesses to some resource. That is,
      instead of accessing your resource directly, add actions that access it to the
@@ -60,7 +60,7 @@ namespace kss { namespace io { namespace _private {
 
         /*!
          Use this in addAction() to specify that you want the action to be performed as
-         soon as possible. This makes the queue work similar to ActionQueue.
+         soon as possible.
          */
         static const std::chrono::milliseconds asap;
 
@@ -120,7 +120,7 @@ namespace kss { namespace io { namespace _private {
         }
 
         /*!
-         Wait util all pending actions have completed. Note that no further actions
+         Wait until all pending actions have completed. Note that no further actions
          may be added while waiting. But they may be added as soon as wait()
          has returned.
          @throws any exceptions that a condition_variable or a map may throw
@@ -140,10 +140,10 @@ namespace kss { namespace io { namespace _private {
      A repeating action is a helper class useful when you want to repeat the same action
      at regular intervals. You give it the desired interval, an ActionQueue, and the action,
      and it will repeatedly add the action with the given interval to the queue. It will
-     continue to do this until it goes out of scope.
+     continue to do this until it goes out of scope or until stop() is called.
 
      Note that it is important that the ActionQueue remain in scope for at least as long
-     as the RepeatingAction instance.
+     as the RepeatingAction is in scope or until stop() is called.
      */
     class RepeatingAction {
     public:
@@ -168,6 +168,17 @@ namespace kss { namespace io { namespace _private {
         }
 
         ~RepeatingAction() noexcept;
+
+        /*!
+         Stop the action from repeating. Note that this will complete any action that is
+         currently running, but will not allow another one to start. If not called
+         manually, the RepeatingAction destructor will also cause the stop.
+
+         Note that this only triggers the stop, it does not wait for the stop to complete.
+         */
+        inline void stop() {
+            stopping = true;
+        }
 
     private:
         std::chrono::milliseconds   timeInterval;

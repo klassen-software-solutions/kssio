@@ -2,7 +2,7 @@
 //  _action_queue.cpp
 //  kssio
 //
-//  Created by Steven W. Klassen on 2018-12-20.
+//  Created by Steven W. Klassen on 2018-11-09.
 //  Copyright © 2018 Klassen Software Solutions. All rights reserved.
 //  Licensing follows the MIT License.
 //
@@ -205,7 +205,7 @@ void ActionQueue::addActionAfter(const milliseconds &delay, action_t &&action) {
 RepeatingAction::~RepeatingAction() noexcept {
     stopping = true;
     while (!stopped) {
-        std::this_thread::sleep_for(10ms);
+        this_thread::sleep_for(10ms);
     }
 }
 
