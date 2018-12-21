@@ -9,7 +9,6 @@
 // "borrowed" from kssthread
 //
 
-#include <cassert>
 #include <atomic>
 #include <condition_variable>
 #include <exception>
