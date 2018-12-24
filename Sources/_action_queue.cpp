@@ -289,7 +289,7 @@ void RepeatingAction::runActionAndRequeue() {
                 internalAction();
             }
             else {
-                throw err;
+                throw;
             }
         }
     }
