@@ -19,6 +19,7 @@
 #include <thread>
 
 #include <syslog.h>
+#include <uuid/uuid.h>
 
 #include "_action_queue.hpp"
 #include "_contract.hpp"
@@ -30,7 +31,16 @@ namespace contract = kss::io::contract;
 
 using kss::io::_private::now;
 using time_point_t = time_point<steady_clock, milliseconds>;
-using action_map_t = multimap<time_point_t, ActionQueue::action_t>;
+
+namespace {
+    struct ActionDetails {
+        time_point_t            targetTime;
+        string                  identifier;
+        ActionQueue::action_t   action;
+    };
+}
+
+using action_map_t = multimap<time_point_t, ActionDetails>;
 
 
 // MARK: ActionQueue
@@ -70,7 +80,7 @@ struct ActionQueue::Impl {
                     const auto currentTime = now<time_point_t>();
                     if (cit->first <= currentTime) {
                         runningAction = true;
-                        currentAction = move(cit->second);
+                        currentAction = move(cit->second.action);
                         pendingActions.erase(cit);
                         haveAction = true;
                     }
@@ -87,9 +97,12 @@ struct ActionQueue::Impl {
                  runningAction = false;
                  cv.notify_all();
              }
-             else {
+             else if (!stopping) {
                  unique_lock<mutex> l(lock);
                  cv.wait_until(l, nextTargetTime);
+             }
+             else {
+                 break;
              }
         }
     }
@@ -129,6 +142,39 @@ ActionQueue::~ActionQueue() noexcept {
 }
 
 
+size_t ActionQueue::cancel(const string& identifier) {
+    unique_lock<mutex> l(impl->lock);
+    size_t ret = 0;
+    const auto sizeIn = impl->pendingActions.size();
+    if (!impl->pendingActions.empty()) {
+        if (identifier.empty()) {
+            ret = sizeIn;
+            impl->pendingActions.clear();
+        }
+        else {
+            const auto end = impl->pendingActions.end();
+            for (auto it = impl->pendingActions.begin(); it != end;) {
+                if (it->second.identifier == identifier) {
+                    it = impl->pendingActions.erase(it);
+                    ++ret;
+                }
+                else {
+                    ++it;
+                }
+            }
+        }
+    }
+    if (ret > 0) {
+        impl->cv.notify_all();
+    }
+
+    contract::postconditions({
+        KSS_EXPR(impl->pendingActions.size() == (sizeIn - ret))
+    });
+    return ret;
+}
+
+
 void ActionQueue::wait() {
     unique_lock<mutex> l(impl->lock);
     if (!impl->pendingActions.empty() || impl->runningAction) {
@@ -147,7 +193,10 @@ void ActionQueue::wait() {
 }
 
 
-void ActionQueue::addActionAfter(const milliseconds &delay, const action_t &action) {
+void ActionQueue::addActionAfter(const milliseconds &delay,
+                                 const string& identifier,
+                                 const action_t &action)
+{
     contract::parameters({
         KSS_EXPR(delay.count() >= 0)
     });
@@ -163,7 +212,8 @@ void ActionQueue::addActionAfter(const milliseconds &delay, const action_t &acti
             }
 
             auto targetTime = now<time_point_t>() + delay;
-            impl->pendingActions.emplace(targetTime, action);
+            impl->pendingActions.emplace(targetTime,
+                                         ActionDetails { targetTime, identifier, action });
 
             contract::postconditions({
                 KSS_EXPR(!impl->pendingActions.empty())
@@ -173,7 +223,10 @@ void ActionQueue::addActionAfter(const milliseconds &delay, const action_t &acti
     }
 }
 
-void ActionQueue::addActionAfter(const milliseconds &delay, action_t &&action) {
+void ActionQueue::addActionAfter(const milliseconds &delay,
+                                 const string& identifier,
+                                 action_t &&action)
+{
     contract::parameters({
         KSS_EXPR(delay.count() >= 0)
     });
@@ -189,7 +242,8 @@ void ActionQueue::addActionAfter(const milliseconds &delay, action_t &&action) {
             }
 
             auto targetTime = now<time_point_t>() + delay;
-            impl->pendingActions.emplace(targetTime, move(action));
+            impl->pendingActions.emplace(targetTime,
+                                         ActionDetails { targetTime, identifier, move(action) });
 
             contract::postconditions({
                 KSS_EXPR(!impl->pendingActions.empty())
@@ -204,19 +258,29 @@ void ActionQueue::addActionAfter(const milliseconds &delay, action_t &&action) {
 
 RepeatingAction::~RepeatingAction() noexcept {
     stopping = true;
-    while (!stopped) {
-        this_thread::sleep_for(10ms);
-    }
+    queue.cancel(identifier);
+}
+
+void RepeatingAction::init() {
+    uuid_t uid;
+    uuid_string_t suid;
+    uuid_generate(uid);
+    uuid_unparse_lower(uid, suid);
+
+    identifier = string(suid);
+    queue.addAction(timeInterval, identifier, internalAction);
+
+    contract::postconditions({
+        KSS_EXPR(!identifier.empty()),
+        KSS_EXPR(stopping == false)
+    });
 }
 
 void RepeatingAction::runActionAndRequeue() {
-    if (stopping) {
-        stopped = true;
-    }
-    else {
+    if (!stopping) {
         action();
         try {
-            queue.addAction(timeInterval, internalAction);
+            queue.addAction(timeInterval, identifier, internalAction);
         }
         catch (const std::system_error& err) {
             // If the queue is currently paused or full, we pause, then try again.

@@ -25,6 +25,7 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <string>
 #include <thread>
 #include "utility.hpp"
 
@@ -64,6 +65,11 @@ namespace kss { namespace io { namespace _private {
          */
         static const std::chrono::milliseconds asap;
 
+        /*!
+         Use this in cancel() to cancel all pending actions.
+         */
+        static constexpr const char* all = "";
+
 
         /*!
          Construct the queue.
@@ -81,6 +87,12 @@ namespace kss { namespace io { namespace _private {
         /*!
          Add an action to the queue. The action will be performed as soon as possible after
          the given delay.
+         @param delay The amount of time before the action will be performed. Note that
+            Duration must conform to the std::chrono::duration API.
+         @param identifier If not empty this identifier can be used to cancel the action
+            before it is performed. Note that it need not be unique. For example, you
+            can give a set of actions the same identifier and then cancel them as a block.
+         @param action The action to be performed.
          @throws std::invalid_argument if the delay is a negative value
          @throws std::system_error with a value of EAGAIN if the action queue
             already has maxPending items, or if we are currently waiting for
@@ -90,15 +102,37 @@ namespace kss { namespace io { namespace _private {
             checked_duration_cast may throw.
          */
         template <class Duration>
+        inline void addAction(const Duration& delay,
+                              const std::string& identifier,
+                              const action_t& action)
+        {
+            using kss::io::_private::checked_duration_cast;
+            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay),
+                           identifier, action);
+        }
+
+        template <class Duration>
+        inline void addAction(const Duration& delay,
+                              const std::string& identifier,
+                              action_t&& action)
+        {
+            using kss::io::_private::checked_duration_cast;
+            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay),
+                           identifier, move(action));
+        }
+
+        template <class Duration>
         inline void addAction(const Duration& delay, const action_t& action) {
             using kss::io::_private::checked_duration_cast;
-            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay), action);
+            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay),
+                           "", action);
         }
 
         template <class Duration>
         inline void addAction(const Duration& delay, action_t&& action) {
             using kss::io::_private::checked_duration_cast;
-            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay), action);
+            addActionAfter(checked_duration_cast<std::chrono::milliseconds>(delay),
+                           "", move(action));
         }
 
         /*!
@@ -112,12 +146,25 @@ namespace kss { namespace io { namespace _private {
          @throws any exceptions that a condition_variable or a map may throw.
          */
         inline void addAction(const action_t& action) {
-            addActionAfter(asap, action);
+            addActionAfter(asap, "", action);
         }
 
         inline void addAction(action_t&& action) {
-            addActionAfter(asap, action);
+            addActionAfter(asap, "", move(action));
         }
+
+        /*!
+         Cancel any actions that match the given identifier. If the identifier is all
+         or anything else that is an empty string, then all pending actions, even those
+         with identifiers, are cancelled.
+
+         Note that actions that are in progress cannot be cancelled, only ones that are
+         pending.
+
+         @param identifier The id of the actions to be cancelled.
+         @return the number of actions that were actually cancelled.
+         */
+        size_t cancel(const std::string& identifier = all);
 
         /*!
          Wait until all pending actions have completed. Note that no further actions
@@ -131,8 +178,12 @@ namespace kss { namespace io { namespace _private {
         struct Impl;
         std::unique_ptr<Impl> impl;
 
-        void addActionAfter(const std::chrono::milliseconds& delay, const action_t& action);
-        void addActionAfter(const std::chrono::milliseconds& delay, action_t&& action);
+        void addActionAfter(const std::chrono::milliseconds& delay,
+                            const std::string& identifier,
+                            const action_t& action);
+        void addActionAfter(const std::chrono::milliseconds& delay,
+                            const std::string& identifier,
+                            action_t&& action);
     };
 
 
@@ -140,10 +191,10 @@ namespace kss { namespace io { namespace _private {
      A repeating action is a helper class useful when you want to repeat the same action
      at regular intervals. You give it the desired interval, an ActionQueue, and the action,
      and it will repeatedly add the action with the given interval to the queue. It will
-     continue to do this until it goes out of scope or until stop() is called.
+     continue to do this until it goes out of scope.
 
      Note that it is important that the ActionQueue remain in scope for at least as long
-     as the RepeatingAction is in scope or until stop() is called.
+     as the RepeatingAction is in scope.
      */
     class RepeatingAction {
     public:
@@ -154,7 +205,7 @@ namespace kss { namespace io { namespace _private {
         : timeInterval(kss::io::_private::checked_duration_cast<std::chrono::milliseconds>(interval)),
         queue(q), action(act)
         {
-            queue.addAction(timeInterval, internalAction);
+            init();
         }
 
         template <class Duration>
@@ -162,32 +213,22 @@ namespace kss { namespace io { namespace _private {
                         ActionQueue& q,
                         ActionQueue::action_t&& act)
         : timeInterval(kss::io::_private::checked_duration_cast<std::chrono::milliseconds>(interval)),
-        queue(q), action(act)
+        queue(q), action(move(act))
         {
-            queue.addAction(timeInterval, internalAction);
+            init();
         }
 
         ~RepeatingAction() noexcept;
 
-        /*!
-         Stop the action from repeating. Note that this will complete any action that is
-         currently running, but will not allow another one to start. If not called
-         manually, the RepeatingAction destructor will also cause the stop.
-
-         Note that this only triggers the stop, it does not wait for the stop to complete.
-         */
-        inline void stop() {
-            stopping = true;
-        }
-
     private:
         std::chrono::milliseconds   timeInterval;
         ActionQueue&                queue;
+        std::string                 identifier;
+        std::atomic<bool>           stopping { false };
         ActionQueue::action_t       action;
         ActionQueue::action_t       internalAction = [this] { runActionAndRequeue(); };
-        std::atomic<bool>           stopping { false };
-        std::atomic<bool>           stopped { false };
 
+        void init();
         void runActionAndRequeue();
     };
 }}}
