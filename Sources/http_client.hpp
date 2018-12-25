@@ -232,9 +232,10 @@ namespace kss {
                 // Callback used for the post convenience method. You should not use this directly.
                 // This will log any errors when the header is received, will ignore any response,
                 // and will delete itself when the request and response has concluded.
-                class InternalPostResponseCallback : public HttpResponseListener {
+                class InternalPostResponseCallback final : public HttpResponseListener {
                 public:
                     explicit InternalPostResponseCallback(bool verb) : verbose(verb) {}
+                    virtual ~InternalPostResponseCallback() noexcept = default;
                     
                     void httpResponseError(const std::error_code& err) override;
                     void httpResponseHeaderReceived(HttpStatusCode status,

@@ -1,4 +1,4 @@
 PREFIX := kss
-LIBS := -lcurl
+LIBS := -lcurl -lyaml
 
 include BuildSystem/common.mk

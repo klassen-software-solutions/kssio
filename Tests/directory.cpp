@@ -44,17 +44,17 @@ namespace {
 static TestSuite ts("file::directory", {
     make_pair("getCwd", [](TestSuite&) {
         string cwd = kss::io::file::getCwd();
-        KSS_ASSERT(endsWith(cwd, "/Tests")                              // when run from make check
+        KSS_ASSERT(endsWith(cwd, "/kssio")                              // when run from make check
                    || endsWith(cwd, "/kssio/Build/Products/Debug")      // when run from Xcode (Debug)
                    || endsWith(cwd, "/kssio/Build/Products/Release"));  // when run from Xcode (Release)
     }),
     make_pair("Directory", [](TestSuite&) {
         string cwd = kss::io::file::getCwd();
-        string srcdir = ".";                   // when run from make check
+        string srcdir = "Tests";            // when run from make check
         if (endsWith(cwd, "/kssio/Build/Products/Debug")
             || endsWith(cwd, "/kssio/Build/Products/Release"))
         {
-            srcdir = "../../../Tests";        // when run from Xcode (Debug or Release)
+            srcdir = "../../../Tests";      // when run from Xcode (Debug or Release)
         }
 
         // Test the iterators.
