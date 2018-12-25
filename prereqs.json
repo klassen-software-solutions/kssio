@@ -1,0 +1,14 @@
+[
+    {
+        "name": "libyaml",
+        "download": "git clone https://github.com/yaml/libyaml.git",
+        "update": "git pull",
+        "update-needed": "git fetch ; git status | grep 'Your branch is up to date'",
+        "build": [
+            "./bootstrap",
+            "./configure --enable-shared=no --prefix=$TARGETDIR",
+            "make",
+            "make install"
+        ]
+    }
+]
