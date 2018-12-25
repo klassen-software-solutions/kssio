@@ -49,7 +49,7 @@ LDFLAGS := $(LDFLAGS) -L$(LIBDIR)
 CFLAGS := $(CFLAGS) -I$(BUILDDIR)/include
 CXXFLAGS := $(CXXFLAGS) -I$(BUILDDIR)/include -std=c++14 -Wno-unknown-pragmas
 
-.PHONY: build library install check clean cleanall directory-checks hello prep docs help
+.PHONY: build library install check clean cleanall directory-checks hello prep docs help prereqs
 
 LIBNAME := $(PREFIX)$(PACKAGEBASENAME)
 LIBFILE := lib$(LIBNAME)$(SOEXT)
@@ -92,6 +92,9 @@ hello:
 ifneq ($(wildcard Tests/.*),)
 	@echo "  TESTPATH=$(TESTPATH)"
 endif
+
+prereqs:
+	BuildSystem/update_prereqs.py
 
 # Build the library
 

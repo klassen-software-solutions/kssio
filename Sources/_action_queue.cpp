@@ -106,6 +106,27 @@ struct ActionQueue::Impl {
              }
         }
     }
+
+    void addActionDetails(ActionDetails&& details) {
+        if (!stopping) {
+            if (waiting) {
+                throw system_error(EAGAIN, system_category(), "addActionAfter (queue waiting)");
+            }
+            else {
+                unique_lock<mutex> l(lock);
+                if (pendingActions.size() >= maxPending) {
+                    throw system_error(EAGAIN, system_category(), "addActionAfter");
+                }
+
+                pendingActions.emplace(details.targetTime, move(details));
+
+                contract::postconditions({
+                    KSS_EXPR(!pendingActions.empty())
+                });
+                cv.notify_all();
+            }
+        }
+    }
 };
 
 
@@ -201,26 +222,8 @@ void ActionQueue::addActionAfter(const milliseconds &delay,
         KSS_EXPR(delay.count() >= 0)
     });
 
-    if (!impl->stopping) {
-        if (impl->waiting) {
-            throw system_error(EAGAIN, system_category(), "addActionAfter (queue waiting)");
-        }
-        else {
-            unique_lock<mutex> l(impl->lock);
-            if (impl->pendingActions.size() >= impl->maxPending) {
-                throw system_error(EAGAIN, system_category(), "addActionAfter");
-            }
-
-            auto targetTime = now<time_point_t>() + delay;
-            impl->pendingActions.emplace(targetTime,
-                                         ActionDetails { targetTime, identifier, action });
-
-            contract::postconditions({
-                KSS_EXPR(!impl->pendingActions.empty())
-            });
-            impl->cv.notify_all();
-        }
-    }
+    ActionDetails details { now<time_point_t>() + delay, identifier, action };
+    impl->addActionDetails(move(details));
 }
 
 void ActionQueue::addActionAfter(const milliseconds &delay,
@@ -231,26 +234,8 @@ void ActionQueue::addActionAfter(const milliseconds &delay,
         KSS_EXPR(delay.count() >= 0)
     });
 
-    if (!impl->stopping) {
-        if (impl->waiting) {
-            throw system_error(EAGAIN, system_category(), "addActionAfter (queue waiting)");
-        }
-        else {
-            unique_lock<mutex> l(impl->lock);
-            if (impl->pendingActions.size() >= impl->maxPending) {
-                throw system_error(EAGAIN, system_category(), "addActionAfter");
-            }
-
-            auto targetTime = now<time_point_t>() + delay;
-            impl->pendingActions.emplace(targetTime,
-                                         ActionDetails { targetTime, identifier, move(action) });
-
-            contract::postconditions({
-                KSS_EXPR(!impl->pendingActions.empty())
-            });
-            impl->cv.notify_all();
-        }
-    }
+    ActionDetails details { now<time_point_t>() + delay, identifier, move(action) };
+    impl->addActionDetails(move(details));
 }
 
 

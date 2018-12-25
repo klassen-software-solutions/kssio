@@ -1,16 +1,20 @@
 # kssio
 C++ I/O library (networking, files, and streams)
 
-## Dependancies
+## Prerequisites
 
-The JSON library is built into this one and is regularly updated. You don't need to do anything special
-to obtain it. The other two libraries at present need to be installed manually before you can build this
-library. (At some point I hope to change that so that they can be automatically downloaded and built. 
-But that isn't going to make it into this version.)
+Besides the standard C++ requirements, this library depends on three third-party libraries:
 
-* JsonCpp (built in - you do not need to install this)
-* libcurl (https://curl.haxx.se/libcurl/)
-* libyaml (https://github.com/yaml/libyaml)
+* JsonCpp (https://github.com/open-source-parsers/jsoncpp). This library is manually added to
+kssio in the files _json.h and _json.cpp so you don't need to do anything to install.
+* libyaml (https://github.com/yaml/libyaml). This library is specified in our prereqs.json file which mean
+you can install/update it locally by running `make prereqs`. This will build the static version of this
+library so that you don't need to include it manually when you use kssio. If you would prefer a dynamic
+version of this library (or if your system already includes it), you can ignore the prereq and install it
+yourself. In this case, if kssio cannot find your version, you may need to create a `config.local`
+file with the appropriate settings.
+* libcurl (https://curl.haxx.se/libcurl/). We use the version of this that comes with macOS, so if you
+do not have libcurl installed on your OS, you will need to do it manually before kssio will build.
 
 ## Contributing
 
