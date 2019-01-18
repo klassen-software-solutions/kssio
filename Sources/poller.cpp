@@ -7,6 +7,7 @@
 //  Licensing follows the MIT License.
 //
 
+#include <algorithm>
 #include <cassert>
 #include <cerrno>
 #include <functional>
@@ -42,6 +43,9 @@ namespace {
 			case PolledResource::Event::write:	return POLLOUT;
 			case PolledResource::Event::any:	return (POLLIN | POLLOUT);
 		}
+        // should never get here
+        assert(false);
+        return 0;
 	}
 
 	// Convert our interval into the timeout integer needed by poll.

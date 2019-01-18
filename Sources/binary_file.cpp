@@ -162,7 +162,7 @@ size_t BinaryFile::read(void *buf, size_t n) {
     const auto nRead = singleRead(buf, n, _fp);
 
     contract::postconditions({
-        KSS_EXPR(tell() == (pos + nRead))
+        KSS_EXPR(static_cast<size_t>(tell()) == (pos + nRead))
     });
     return nRead;
 }
@@ -194,7 +194,7 @@ void BinaryFile::readFully(void *buf, size_t n) {
     }
 
     contract::postconditions({
-        KSS_EXPR(tell() == (startPos + n))
+        KSS_EXPR(static_cast<size_t>(tell()) == (startPos + n))
     });
 }
 
@@ -211,7 +211,9 @@ size_t BinaryFile::write(const void *buf, size_t n) {
     size_t bytesWritten = singleWrite(buf, n, _fp);
 
     contract::postconditions({
-        KSS_EXPR(isOpenFor(appending) ? true : tell() == (pos + bytesWritten))
+        KSS_EXPR(isOpenFor(appending)
+                 ? true
+                 : static_cast<size_t>(tell()) == (pos + bytesWritten))
     });
     return bytesWritten;
 }
@@ -238,7 +240,9 @@ void BinaryFile::writeFully(const void *buf, size_t n) {
     }
 
     contract::postconditions({
-        KSS_EXPR(isOpenFor(appending) ? true : tell() == (startingPos + n))
+        KSS_EXPR(isOpenFor(appending)
+                 ? true
+                 : static_cast<size_t>(tell()) == (startingPos + n))
     });
 }
 

@@ -80,7 +80,7 @@ namespace {
 
 
 static TestSuite ts("stream::iterator", {
-    make_pair("InputIterator basic tests", [](TestSuite&) {
+    make_pair("InputIterator basic tests", [] {
         input_container c;
         input_container::const_iterator it = c.begin();
         input_container::const_iterator last = c.end();
@@ -92,7 +92,7 @@ static TestSuite ts("stream::iterator", {
         KSS_ASSERT(it == last);
         KSS_ASSERT(c.begin() == last);
     }),
-    make_pair("InputIterator type declarations", [](TestSuite&) {
+    make_pair("InputIterator type declarations", [] {
         input_container c;
         auto it = c.begin();
         input_container::const_iterator::difference_type d = 1;
@@ -104,7 +104,7 @@ static TestSuite ts("stream::iterator", {
         KSS_ASSERT(typeid(p) == typeid(const unsigned*));
         KSS_ASSERT(typeid(r) == typeid(const unsigned&));
     }),
-    make_pair("InputIterator copies", [](TestSuite&) {
+    make_pair("InputIterator copies", [] {
         input_container c1, c2;
         input_container::const_iterator it1 = c1.begin(), it2 = c2.begin();
         input_container::const_iterator last1 = c1.end(), last2 = c2.end();
@@ -137,21 +137,21 @@ static TestSuite ts("stream::iterator", {
         for (int i = 0; i < 10; ++i) c1.increment();
         KSS_ASSERT(throwsException<runtime_error>([&] { ++it1; }));
     }),
-    make_pair("InputIterator prefix iteration combined with dereference", [](TestSuite&) {
+    make_pair("InputIterator prefix iteration combined with dereference", [] {
         input_container c;
         auto it = c.begin();
         for (unsigned i = 1; i < 5;) {
             KSS_ASSERT(*++it == ++i);
         }
     }),
-    make_pair("InputIterator postfix iteration combined with dereference", [](TestSuite&) {
+    make_pair("InputIterator postfix iteration combined with dereference", [] {
         input_container c;
         unsigned i = 1;
         for (auto it = c.begin(), last = c.end(); it != last;) {
             KSS_ASSERT(*it++ == i++);
         }
     }),
-    make_pair("InputIterator swap will handle end()", [](TestSuite&) {
+    make_pair("InputIterator swap will handle end()", [] {
         input_container c, c1;
         auto first = c.begin(), last = c.end(), first1 = c1.begin();
         swap(first, last);
@@ -159,7 +159,7 @@ static TestSuite ts("stream::iterator", {
         swap(first, first1);
         KSS_ASSERT(first1 == c.end());
     }),
-    make_pair("InputIterator will work with STL algorithms", [](TestSuite&) {
+    make_pair("InputIterator will work with STL algorithms", [] {
         unsigned ar[10];
         input_container c;
         for (size_t i = 0; i < 10; ++i) ar[i] = 999;
@@ -171,7 +171,7 @@ static TestSuite ts("stream::iterator", {
             KSS_ASSERT(ar[i] == 999);
         }
     }),
-    make_pair("InputIterator is similar to an istream_iterator", [](TestSuite&) {
+    make_pair("InputIterator is similar to an istream_iterator", [] {
         istringstream iss("one\ntwo\nthree\nfour");
         typedef InputIterator<istream, string> my_istream_iterator;
         my_istream_iterator begin = my_istream_iterator(iss);
@@ -183,9 +183,10 @@ static TestSuite ts("stream::iterator", {
         KSS_ASSERT(v[2] == "three");
         KSS_ASSERT(v[3] == "four");
     }),
-    make_pair("OutputIterator", [](TestSuite&) {
+    make_pair("OutputIterator", [] {
         output_container c;
         long ar[] { 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L };
+
         copy(ar, ar+10, c.begin());
         KSS_ASSERT(c.counter() == 10);
 

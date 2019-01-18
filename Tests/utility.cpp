@@ -44,7 +44,7 @@ namespace {
 }
 
 static TestSuite ts("net::utility", {
-    make_pair("byteorder", [](TestSuite&) {
+    make_pair("byteorder", [] {
         uint16_t hu16 = 10101;
         uint16_t nu16 = hton(hu16);
         uint32_t hu32 = 1010101;
@@ -76,7 +76,7 @@ static TestSuite ts("net::utility", {
             KSS_ASSERT(*((uint64_t*)&nd) == 0x7b14ae4781bac340);
         }
     }),
-    make_pair("byteorder on a sequence", [](TestSuite&) {
+    make_pair("byteorder on a sequence", [] {
         uint16_t hu16 = 10101;
         uint16_t nu16 = hton(hu16);
         uint32_t hu32 = 1010101;
@@ -91,7 +91,7 @@ static TestSuite ts("net::utility", {
         KSS_ASSERT(testByteOrderSequence(hf, nf));
         KSS_ASSERT(testByteOrderSequence(hd, nd));
     }),
-    make_pair("byte packing & unpacking", [](TestSuite&) {
+    make_pair("byte packing & unpacking", [] {
         KSS_ASSERT((pack<uint16_t, 2>((uint8_t[]) { 0U, 0U })) == 0U);
         KSS_ASSERT((pack<uint32_t, 4>((uint8_t[]) { 100U, 10U, 8U, 200U })) == 1678379208U);
         KSS_ASSERT((pack<uint64_t, 6>((uint8_t[]) { 0x0a, 0xf6, 0xb1, 0x16, 0x60, 0xcd })) == 0x0af6b11660cd);
@@ -106,7 +106,7 @@ static TestSuite ts("net::utility", {
         unpack<uint64_t, 6>(0x0af6b11660cd, ar);
         KSS_ASSERT(equal(ar, ar+6, (uint8_t[]) { 0x0a, 0xf6, 0xb1, 0x16, 0x60, 0xcd }));
     }),
-    make_pair("mime types", [](TestSuite&) {
+    make_pair("mime types", [] {
         int i = 0;
         string s;
         KSS_ASSERT(guessMimeType(i) == "text/plain");
@@ -116,7 +116,7 @@ static TestSuite ts("net::utility", {
 });
 
 static TestSuite ts1("stream::utility", {
-    make_pair("capture", [](TestSuite&) {
+    make_pair("capture", [] {
         auto s = capture(cout, []{
             cout << "hello world!" << endl;
         });

@@ -3,18 +3,7 @@ C++ I/O library (networking, files, and streams)
 
 ## Prerequisites
 
-Besides the standard C++ requirements, this library depends on three third-party libraries:
-
-* JsonCpp (https://github.com/open-source-parsers/jsoncpp). This library is manually added to
-kssio in the files _json.h and _json.cpp so you don't need to do anything to install.
-* libyaml (https://github.com/yaml/libyaml). This library is specified in our prereqs.json file which mean
-you can install/update it locally by running `make prereqs`. This will build the static version of this
-library so that you don't need to include it manually when you use kssio. If you would prefer a dynamic
-version of this library (or if your system already includes it), you can ignore the prereq and install it
-yourself. In this case, if kssio cannot find your version, you may need to create a `config.local`
-file with the appropriate settings.
-* libcurl (https://curl.haxx.se/libcurl/). We use the version of this that comes with macOS, so if you
-do not have libcurl installed on your OS, you will need to do it manually before kssio will build.
+This library has no prerequisites other than a C++14 compiler and the standard library.
 
 ## Contributing
 
@@ -48,15 +37,21 @@ using the apprpriate #pragma, but be prepared to justify your decision.
 
 #### Header files
 
+* Everything in the header files should be in the namespace `kss::io` or a sub-space within it.
+* Items in the header files that should be considered private, but for technical reasons cannot be should
+either be placed in the namespace `kss::io::_private` or should individually begine with an underscore.
 * C++ header files should use the extention '.hpp' and be all lower case.
-* C header files should user the extention '.h' and be all lower case.
-* C/C++ mixed header files should use '.h' and must have appropriate '#if defined __cplusplus' statements.
+* C header files should use the extention '.h' and be all lower case.
+* C/C++ mixed header files should use '.h' and must have appropriate `#if defined(__cplusplus)` statements.
 * Header files do not have to be limited to a single class. But everything in them should be
 reasonably related.
-* Names of headers files that are for compiling only (i.e. that do not need to be installed with the library) should start with an underscore.
+* Names of headers files that are for compiling only (i.e. that do not need to be installed with the library) should 
+start with an underscore.
 * Header files must be protected using an `#ifdef` of the form `kssio_<filenamebase>_hpp`.
-* Keep implementation details out of the header except for very simple classes and structures. Make use of the [PIMPL Pattern](https://en.cppreference.com/w/cpp/language/pimpl) when suitable.
-* Include documenting comments with the public portion of an API. Use a syntax that will work both for Doxygen and Xcode Documentation.
+* Keep implementation details out of the header except for very simple classes and structures. Make use of 
+the [PIMPL Pattern](https://en.cppreference.com/w/cpp/language/pimpl) when suitable.
+* Include documenting comments with the public portion of an API. Use a syntax that will work both for 
+Doxygen and Xcode Documentation.
 * Do not use `using namespace ...` in your header files except where they are reasonably scope limited.
 
 #### Source files
@@ -65,8 +60,7 @@ reasonably related.
 * C source files should use the extension '.c', be all lower case, and should match their '.h'.
 * Indent using 4 spaces (no tabs except where required) at the usual locations.
 * Keep lines to no more than 95 characters in length. (It should be possible to view two source
-files side by side using a 12pt font on a reasonably sized monitor. Note: We are not saying you
-need to use a 12pt font - but assume that the code reviewers are.)
+files side by side using a 12pt font on a reasonably sized monitor.)
 * Keep methods and other blocks to no more than 50 lines in length. (It should be possible to
 view an entire block on a reasonable laptop screen.)
 * Prefer the use of anonymous namespaces over the "static" keyword.
@@ -74,8 +68,10 @@ view an entire block on a reasonable laptop screen.)
 "standard OS libraries" (e.g. `#include <sys/wait.h>`), 
 "third party libraries" (e.g. `#include <curl/curl.h>`, 
 and finally "local includes" (e.g. `#include "binary_file.hpp"`).
-* Local includes should use the form `#include "filename"`. All other includes should use the form `#include <filename>`.
-* Use `using namespace ...`, `namespace = ...` and `use something_t = ...` to reduce the need to explicitly refer to namespaces in your code.
+* Local includes should use the form `#include "filename"`. All other includes should use the 
+form `#include <filename>`.
+* Use `using namespace ...`, `namespace = ...` and `use something_t = ...` to reduce the need to 
+explicitly refer to namespaces in your code.
 * Don't repeat the "documentation" comments that are already in the header file in the source file.
 (Our Doxygen configuration ignores the source files and only examines the header files on the
 assumption that the API does not depend on the implementation.)
@@ -90,7 +86,9 @@ navigable in the IDEs (e.g. MARK: and TODO:).
 * Classes: CamelCase except for certain cases where we want to make them look like a keyword.
 * Variables (local and member): camelCase.
 * Member variables that would conflict with a method name: _underscorePrefixedCamelCase.
-* "Private" items: This refers to things that should be treated as private but for technical reasons cannot be explicitly made private. They should either be placed in a sub-namespace named "_private" or just given a single underscore prefix.
+* "Private" items: This refers to things that should be treated as private but for technical reasons cannot be 
+explicitly made private. They should either be placed in a sub-namespace named `_private` or just given a 
+single underscore prefix.
 * Type aliases: lowercase_t (e.g. `use requestlist_t = list<Request>;`)
 * Macros: ALL_UPPERCASE - but keep macros scarce. Work hard to avoid them if possible,
 and be prepared to justify their use.

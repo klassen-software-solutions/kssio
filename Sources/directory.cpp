@@ -151,16 +151,27 @@ namespace {
         return dir;
     }
 
+    // Note that entry should not be used by the caller, it is just space provided that
+    // must not go out of scope before you are done using *result.
     bool readDir(DIR* dir, dirent* entry, dirent** result) {
         // preconditions
         assert(dir != nullptr);
         assert(entry != nullptr);
         assert(result != nullptr);
 
+#if defined(__linux)
+        errno = 0;
+        dirent* d = readdir(dir);
+        if (errno) {
+            throw system_error(errno, system_category(), "readdir");
+        }
+        *result = d;
+#else
         const int err = readdir_r(dir, entry, result);
         if (err) {
             throw system_error(err, system_category(), "readdir_r");
         }
+#endif
         return (*result != nullptr);
     }
 }

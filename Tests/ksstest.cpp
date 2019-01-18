@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <chrono>
 #include <cstdlib>
 #include <ctime>
 #include <exception>
@@ -34,6 +33,7 @@
 #include "ksstest.hpp"
 
 using namespace std;
+using namespace std::chrono;
 using namespace kss::test;
 
 
@@ -366,14 +366,6 @@ namespace { namespace json {
 // MARK: State of the world
 
 namespace {
-    typedef chrono::duration<double, std::chrono::seconds::period> fractional_seconds_t;
-
-    // Name demangling.
-    template <typename T>
-    string demangle(const T& t = T()) {
-        int status;
-        return abi::__cxa_demangle(typeid(t).name(), 0, 0, &status);
-    }
 
     struct TestError {
         string errorType;           // The name of the exception.
@@ -385,11 +377,13 @@ namespace {
 
         static TestError makeError(const exception& e) {
             TestError ret;
-            ret.errorType = demangle(e);
+            ret.errorType = _private::demangle(e);
             ret.errorMessage = e.what();
             return ret;
         }
     };
+
+    using failures_t = vector<pair<string, string>>;
 
     struct TestCaseWrapper {
         string                  name;
@@ -397,9 +391,10 @@ namespace {
         TestSuite::test_case_fn fn;
         unsigned int            assertions = 0;
         vector<TestError>       errors;
-        vector<string>          failures;
+        failures_t              failures;
         bool                    skipped = false;
-        fractional_seconds_t    durationOfTest;
+        duration<double>        durationOfTest;
+        string                  mostRecentDetails;
 
         bool operator<(const TestCaseWrapper& rhs) const noexcept {
             return name < rhs.name;
@@ -407,14 +402,14 @@ namespace {
     };
 
     struct TestSuiteWrapper {
-        TestSuite*              suite;
-        bool                    filteredOut = false;
-        string                  timestamp;
-        fractional_seconds_t    durationOfTestSuite;
-        unsigned                numberOfErrors = 0;
-        unsigned                numberOfFailedAssertions = 0;
-        unsigned                numberOfSkippedTests = 0;
-        unsigned                numberOfFailedTests = 0;
+        TestSuite*          suite;
+        bool                filteredOut = false;
+        string              timestamp;
+        duration<double>    durationOfTestSuite;
+        unsigned            numberOfErrors = 0;
+        unsigned            numberOfFailedAssertions = 0;
+        unsigned            numberOfSkippedTests = 0;
+        unsigned            numberOfFailedTests = 0;
 
         bool operator<(const TestSuiteWrapper& rhs) const noexcept {
             return suite->name() < rhs.suite->name();
@@ -440,16 +435,16 @@ namespace {
 
     // Summary of test results.
     struct TestResultSummary {
-        mutex                   lock;
-        string                  programName;
-        string                  nameOfTestRun;
-        string                  nameOfHost;
-        string                  timeOfTestRun;
-        fractional_seconds_t    durationOfTestRun;
-        unsigned                numberOfErrors = 0;
-        unsigned                numberOfFailures = 0;
-        unsigned                numberOfAssertions = 0;
-        unsigned                numberOfTests = 0;
+        mutex               lock;
+        string              programName;
+        string              nameOfTestRun;
+        string              nameOfHost;
+        string              timeOfTestRun;
+        duration<double>    durationOfTestRun;
+        unsigned            numberOfErrors = 0;
+        unsigned            numberOfFailures = 0;
+        unsigned            numberOfAssertions = 0;
+        unsigned            numberOfTests = 0;
     };
     static TestResultSummary reportSummary;
 }
@@ -534,70 +529,70 @@ namespace {
     void printUsageMessage(ostream& strm) {
         strm << "usage: " << reportSummary.programName << " [options]" << R"(
 
-        The following are the accepted command line options:
-        -h/--help displays this usage message
-        -q/--quiet suppress test result output (useful if all you want is the return value)
-        -v/--verbose displays more information (-q will override this if present. Specifying
-                                                this option will also cause --no-parallel to be assumed.)
-        -f <testprefix>/--filter=<testprefix> only run tests that start with the prefix
-        ---xml=<filename> writes a JUnit test compatible XML to the given filename
-        --json=<filename> writes a gUnit test compatible JSON to the given filename
-        --no-parallel will force all tests to be run in the same thread (This is assumed if
-                                                                         the --verbose option is specified.)
+The following are the accepted command line options:
+-h/--help displays this usage message
+-q/--quiet suppress test result output (useful if all you want is the return value)
+-v/--verbose displays more information (-q will override this if present. Specifying
+    this option will also cause --no-parallel to be assumed.)
+-f <testprefix>/--filter=<testprefix> only run tests that start with the prefix
+---xml=<filename> writes a JUnit test compatible XML to the given filename
+--json=<filename> writes a gUnit test compatible JSON to the given filename
+--no-parallel will force all tests to be run in the same thread (This is assumed if
+    the --verbose option is specified.)
 
-        The display options essentially run in three modes.
+The display options essentially run in three modes.
 
-        In the "quiet" mode (--quiet is specified) no output at all is written and the only
-        indication of the test results is the return code. This is useful for inclusion in scripts
-            where you only want a pass/fail result and do not care about the details. It is also
-                useful if you are outputting XML or JSON to the standard output device and don't want
-                    to have to separate them in your script.
+In the "quiet" mode (--quiet is specified) no output at all is written and the only
+indication of the test results is the return code. This is useful for inclusion in scripts
+where you only want a pass/fail result and do not care about the details. It is also
+useful if you are outputting XML or JSON to the standard output device and don't want
+to have to separate them in your script.
 
-                    In the "normal" mode (neither --quiet nor --verbose is specified) the program will print a
-                    header line when the tests begin, then will print one of the following characters for each
-                        test suite, followed by a summary stating how many tests passed, failed, and skipped,
-                        finishing with details of all the failed tests:
-                        . - all tests in the suite ran without error or failure
-                        E - one or more of the tests in the suite caused an error condition
-                        F - one or more of the tests in the suite failed an assertion
-                        S - one or more tests in the suite were skipped (due to use of the skip() method)
+In the "normal" mode (neither --quiet nor --verbose is specified) the program will print a
+header line when the tests begin, then will print one of the following characters for each
+test suite, followed by a summary stating how many tests passed, failed, and skipped,
+finishing with details of all the failed tests:
+    . - all tests in the suite ran without error or failure
+    E - one or more of the tests in the suite caused an error condition
+    F - one or more of the tests in the suite failed an assertion
+    S - one or more tests in the suite were skipped (due to use of the skip() method)
 
-                        In the "verbose" mode (--verbose is specified) more details are written while the tests
-                            are run. In particular you will see a header line for each test suite and an individual
-                                line for each test case within the test suite. For each test case you will see one of
-                                    the following characters for each test (i.e. for each call to KSS_ASSERT):
-                                        . - the assertion passed
-                                        + - 10 consecutive assertions passed
-                                        * - 100 consecutive assertions passed
-                                        S - skip() was called (it will be the last report on the line)
-                                        E - an error occurred while running the test (it will be the last report on the line)
-                                            F - the test failed
-                                            If a tests has errors or failures, they will be written out on the following lines. When
-                                            the output for all the test cases in a suite is completed, a summary line for the test
-                                                suite will be output. Note that in order for this output to make sense, specifying --verbose
-                                                    will also imply --no-parallel.
+In the "verbose" mode (--verbose is specified) more details are written while the tests
+are run. In particular you will see a header line for each test suite and an individual
+line for each test case within the test suite. For each test case you will see one of
+the following characters for each test (i.e. for each call to KSS_ASSERT):
+    . - the assertion passed
+    + - 10 consecutive assertions passed
+    * - 100 consecutive assertions passed
+    S - skip() was called (it will be the last report on the line)
+    E - an error occurred while running the test (it will be the last report on the line)
+    F - the test failed
+If a tests has errors or failures, they will be written out on the following lines. When
+the output for all the test cases in a suite is completed, a summary line for the test
+suite will be output. Note that in order for this output to make sense, specifying --verbose
+will also imply --no-parallel.
 
-                                                    For --xml or --json you can specify "-" as the filename. In that case instead of writing
-                                                    to a file the report will be written to the standard output device. If you decide to write
-                                                    the reports to the standard output device, and you have not specified --quiet or you have
-                                                    asked for both XML and JSON, the reports will be preceeded by a line containing at least the
-                                                        text "==XML=REPORT==" and "==JSON=REPORT==" to help your scripts identify them in the
-                                                        output. If you only send one of them to the standard output device, and you have specified
-                                                        --quiet, then no such tag line will be output (hence the only output should be the report).
+For --xml or --json you can specify "-" as the filename. In that case instead of writing
+to a file the report will be written to the standard output device. If you decide to write
+the reports to the standard output device, and you have not specified --quiet or you have
+asked for both XML and JSON, the reports will be preceeded by a line containing at least the
+text "==XML=REPORT==" and "==JSON=REPORT==" to help your scripts identify them in the
+output. If you only send one of them to the standard output device, and you have specified
+--quiet, then no such tag line will be output (hence the only output should be the report).
 
-                                                        Filtering can be used to limit the tests that are run without having to add skip()
-                                                        statements in your code. This is most useful when you are developing/debugging a particular
-                                                        section and don't want to repeat all the other test until you have completed. It is also
-                                                        generally useful to specify --verbose when you are filtering, but that is not assumed.
+Filtering can be used to limit the tests that are run without having to add skip()
+statements in your code. This is most useful when you are developing/debugging a particular
+section and don't want to repeat all the other test until you have completed. It is also
+generally useful to specify --verbose when you are filtering, but that is not assumed.
 
-                                                        The return value, when all the tests are done, will be one of the following:
-                                                        -1 (255 on some systems) if there was one or more error conditions raised,
-                                                            0 if all tests completed with no errors or failures (although some may have skipped), or
-                                                                >0 if some tests failed. The value will be the number of failures (i.e. the number of
-                                                                                                                                   times that KSS_ASSERT failed) in all the test cases in all the test suites.
+The return value, when all the tests are done, will be one of the following:
+-1 (255 on some systems) if there was one or more error conditions raised,
+0 if all tests completed with no errors or failures (although some may have skipped), or
+>0 if some tests failed. The value will be the number of failures (i.e. the number of
+times that KSS_ASSERT failed) in all the test cases in all the test suites.
 
-                                                                    )" << endl;
-                                                                    }
+    )" << endl;
+    }
 
     // Obtain the required argument or print a usage message and exit if it does not exist.
     string getArgument() {
@@ -679,10 +674,10 @@ namespace {
     }
 
     // Return the time that fn took to run.
-    fractional_seconds_t time_of_execution(function<void ()> fn) {
-        const auto start = chrono::high_resolution_clock::now();
+    duration<double> timeOfExecution(function<void ()> fn) {
+        const auto start = steady_clock::now();
         fn();
-        return chrono::duration_cast<fractional_seconds_t>(chrono::high_resolution_clock::now() - start);
+        return duration_cast<duration<double>>(steady_clock::now() - start);
     }
 
     // Return the current timestamp in ISO 8601 format.
@@ -718,14 +713,14 @@ struct TestSuite::Impl {
             TestCaseWrapper wrapper;
             wrapper.name = "BeforeAll";
             wrapper.owner = parent;
-            wrapper.fn = [=](TestSuite& suite) { hba->beforeAll(); };
+            wrapper.fn = [hba] { hba->beforeAll(); };
             tests.insert(tests.begin(), move(wrapper));
         }
         if (auto* haa = as<HasAfterAll>(parent)) {
             TestCaseWrapper wrapper;
             wrapper.name = "AfterAll";
             wrapper.owner = parent;
-            wrapper.fn = [=](TestSuite& suite) { haa->afterAll(); };
+            wrapper.fn = [haa] { haa->afterAll(); };
             tests.push_back(move(wrapper));
         }
     }
@@ -734,11 +729,11 @@ struct TestSuite::Impl {
     void runTestCase(TestCaseWrapper& t) {
         currentTest = &t;
         try {
-            t.durationOfTest = time_of_execution([&]{
+            t.durationOfTest = timeOfExecution([&]{
                 if (auto* hbe = as<HasBeforeEach>(parent)) {
                     if (t.name != "BeforeAll" && t.name != "AfterAll") hbe->beforeEach();
                 }
-                t.fn(*parent);
+                t.fn();
                 if (auto* haa = as<HasAfterEach>(parent)) {
                     if (t.name != "BeforeAll" && t.name != "AfterAll") haa->afterEach();
                 }
@@ -897,7 +892,10 @@ namespace {
                     for (const auto& ts : *suites) {
                         for (const auto& t : ts.suite->_implementation()->tests) {
                             for (const auto& f : t.failures) {
-                                cout << "    " << f << endl;
+                                cout << "    " << f.first << endl;
+                                if (!f.second.empty()) {
+                                    cout << "       ↳" << f.second << endl;
+                                }
                             }
                         }
                     }
@@ -931,11 +929,16 @@ namespace {
         Node                                _n;
     };
 
-    struct FailureXmlGenerator : public AbstractGenerator<string, xml::simple_writer::node> {
-        FailureXmlGenerator(const vector<string>& failures) : AbstractGenerator(failures) {}
+    struct FailureXmlGenerator
+    : public AbstractGenerator<pair<string, string>, xml::simple_writer::node>
+    {
+        FailureXmlGenerator(const failures_t& failures) : AbstractGenerator(failures) {}
         virtual void populate() override {
             _n.name = "failure";
-            _n["message"] = *_it;
+            _n["message"] = _it->first;
+            if (!_it->second.empty()) {
+                _n.text = _it->second;
+            }
         }
     };
 
@@ -954,7 +957,7 @@ namespace {
             _n.name = "testcase";
             _n["name"] = _it->name;
             _n["assertions"] = to_string(_it->assertions);
-            _n["classname"] = (_it->owner ? demangle(*(_it->owner)) : string("none"));
+            _n["classname"] = (_it->owner ? _private::demangle(*(_it->owner)) : string("none"));
             _n["time"] = to_string(_it->durationOfTest.count());
             if (!_it->errors.empty() || !_it->failures.empty()) {
                 _n.children = {
@@ -1015,10 +1018,15 @@ namespace {
     }
 
 
-    struct FailureJsonGenerator : public AbstractGenerator<string, json::simple_writer::node>{
-        FailureJsonGenerator(const vector<string>& failures) : AbstractGenerator(failures) {}
+    struct FailureJsonGenerator
+    : public AbstractGenerator<pair<string, string>, json::simple_writer::node>
+    {
+        FailureJsonGenerator(const failures_t& failures) : AbstractGenerator(failures) {}
         virtual void populate() override {
-            _n["message"] = *_it;
+            _n["message"] = _it->first;
+            if (!_it->second.empty()) {
+                _n["message"] += " (" + _it->second + ")";
+            }
         }
     };
 
@@ -1028,7 +1036,7 @@ namespace {
             _n["name"] = _it->name;
             _n["status"] = (_it->skipped ? "NOTRUN" : "RUN");
             _n["time"] = to_string(_it->durationOfTest.count());
-            _n["classname"] = (_it->owner ? demangle(*(_it->owner)) : string("none"));
+            _n["classname"] = (_it->owner ? _private::demangle(*(_it->owner)) : string("none"));
             if (!_it->failures.empty()) {
                 _n.arrays = { make_pair("failures", FailureJsonGenerator(_it->failures)) };
             }
@@ -1134,7 +1142,10 @@ namespace {
                     cout << "    Failures:" << endl;
                     for (const auto& t : impl->tests) {
                         for (const auto& f : t.failures) {
-                            cout << "      " << f << endl;
+                            cout << "      " << f.first << endl;
+                            if (!f.second.empty()) {
+                                cout << "         ↳" << f.second << endl;
+                            }
                         }
                     }
                 }
@@ -1176,7 +1187,7 @@ namespace {
         impl->addBeforeAndAfterAll();
         currentSuite = wrapper;
 
-        wrapper->durationOfTestSuite = time_of_execution([&]{
+        wrapper->durationOfTestSuite = timeOfExecution([&]{
             for (auto& t : impl->tests) {
                 printTestCaseHeader(t);
                 impl->runTestCase(t);
@@ -1202,7 +1213,7 @@ namespace kss { namespace test {
 
             sort(suites->begin(), suites->end());
             reportSummary.timeOfTestRun = now();
-            reportSummary.durationOfTestRun = time_of_execution([&]{
+            reportSummary.durationOfTestRun = timeOfExecution([&]{
                 vector<future<bool>> futures;
 
                 for (auto& ts : *suites) {
@@ -1254,8 +1265,11 @@ namespace kss { namespace test {
         try {
             fn();
         }
-        catch (const exception&) {
+        catch (const exception& e) {
             caughtSomething = true;
+            _private::setFailureDetails("threw "
+                                        + _private::demangle(e)
+                                        + ", what=" + e.what());
         }
         return !caughtSomething;
     }
@@ -1267,8 +1281,15 @@ namespace kss { namespace test {
         }
         catch (const system_error& e) {
             caughtCorrectCategory = (e.code().category() == cat);
+            if (!caughtCorrectCategory) {
+                _private::setFailureDetails(string("actual category was ")
+                                            + e.code().category().name());
+            }
         }
-        catch (const exception&) {
+        catch (const exception& e) {
+            _private::setFailureDetails("actually exception was "
+                                        + _private::demangle(e)
+                                        + ", what=" + e.what());
         }
         return caughtCorrectCategory;
     }
@@ -1280,8 +1301,17 @@ namespace kss { namespace test {
         }
         catch (const system_error& e) {
             caughtCorrectCode = (e.code() == code);
+            if (!caughtCorrectCode) {
+                _private::setFailureDetails(string("actual code was ")
+                                            + to_string(e.code().value())
+                                            + ", category "
+                                            + e.code().category().name());
+            }
         }
-        catch (const exception&) {
+        catch (const exception& e) {
+            _private::setFailureDetails("actually exception was "
+                                        + _private::demangle(e)
+                                        + ", what=" + e.what());
         }
         return caughtCorrectCode;
     }
@@ -1358,23 +1388,64 @@ const string& TestSuite::name() const noexcept {
     return _impl->name;
 }
 
+TestSuite& TestSuite::get() noexcept {
+    assert(currentSuite != nullptr);     // Fails if called in a new thread.
+    assert(currentSuite->suite != nullptr);
+    return *(currentSuite->suite);
+}
+
+TestSuite::test_case_context_t TestSuite::testCaseContext() const noexcept {
+    assert(currentTest != nullptr);     // Fails if called in a new thread.
+    return currentTest;
+}
+
+void TestSuite::setTestCaseContext(test_case_context_t ctx) noexcept {
+    assert(ctx != nullptr);             // User must not set a null value.
+    currentTest = static_cast<TestCaseWrapper*>(ctx);
+}
+
 
 // MARK: _private Implementation
 
 namespace kss { namespace test { namespace _private {
 
-    void _success(void) noexcept {
+    void success(void) noexcept {
+        assert(currentTest != nullptr);
         ++currentTest->assertions;
         if (isVerboseMode) {
             cout << ".";
         }
     }
 
-    void _failure(const char* expr, const char* filename, unsigned int line) noexcept {
+    void failure(const char* expr, const char* filename, unsigned int line) noexcept {
+        assert(currentTest != nullptr);
         ++currentTest->assertions;
-        currentTest->failures.push_back(basename(filename) + ": " + to_string(line) + ", " + expr);
+        auto f = make_pair(basename(filename) + ": " + to_string(line) + ", " + expr,
+                           currentTest->mostRecentDetails);
+        currentTest->failures.push_back(move(f));
+        currentTest->mostRecentDetails = "";
         if (isVerboseMode) {
             cout << "F";
         }
     }
+
+    bool completesWithinSec(const duration<double>& d, const function<void()>& fn) {
+        const auto dur = timeOfExecution(fn);
+        const auto ret = (dur <= d);
+        if (!ret) {
+            _private::setFailureDetails("actual duration was " + to_string(dur.count()) + "s");
+        }
+        return (dur <= d);
+    }
+
+    void setFailureDetails(const string& d) {
+        assert(currentTest != nullptr);
+        currentTest->mostRecentDetails = d;
+    }
+
+    string demangleName(const char* mangledName) {
+        int status;
+        return abi::__cxa_demangle(mangledName, 0, 0, &status);
+    }
+    
 }}}

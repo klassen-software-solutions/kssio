@@ -21,7 +21,7 @@ using namespace kss::test;
 
 
 static TestSuite ts("net::interface", {
-    make_pair("IpV4Address", [](TestSuite&) {
+    make_pair("IpV4Address", [] {
         IpV4Address a1;
         KSS_ASSERT((bool)a1 == false);
         KSS_ASSERT((string)a1 == "0.0.0.0");
@@ -49,7 +49,7 @@ static TestSuite ts("net::interface", {
         KSS_ASSERT(a2 == a4);
         KSS_ASSERT(a2 >= a4);
     }),
-    make_pair("MacAddress", [](TestSuite&) {
+    make_pair("MacAddress", [] {
         MacAddress a1;
         KSS_ASSERT((bool)a1 == false);
         KSS_ASSERT((string)a1 == "00:00:00:00:00:00");
@@ -75,7 +75,7 @@ static TestSuite ts("net::interface", {
         KSS_ASSERT(a2 == a4);
         KSS_ASSERT(a2 >= a4);
     }),
-    make_pair("NetworkInterface", [](TestSuite&) {
+    make_pair("NetworkInterface", [] {
         // Find the loopback interface.
         auto ni = findInterface("lo");
         if (!ni) { ni = findInterface("lo0"); }

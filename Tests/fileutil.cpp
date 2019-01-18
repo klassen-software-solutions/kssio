@@ -72,7 +72,7 @@ namespace {
 
 
 static TestSuite ts("file::fileutil", {
-    make_pair("basic tests", [](TestSuite&) {
+    make_pair("basic tests", [] {
         setup_fileutil_test();
 
         KSS_ASSERT(!exists("/probably/does/not/exist")
@@ -110,7 +110,7 @@ static TestSuite ts("file::fileutil", {
 
         teardown_fileutil_test();
     }),
-    make_pair("temporaryFile", [](TestSuite&) {
+    make_pair("temporaryFile", [] {
         string prefix = "/tmp/kssutil";
         {
             string name = temporaryFilename(prefix);
@@ -137,7 +137,7 @@ static TestSuite ts("file::fileutil", {
             KSS_ASSERT(f1.rdbuf() != f2.rdbuf());
         }
     }),
-    make_pair("path manipulation", [](TestSuite&) {
+    make_pair("path manipulation", [] {
         // basename
         KSS_ASSERT(basename("") == "");
         KSS_ASSERT(basename("/////") == "");
@@ -156,7 +156,7 @@ static TestSuite ts("file::fileutil", {
         KSS_ASSERT(dirname("dir/file.ext") == "dir/");
         KSS_ASSERT(dirname("/file.ext") == "/");
     }),
-    make_pair("FileGuard", [](TestSuite&){
+    make_pair("FileGuard", [] {
         int data = 10;
         string prefix = "/tmp/fileguard";
         {
@@ -188,7 +188,7 @@ static TestSuite ts("file::fileutil", {
             KSS_ASSERT(write(fd, &data, sizeof(int)) == -1);                // file is closed
         }
     }),
-    make_pair("file processing", [](TestSuite&) {
+    make_pair("file processing", [] {
         // Create a test file. (This also acts as a test of writeFile.)
         const string filename = temporaryFilename("/tmp/fileprocessing");
         const string filename2 = temporaryFilename("/tmp/fileprocessing");
@@ -198,32 +198,40 @@ static TestSuite ts("file::fileutil", {
         });
 
         // File processing without errors.
-        int count = 0;
-        processFile(filename, [&](ifstream& strm) {
-            string line;
-            while (getline(strm, line)) {
+        KSS_ASSERT(isEqualTo<int>(2, [&] {
+            int count = 0;
+            processFile(filename, [&](ifstream& strm) {
+                string line;
+                while (getline(strm, line)) {
+                    ++count;
+                }
+            });
+            return count;
+        }));
+
+        KSS_ASSERT(isEqualTo<int>(2, [&] {
+            int count = 0;
+            processFile(filename, LineByLine([&](const string&) {
                 ++count;
-            }
-        });
-        KSS_ASSERT(count == 2);
-
-        count = 0;
-        processFile(filename, LineByLine([&](const string&) {
-            ++count;
+            }));
+            return count;
         }));
-        KSS_ASSERT(count == 2);
 
-        count = 0;
-        processFile(filename, LineByLine(' ', [&](const string&) {
-            ++count;
+        KSS_ASSERT(isEqualTo<int>(7, [&] {
+            int count = 0;
+            processFile(filename, LineByLine(' ', [&](const string&) {
+                ++count;
+            }));
+            return count;
         }));
-        KSS_ASSERT(count == 7);
 
-        count = 0;
-        processFile(filename, CharByChar([&](char) {
-            ++count;
+        KSS_ASSERT(isEqualTo<int>(27, [&] {
+            int count = 0;
+            processFile(filename, CharByChar([&](char) {
+                ++count;
+            }));
+            return count;
         }));
-        KSS_ASSERT(count == 27);
 
         // File writing with errors on open.
         KSS_ASSERT(throwsException<system_error>([] {
@@ -262,17 +270,20 @@ static TestSuite ts("file::fileutil", {
 
         copyFile(filename, filename2);
         KSS_ASSERT(isFile(filename2));
-        stringstream s;
-        processFile(filename2, LineByLine([&](const string& line) {
-            s << line << endl;
+
+        KSS_ASSERT(isEqualTo<string>("1 2 3 4\none two three four\n", [&] {
+            stringstream s;
+            processFile(filename2, LineByLine([&](const string& line) {
+                s << line << endl;
+            }));
+            return s.str();
         }));
-        KSS_ASSERT(s.str() == "1 2 3 4\none two three four\n");
 
         // Cleanup
         unlink(filename.c_str());
         unlink(filename2.c_str());
     }),
-    make_pair("empty path arguments", [](TestSuite&) {
+    make_pair("empty path arguments", [] {
         KSS_ASSERT(throwsException<invalid_argument>([]{ exists(""); }));
         KSS_ASSERT(throwsException<invalid_argument>([]{ isFile(""); }));
         KSS_ASSERT(throwsException<invalid_argument>([]{ isDirectory(""); }));

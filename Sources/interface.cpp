@@ -19,9 +19,17 @@
 #include <utility>
 
 #include <ifaddrs.h>
-#include <net/if_dl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+
+#if defined(__APPLE__)
+#   include <net/if_dl.h>
+#endif
+
+#if defined(__linux)
+#   include <unistd.h>
+#   include <sys/ioctl.h>
+#endif
 
 #include "_contract.hpp"
 #include "_raii.hpp"
@@ -47,21 +55,23 @@ namespace {
     inline void throwInvalidIp(const string& addrStr) {
         throw invalid_argument("'" + addrStr + "' is not a valid IP address");
     }
-}
 
+    uint32_t ipFromSockAddr(const struct sockaddr *saddr) {
+        uint32_t ret = 0;
+        if (saddr) {
+#if defined(__APPLE__)
+            contract::conditions({
+                KSS_EXPR(saddr->sa_family == AF_INET)
+            });
+#endif
 
-IpV4Address IpV4Address::_fromSockAddr(const struct sockaddr *saddr) {
-    IpV4Address ret;
-    if (saddr) {
-        contract::conditions({
-            KSS_EXPR(saddr->sa_family == AF_INET)
-        });
-
-        const struct sockaddr_in* sin = reinterpret_cast<const struct sockaddr_in*>(saddr);
-        ret._addr = ntoh((uint32_t)sin->sin_addr.s_addr);
+            const struct sockaddr_in* sin = reinterpret_cast<const struct sockaddr_in*>(saddr);
+            ret = ntoh((uint32_t)sin->sin_addr.s_addr);
+        }
+        return ret;
     }
-    return ret;
 }
+
 
 IpV4Address::IpV4Address(const string& addrStr) {
     contract::parameters({
@@ -117,23 +127,25 @@ namespace {
     inline void throwInvalidMac(const string& addrStr) {
         throw invalid_argument("'" + addrStr + "' is not a valid MAC address");
     }
-}
 
-MacAddress MacAddress::_fromSockAddr(const struct sockaddr *saddr) {
-    MacAddress ret;
-    if (saddr) {
-        contract::conditions({
-            KSS_EXPR(saddr->sa_family == AF_LINK)
-        });
+#if defined(__APPLE__)
+    uint64_t macFromSockAddr(const struct sockaddr *saddr) {
+        uint64_t ret = 0;
+        if (saddr) {
+            contract::conditions({
+                KSS_EXPR(saddr->sa_family == AF_LINK)
+            });
 
-        const sockaddr_dl* sdl = reinterpret_cast<const sockaddr_dl*>(saddr);
-        if (sdl->sdl_alen == 6) {   // Ignore items that cannot be a IPV4 (which all have
-            uint8_t ar[6];          // mac address of 6 bytes).
-            memcpy(ar, LLADDR(sdl), 6);
-            ret._addr = pack<uint64_t, 6>(ar);
+            const sockaddr_dl* sdl = reinterpret_cast<const sockaddr_dl*>(saddr);
+            if (sdl->sdl_alen == 6) {   // Ignore items that cannot be a IPV4 (which all have
+                uint8_t ar[6];          // mac address of 6 bytes).
+                memcpy(ar, LLADDR(sdl), 6);
+                ret = pack<uint64_t, 6>(ar);
+            }
         }
+        return ret;
     }
-    return ret;
+#endif
 }
 
 MacAddress::MacAddress(const string& addrStr) {
@@ -205,6 +217,7 @@ namespace {
 
     mac_addr_map_t getMacAddresses() {
         mac_addr_map_t ret;
+#if defined(__APPLE__)
         struct ifaddrs* addrs = nullptr;
         finally cleanup([&]{
             if (addrs) { freeifaddrs(addrs); }
@@ -215,12 +228,53 @@ namespace {
         }
         for (auto cur = addrs; cur; cur = cur->ifa_next) {
             if (cur->ifa_addr != nullptr && cur->ifa_addr->sa_family == AF_LINK) {
-                MacAddress ma = MacAddress::_fromSockAddr(cur->ifa_addr);
+                MacAddress ma(macFromSockAddr(cur->ifa_addr));
                 if ((bool)ma == true) {
                     ret[cur->ifa_name] = ma;
                 }
             }
         }
+#elif defined(__linux)
+        // This implementation is based on example code found at
+        // https://stackoverflow.com/questions/1779715/how-to-get-mac-address-of-your-machine-using-a-c-program
+        const int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+        if (sock == -1) {
+            throw system_error(errno, system_category(), "socket");
+        }
+        finally cleanup([&] {
+            if (sock != -1) { close(sock); }
+        });
+
+        struct ifreq ifr;
+        struct ifconf ifc;
+        char buf[1024];
+
+        ifc.ifc_len = sizeof(buf);
+        ifc.ifc_buf = buf;
+        if (ioctl(sock, SIOCGIFCONF, &ifc) == -1) {
+            throw system_error(errno, system_category(), "ioctl");
+        }
+
+        struct ifreq* it = ifc.ifc_req;
+        const struct ifreq* const end = it + (ifc.ifc_len / sizeof(struct ifreq));
+        for (; it != end; ++it) {
+            strcpy(ifr.ifr_name, it->ifr_name);
+            if (ioctl(sock, SIOCGIFFLAGS, &ifr) == -1) {
+                throw system_error(errno, system_category(), "ioctl");
+            }
+
+            if (ioctl(sock, SIOCGIFHWADDR, &ifr) == -1) {
+                throw system_error(errno, system_category(), "ioctl");
+            }
+
+            MacAddress ma(pack<uint64_t, 6>(reinterpret_cast<const uint8_t*>(ifr.ifr_hwaddr.sa_data)));
+            if ((bool)ma == true) {
+                ret[ifr.ifr_name] = ma;
+            }
+        }
+#else
+#       error Not implemented for this OS
+#endif
         return ret;
     }
 
@@ -285,10 +339,10 @@ NetworkInterface NetworkInterface::_fromOsImpl(void *osimpl) {
     const ifaddrs* rep = data->first;
     ret._impl->name = rep->ifa_name;
     ret._impl->flags = (unsigned)rep->ifa_flags;
-    ret._impl->v4Address = IpV4Address::_fromSockAddr(rep->ifa_addr);
-    ret._impl->v4NetMask = IpV4Address::_fromSockAddr(rep->ifa_netmask);
+    ret._impl->v4Address = IpV4Address(ipFromSockAddr(rep->ifa_addr));
+    ret._impl->v4NetMask = IpV4Address(ipFromSockAddr(rep->ifa_netmask));
     if (ret.broadcast()) {
-        ret._impl->v4Broadcast = IpV4Address::_fromSockAddr(rep->ifa_broadaddr);
+        ret._impl->v4Broadcast = IpV4Address(ipFromSockAddr(rep->ifa_broadaddr));
     }
 
     const mac_addr_map_t* addrMap = data->second;
@@ -296,8 +350,6 @@ NetworkInterface NetworkInterface::_fromOsImpl(void *osimpl) {
     if (it != addrMap->end()) { ret._impl->hwAddress = it->second; }
     return ret;
 }
-
-
 
 // Accessors.
 

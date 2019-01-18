@@ -19,13 +19,13 @@ using namespace kss::test;
 
 
 static TestSuite ts("net::eai_error_category", {
-    make_pair("eaiErrorCategory", [](TestSuite& self) {
+    make_pair("eaiErrorCategory", [] {
         const error_category& cat = eaiErrorCategory();
         KSS_ASSERT(cat.name() == string("eai"));
         KSS_ASSERT(!cat.message(EAI_FAIL).empty());
         KSS_ASSERT(!cat.message(-1).empty());
     }),
-    make_pair("eaiErrorCode", [](TestSuite& self) {
+    make_pair("eaiErrorCode", [] {
         error_code ec = eaiErrorCode(EAI_FAMILY);
         KSS_ASSERT(ec.category() == eaiErrorCategory());
         KSS_ASSERT(ec.value() == EAI_FAMILY);

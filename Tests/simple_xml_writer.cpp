@@ -34,22 +34,24 @@ namespace {
 }
 
 static TestSuite ts("stream::xml::simple_writer", {
-    make_pair("test without children", [](TestSuite&) {
+    make_pair("test without children", [] {
         Node root;
 		root.name = "testsuites";
 		root["tests"] = "3";
 		root["failures"] = "1";
 		root["special_chars"] = "'one' & 'two'";
 
-		stringstream strm;
-		write(strm, root);
-
 		const string answer = R"XML(<?xml version="1.0" encoding="UTF-8"?>
 <testsuites failures="1" special_chars="&apos;one&apos; &amp; &apos;two&apos;" tests="3"/>
 )XML";
-		KSS_ASSERT(strm.str() == answer);
+
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, root);
+            return strm.str();
+        }));
     }),
-    make_pair("test with children", [](TestSuite&) {
+    make_pair("test with children", [] {
         Node root;
 		root.name = "testsuites";
 		root["tests"] = "3";
@@ -86,9 +88,6 @@ static TestSuite ts("stream::xml::simple_writer", {
 			}
 		};
 
-		stringstream strm;
-		write(strm, root);
-
 		const string answer = R"XML(<?xml version="1.0" encoding="UTF-8"?>
 <testsuites failures="1" special_chars="&apos;one&apos; &amp; &apos;two&apos;" tests="3">
   <counter count="1"/>
@@ -104,9 +103,14 @@ static TestSuite ts("stream::xml::simple_writer", {
   <empty/>
 </testsuites>
 )XML";
-		KSS_ASSERT(strm.str() == answer);
+
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, root);
+            return strm.str();
+        }));
     }),
-    make_pair("test with grandchildren", [](TestSuite&) {
+    make_pair("test with grandchildren", [] {
         Node root;
 		root.name = "testsuites";
 		root["tests"] = "3";
@@ -144,9 +148,6 @@ static TestSuite ts("stream::xml::simple_writer", {
 			}
 		};
 
-		stringstream strm;
-		write(strm, root);
-
 		const string answer = R"XML(<?xml version="1.0" encoding="UTF-8"?>
 <testsuites failures="1" special_chars="&apos;one&apos; &amp; &apos;two&apos;" tests="3">
   <counter count="1"/>
@@ -167,6 +168,11 @@ static TestSuite ts("stream::xml::simple_writer", {
   <empty/>
 </testsuites>
 )XML";
-		KSS_ASSERT(strm.str() == answer);
+
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, root);
+            return strm.str();
+        }));
     })
 });

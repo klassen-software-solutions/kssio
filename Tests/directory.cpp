@@ -42,13 +42,13 @@ namespace {
 
 
 static TestSuite ts("file::directory", {
-    make_pair("getCwd", [](TestSuite&) {
+    make_pair("getCwd", [] {
         string cwd = kss::io::file::getCwd();
         KSS_ASSERT(endsWith(cwd, "/kssio")                              // when run from make check
                    || endsWith(cwd, "/kssio/Build/Products/Debug")      // when run from Xcode (Debug)
                    || endsWith(cwd, "/kssio/Build/Products/Release"));  // when run from Xcode (Release)
     }),
-    make_pair("Directory", [](TestSuite&) {
+    make_pair("Directory", [] {
         string cwd = kss::io::file::getCwd();
         string srcdir = "Tests";            // when run from make check
         if (endsWith(cwd, "/kssio/Build/Products/Debug")
@@ -102,7 +102,7 @@ static TestSuite ts("file::directory", {
         KSS_ASSERT(d == d3);
         KSS_ASSERT(d != d4);
     }),
-    make_pair("ensurePath", [](TestSuite&) {
+    make_pair("ensurePath", [] {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 
