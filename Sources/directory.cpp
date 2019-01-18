@@ -28,7 +28,7 @@
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 using kss::io::_private::endsWith;
 using kss::io::_private::finally;

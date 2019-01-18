@@ -1,5 +1,4 @@
 PREFIX := kss
-LIBS := -lcurl -lz -lyaml
-Darwin-x86_64_LIBS := -lldap
+LIBS :=
 
 include BuildSystem/common.mk

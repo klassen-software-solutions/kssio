@@ -41,7 +41,7 @@
 using namespace std;
 using namespace kss::io::net;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 using kss::io::_private::finally;
 using kss::io::_private::Tokenizer;

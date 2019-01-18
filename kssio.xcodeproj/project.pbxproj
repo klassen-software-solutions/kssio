@@ -571,10 +571,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/.build/Darwin-x86_64/include",
-					"$(PROJECT_DIR)/.prereqs/Darwin-x86_64/include",
-				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -584,10 +581,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/.build/Darwin-x86_64/include",
-					"$(PROJECT_DIR)/.prereqs/Darwin-x86_64/include",
-				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

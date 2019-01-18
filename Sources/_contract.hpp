@@ -9,13 +9,13 @@
 //  "borrowed" from ksscontract
 //
 
-#ifndef ksscontract_contract_hpp
-#define ksscontract_contract_hpp
+#ifndef kssio_contract_hpp
+#define kssio_contract_hpp
 
 #include <initializer_list>
 #include <string>
 
-namespace kss { namespace io { namespace contract {
+namespace kss { namespace io { namespace _private { namespace contract {
 
     namespace _private {
         struct Expression {
@@ -27,10 +27,10 @@ namespace kss { namespace io { namespace contract {
         };
 
         void performThrowingCheck(const char* conditionType,
-                                  const kss::io::contract::_private::Expression& exp);
+                                  const kss::io::_private::contract::_private::Expression& exp);
 
         void performTerminatingCheck(const char* conditionType,
-                                     const kss::io::contract::_private::Expression& exp);
+                                     const kss::io::_private::contract::_private::Expression& exp);
     }
 
 
@@ -38,7 +38,7 @@ namespace kss { namespace io { namespace contract {
      This macro is used to create the Expression objects used as inputs to the
      condition checking methods of this file.
      */
-#   define KSS_EXPR(expr) kss::io::contract::_private::Expression {(expr), #expr, __PRETTY_FUNCTION__, __FILE__, __LINE__}
+#   define KSS_EXPR(expr) kss::io::_private::contract::_private::Expression {(expr), #expr, __PRETTY_FUNCTION__, __FILE__, __LINE__}
 
 
     /*!
@@ -225,6 +225,6 @@ namespace kss { namespace io { namespace contract {
         }
     }
 
-}}}
+}}}}
 
 #endif

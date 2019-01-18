@@ -22,7 +22,7 @@
 using namespace std;
 using namespace kss::io::net;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 
 namespace {

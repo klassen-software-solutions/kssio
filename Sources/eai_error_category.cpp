@@ -18,7 +18,7 @@
 
 using namespace std;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 namespace {
     class EaiErrorCategory : public error_category {

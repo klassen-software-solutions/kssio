@@ -11,20 +11,19 @@
 
 #include <string>
 
-namespace kss {
-    namespace io {
+namespace kss { namespace io {
 
-        /*!
-         Returns a string of the form x.y.z<optional tags> that describes the version
-         of this library.
-         */
-        std::string version() noexcept;
+    /*!
+     Returns a string of the form x.y.z<optional tags> that describes the version
+     of this library.
+     */
+    std::string version() noexcept;
 
-        /*!
-         Returns the text of the software license.
-         */
-        std::string license() noexcept;
-    }
-}
+    /*!
+     Returns the text of the software license.
+     */
+    std::string license() noexcept;
 
-#endif /* version_hpp */
+}}
+
+#endif

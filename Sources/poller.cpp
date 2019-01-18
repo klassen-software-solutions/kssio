@@ -26,7 +26,7 @@
 using namespace std;
 using namespace kss::io;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 using std::chrono::milliseconds;
 

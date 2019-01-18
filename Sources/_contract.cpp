@@ -17,7 +17,7 @@
 #include "_contract.hpp"
 
 using namespace std;
-using namespace kss::io::contract;
+using namespace kss::io::_private::contract;
 
 using _private::Expression;
 
