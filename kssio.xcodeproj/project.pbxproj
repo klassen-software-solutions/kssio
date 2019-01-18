@@ -20,7 +20,6 @@
 		AA33F1B02190DF8900B19B7A /* _stringutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */; };
 		AA33F1B12190DF8900B19B7A /* _stringutil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */; };
 		AA450A6221B237C200643D40 /* random_access_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6121B237C200643D40 /* random_access_iterator.hpp */; };
-		AA450A6C21B37EF500643D40 /* _substring.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA450A6B21B37EF500643D40 /* _substring.hpp */; };
 		AA4780902188E5A7006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA47808E2188E5A7006D635F /* version.cpp */; };
 		AA4780912188E5A7006D635F /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AA47808F2188E5A7006D635F /* version.hpp */; };
 		AA4780972188E613006D635F /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA4780952188E613006D635F /* version.cpp */; };
@@ -91,7 +90,6 @@
 		AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = _stringutil.cpp; sourceTree = "<group>"; };
 		AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = _stringutil.hpp; sourceTree = "<group>"; };
 		AA450A6121B237C200643D40 /* random_access_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = random_access_iterator.hpp; sourceTree = "<group>"; };
-		AA450A6B21B37EF500643D40 /* _substring.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = _substring.hpp; sourceTree = "<group>"; };
 		AA4780722188E29F006D635F /* libkssio.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libkssio.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4780792188E309006D635F /* BuildSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildSystem; sourceTree = "<group>"; };
 		AA47807B2188E329006D635F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				AA4780B32188F9D6006D635F /* _raii.hpp */,
 				AA33F1AE2190DF8900B19B7A /* _stringutil.cpp */,
 				AA33F1AF2190DF8900B19B7A /* _stringutil.hpp */,
-				AA450A6B21B37EF500643D40 /* _substring.hpp */,
 				AAC8CF15218BA6AB000540E4 /* _tokenizer.cpp */,
 				AAC8CF14218BA6AB000540E4 /* _tokenizer.hpp */,
 				AA9D9D9421A024D7002222EF /* binary_file.cpp */,
@@ -260,7 +257,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA450A6C21B37EF500643D40 /* _substring.hpp in Headers */,
 				AAB2573521A3B1250003F519 /* directory.hpp in Headers */,
 				AA4780A62188E95A006D635F /* utility.hpp in Headers */,
 				AA03030E219A2FEF00231AA8 /* fileutil.hpp in Headers */,
