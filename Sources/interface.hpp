@@ -34,7 +34,7 @@ namespace kss {
                  Construct an address.
                  @throws invalid_argument if the string version cannot be parsed into an IPV4 address.
                  */
-                IpV4Address() = default;
+                explicit IpV4Address(uint32_t addr = 0) : _addr(addr) {}
                 explicit IpV4Address(const std::string& addrStr);
                 IpV4Address(const IpV4Address&) = default;
                 IpV4Address(IpV4Address&&) = default;
@@ -77,13 +77,6 @@ namespace kss {
                     return (_addr < rhs._addr);
                 }
 
-                /*!
-                 Construct from the hardware C structure. This should be considered private
-                 and not called manually.
-                 @throws system_error if one of the underlying C methods returns an error.
-                 */
-                static IpV4Address _fromSockAddr(const struct sockaddr* saddr);
-
             private:
                 uint32_t _addr = 0;
             };
@@ -99,7 +92,7 @@ namespace kss {
                  description.
                  @throws invalid_argument if the string version cannot be parsed into a MAC address.
                  */
-                MacAddress() = default;
+                explicit MacAddress(uint64_t addr = 0U) : _addr(addr) {}
                 explicit MacAddress(const std::string& addrStr);
                 MacAddress(const MacAddress&) = default;
                 MacAddress(MacAddress&&) = default;
@@ -138,13 +131,6 @@ namespace kss {
                 bool operator<(const MacAddress& rhs) const noexcept {
                     return (_addr < rhs._addr);
                 }
-
-                /*!
-                 Construct an address from the underlying C structure. This should be considered
-                 private and not called manually.
-                 @throws system_error if there is an error reported by one of the underlying C routines
-                 */
-                static MacAddress _fromSockAddr(const struct sockaddr* saddr);
 
             private:
                 uint64_t _addr = 0;

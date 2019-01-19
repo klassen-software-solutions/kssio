@@ -33,9 +33,10 @@ namespace {
 
 
 static TestSuite ts("file::binary_file", {
-    make_pair("Constructors", [](TestSuite&) {
+    make_pair("Constructors", [] {
         int filedes = open(temporaryFilename("/tmp/filedes").c_str(),
-                           O_WRONLY | O_CREAT | O_APPEND);
+                           O_WRONLY | O_CREAT | O_APPEND,
+                           S_IRUSR | S_IWUSR);
         FILE* fp = temporaryFile("/tmp/fp");
         FiledesGuard g1(filedes);
         FileGuard g2(fp);
@@ -71,7 +72,7 @@ static TestSuite ts("file::binary_file", {
         FileOf<srec> fo7(move(fo3));
         fo1 = move(fo2);
     }),
-    make_pair("BinaryFile read/write", [](TestSuite&) {
+    make_pair("BinaryFile read/write", [] {
         const size_t nitems = 100;
         uint16_t arout[nitems];
         uint16_t arin[nitems];
@@ -94,12 +95,17 @@ static TestSuite ts("file::binary_file", {
                 remain -= numwritten;
                 pos += numwritten;
             }
-            bf.flush();
-            KSS_ASSERT(bf.tell() == nbytes);
 
-            bf.writeFully(arout, nbytes);
-            bf.flush();
-            KSS_ASSERT(bf.tell() == (nbytes*2));
+            KSS_ASSERT(isEqualTo<size_t>(nbytes, [&bf] {
+                bf.flush();
+                return static_cast<size_t>(bf.tell());
+            }));
+
+            KSS_ASSERT(isEqualTo<size_t>(nbytes*2, [&] {
+                bf.writeFully(arout, nbytes);
+                bf.flush();
+                return static_cast<size_t>(bf.tell());
+            }));
 
             memset(arin, 0, nbytes);
             bf.seek(0);
@@ -112,22 +118,24 @@ static TestSuite ts("file::binary_file", {
                 pos += numread;
             }
             KSS_ASSERT(!memcmp(arout, arin, nbytes));
-            KSS_ASSERT(bf.tell() == nbytes);
+            KSS_ASSERT(static_cast<size_t>(bf.tell()) == nbytes);
 
             memset(arin, 0, nbytes);
             bf.readFully(arin, nbytes);
             KSS_ASSERT(!memcmp(arout, arin, nbytes));
-            KSS_ASSERT(bf.tell() == (nbytes*2));
+            KSS_ASSERT(static_cast<size_t>(bf.tell()) == (nbytes*2));
 
             KSS_ASSERT(throwsException<invalid_argument>([&] { bf.write(nullptr, 1); }));
             KSS_ASSERT(throwsException<invalid_argument>([&] { bf.writeFully(arout, 0); }));
             KSS_ASSERT(throwsException<invalid_argument>([&] { bf.read(nullptr, 10); }));
             KSS_ASSERT(throwsException<invalid_argument>([&] { bf.readFully(arin, 0); }));
 
-            for (size_t i = 0; i < 5; ++i) {
-                write<long>(bf, 1L);
-            }
-            KSS_ASSERT(bf.tell() == (nbytes*2)+(5*sizeof(long)));
+            KSS_ASSERT(isEqualTo<size_t>((nbytes*2)+(5*sizeof(long)), [&bf] {
+                for (size_t i = 0; i < 5; ++i) {
+                    write<long>(bf, 1L);
+                }
+                return static_cast<size_t>(bf.tell());
+            }));
 
             bf.seek((long)(nbytes*2));
             for (size_t i = 0; i < 5; ++i) {
@@ -156,55 +164,63 @@ static TestSuite ts("file::binary_file", {
                 bf.read(bytes, 100);
             }
             KSS_ASSERT(bf.eof());
-            KSS_ASSERT(bf.tell() == (nbytes*2)+(5*sizeof(long)));
+            KSS_ASSERT(static_cast<size_t>(bf.tell()) == (nbytes*2)+(5*sizeof(long)));
 
             bf.seek((long)nbytes);
             KSS_ASSERT(!bf.eof());
-            KSS_ASSERT(bf.tell() == nbytes);
+            KSS_ASSERT(static_cast<size_t>(bf.tell()) == nbytes);
             bf.readFully(arin, nbytes);
             KSS_ASSERT(!bf.eof());
-            KSS_ASSERT(bf.tell() == nbytes*2);
+            KSS_ASSERT(static_cast<size_t>(bf.tell()) == nbytes*2);
             KSS_ASSERT(!memcmp(arout, arin, nbytes));
 
-            size_t counter = 0;
-            long l;
-            try {
-                while (true) {
-                    bf.readFully(&l, sizeof(long));
-                    ++counter;
+            KSS_ASSERT(isEqualTo<size_t>(5, [&bf] {
+                size_t counter = 0;
+                long l;
+                try {
+                    while (true) {
+                        bf.readFully(&l, sizeof(long));
+                        ++counter;
+                    }
                 }
-            }
-            catch (kss::io::Eof& e) {
-            }
-            KSS_ASSERT(counter == 5);
+                catch (kss::io::Eof& e) {
+                }
+                return counter;
+            }));
         }
     }),
-    make_pair("FileOf read/write", [](TestSuite&) {
+    make_pair("FileOf read/write", [] {
         // read/write mode
         string filename = temporaryFilename("/tmp/fo");
         {
             srec sr;
             FileOf<srec> fo(filename, BinaryFile::writing | BinaryFile::updating);
 
-            for (size_t i = 0; i < 5; ++i) {
-                sr.i = (int)i;
-                sr.l = (long)i;
-                fo.write(sr);
-            }
-            KSS_ASSERT(fo.position() == 5);
+            KSS_ASSERT(isEqualTo<size_t>(5, [&] {
+                for (size_t i = 0; i < 5; ++i) {
+                    sr.i = (int)i;
+                    sr.l = (long)i;
+                    fo.write(sr);
+                }
+                return fo.position();
+            }));
 
-            for (size_t i = 5; i < 10; ++i) {
-                sr.i = (int)i;
-                sr.l = (long)i;
-                fo << sr;
-            }
-            KSS_ASSERT(fo.position() == 10);
+            KSS_ASSERT(isEqualTo<size_t>(10, [&] {
+                for (size_t i = 5; i < 10; ++i) {
+                    sr.i = (int)i;
+                    sr.l = (long)i;
+                    fo << sr;
+                }
+                return fo.position();
+            }));
 
-            sr.i = 3;
-            sr.l = -3;
-            fo.write(sr, 3);
-            fo.flush();
-            KSS_ASSERT(fo.position() == 4);
+            KSS_ASSERT(isEqualTo<size_t>(4, [&] {
+                sr.i = 3;
+                sr.l = -3;
+                fo.write(sr, 3);
+                fo.flush();
+                return fo.position();
+            }));
 
             fo.setPosition(0);
             for (size_t i = 0; i < 5; ++i) {
@@ -252,9 +268,11 @@ static TestSuite ts("file::binary_file", {
             FileOf<srec> fo(filename, BinaryFile::appending | BinaryFile::updating);
             KSS_ASSERT(fo.position() == 15);
 
-            sr.i = sr.l = 15;
-            fo.write(sr);
-            KSS_ASSERT(fo.position() == 16);
+            KSS_ASSERT(isEqualTo<size_t>(16, [&] {
+                sr.i = sr.l = 15;
+                fo.write(sr);
+                return fo.position();
+            }));
 
             sr.i = sr.l = 16;
             fo << sr;

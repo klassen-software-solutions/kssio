@@ -10,6 +10,7 @@
 #ifndef kssio_simple_json_writer_h
 #define kssio_simple_json_writer_h
 
+#include <algorithm>
 #include <cassert>
 #include <functional>
 #include <iomanip>
@@ -93,7 +94,7 @@ namespace kss { namespace io { namespace stream { namespace json {
 			// This is based on code found at
 			// https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 			static inline bool isNumber(const string& s) {
-				return !s.empty() && find_if(s.begin(), s.end(), [](char c) { return !(isdigit(c) || c == '.'); }) == s.end();
+				return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return !(isdigit(c) || c == '.'); }) == s.end();
 			}
 
 			// The following is based on code found at

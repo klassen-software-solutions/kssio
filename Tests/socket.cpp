@@ -8,6 +8,7 @@
 //
 
 #include <cerrno>
+#include <cstring>
 #include <system_error>
 #include <vector>
 
@@ -53,7 +54,7 @@ namespace {
 }
 
 static TestSuite ts("net::socket", {
-    make_pair("bindToPort", [](TestSuite&) {
+    make_pair("bindToPort", [] {
         vector<int> blockedSockets;
         blockedSockets.push_back(block(5000));
         blockedSockets.push_back(block(5001));
@@ -101,7 +102,7 @@ static TestSuite ts("net::socket", {
             unblock(sock);
         }
     }),
-    make_pair("findNextAvailablePort", [](TestSuite&) {
+    make_pair("findNextAvailablePort", [] {
         vector<int> blockedSockets;
         blockedSockets.push_back(block(6000));
         blockedSockets.push_back(block(6001));

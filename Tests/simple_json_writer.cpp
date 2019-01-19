@@ -10,7 +10,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <kss/io/jsonstream.hpp>
 #include <kss/io/simple_json_writer.hpp>
 
 #include "ksstest.hpp"
@@ -19,8 +18,6 @@
 using namespace std;
 using namespace kss::io::stream::json::simple_writer;
 using namespace kss::test;
-
-using kss::io::stream::json::Document;
 
 
 namespace {
@@ -39,7 +36,7 @@ namespace {
 }
 
 static TestSuite ts("stream::json::simple_writer", {
-    make_pair("test without children", [](TestSuite&) {
+    make_pair("test without children", [] {
         Node json;
         json["tests"] = "3";
         json["failures"] = "1";
@@ -48,17 +45,23 @@ static TestSuite ts("stream::json::simple_writer", {
         json["timestamp"] = "2011-10-31T18:52:42Z";
         json["special_chars"] = "'one' & 'two'";
 
-        stringstream strm;
-        write(strm, json);
+        const string answer = R"JSON({
+  "errors": 0,
+  "failures": 1,
+  "special_chars": "'one' & 'two'",
+  "tests": 3,
+  "time": "0.035s",
+  "timestamp": "2011-10-31T18:52:42Z"
+}
+)JSON";
 
-        Document d;
-        strm >> d;
-        // For now all we can test is that we can parse the JSON. These tests will
-        // become more complete as our JSON streaming classes become more complete.
-        KSS_ASSERT(d.root().isObject());
-        KSS_ASSERT(!d.root().empty());
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, json);
+            return strm.str();
+        }));
     }),
-    make_pair("test with children", [](TestSuite&) {
+    make_pair("test with children", [] {
         Node json;
         json["tests"] = "3";
         json["failures"] = "1";
@@ -82,17 +85,58 @@ static TestSuite ts("stream::json::simple_writer", {
             make_pair("params", ParamGenerator())
         };
 
-        stringstream strm;
-        write(strm, json);
+        const string answer = R"JSON({
+  "errors": 0,
+  "failures": 1,
+  "special_chars": "'one' & \"two\"",
+  "tests": 3,
+  "time": "0.035s",
+  "timestamp": "2011-10-31T18:52:42Z",
+  "testsuites": [
+    {
+      "counter": 1
+    },
+    {
+      "counter": 2
+    },
+    {
+      "counter": 3
+    },
+    {
+      "counter": 4
+    },
+    {
+      "counter": 5
+    }
+  ],
+  "params": [
+    {
+      "type": "test generator",
+      "value": 1
+    },
+    {
+      "type": "test generator",
+      "value": 2
+    },
+    {
+      "type": "test generator",
+      "value": 3
+    },
+    {
+      "type": "test generator",
+      "value": 4
+    }
+  ]
+}
+)JSON";
 
-        Document d;
-        strm >> d;
-        // For now all we can test is that we can parse the JSON. These tests will
-        // become more complete as our JSON streaming classes become more complete.
-        KSS_ASSERT(d.root().isObject());
-        KSS_ASSERT(!d.root().empty());
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, json);
+            return strm.str();
+        }));
     }),
-    make_pair("test with grandchildren", [](TestSuite&) {
+    make_pair("test with grandchildren", [] {
         Node json;
         json["tests"] = "3";
         json["failures"] = "1";
@@ -120,14 +164,55 @@ static TestSuite ts("stream::json::simple_writer", {
             })
         };
 
-        stringstream strm;
-        write(strm, json);
+        const string answer = R"JSON({
+  "errors": 0,
+  "failures": 1,
+  "special_chars": "'one' & \"two\"",
+  "tests": 3,
+  "time": "0.035s",
+  "timestamp": "2011-10-31T18:52:42Z",
+  "testsuites": [
+    {
+      "counter": 1
+    },
+    {
+      "counter": 2,
+      "grandchildren": [
+        {
+          "type": "test generator",
+          "value": 1
+        },
+        {
+          "type": "test generator",
+          "value": 2
+        },
+        {
+          "type": "test generator",
+          "value": 3
+        },
+        {
+          "type": "test generator",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "counter": 3
+    },
+    {
+      "counter": 4
+    },
+    {
+      "counter": 5
+    }
+  ]
+}
+)JSON";
 
-        Document d;
-        strm >> d;
-        // For now all we can test is that we can parse the JSON. These tests will
-        // become more complete as our JSON streaming classes become more complete.
-        KSS_ASSERT(d.root().isObject());
-        KSS_ASSERT(!d.root().empty());
+        KSS_ASSERT(isEqualTo<string>(answer, [&] {
+            stringstream strm;
+            write(strm, json);
+            return strm.str();
+        }));
     })
 });

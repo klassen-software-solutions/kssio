@@ -97,7 +97,7 @@ namespace {
 
 
 static TestSuite ts("io::poller", {
-    make_pair("basic tests", [](TestSuite&) {
+    make_pair("basic tests", [] {
         Poller p;
         KSS_ASSERT(throwsException<runtime_error>([&] { p.run(); }));
 
@@ -107,7 +107,7 @@ static TestSuite ts("io::poller", {
         p.run();
         KSS_ASSERT(true);    // Nothing to check other than it exited.
     }),
-    make_pair("file read test", [](TestSuite&) {
+    make_pair("file read test", [] {
         // Setup the file.
         file::FileGuard fg(tmpfile());
 
@@ -136,6 +136,6 @@ static TestSuite ts("io::poller", {
         rewind(fg.file());
 
         th.join();
-        KSS_ASSERT(d.numRead() == mydata.size() * 5);
+        KSS_ASSERT(d.numRead() == static_cast<ssize_t>(mydata.size() * 5));
     })
 });

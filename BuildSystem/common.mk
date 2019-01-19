@@ -12,8 +12,10 @@ TARGETDIR := /usr/local
 OS := $(shell uname -s)
 ARCH := $(OS)-$(shell uname -m)
 BUILDDIR := .build/$(ARCH)
+PREREQSDIR := .prereqs/$(ARCH)
 HEADERDIR := $(BUILDDIR)/include/$(PREFIX)/$(PACKAGEBASENAME)
 LIBDIR := $(BUILDDIR)/lib
+LIBS := $(LIBS) $($(ARCH)_LIBS)
 
 ifeq ($(OS),Darwin)
 	SOEXT := .$(VERSION).dylib
@@ -42,12 +44,19 @@ endif
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS)
 LDFLAGS := $(LDFLAGS) -L$(LIBDIR)
+ifneq ("$(wildcard $(PREREQSDIR)/lib)","")
+    LDFLAGS := $(LDFLAGS) -L$(PREREQSDIR)/lib
+endif
 
 -include $(PROJECTDIR)/config.local
 -include $(PROJECTDIR)/config.defs
 
 CFLAGS := $(CFLAGS) -I$(BUILDDIR)/include
 CXXFLAGS := $(CXXFLAGS) -I$(BUILDDIR)/include -std=c++14 -Wno-unknown-pragmas
+ifneq ("$(wildcard $(PREREQSDIR)/include)","")
+    CFLAGS := $(CFLAGS) -I$(PREREQSDIR)/include
+    CXXFLAGS := $(CXXFLAGS) -I$(PREREQSDIR)/include
+endif
 
 .PHONY: build library install check clean cleanall directory-checks hello prep docs help prereqs
 
@@ -208,4 +217,4 @@ clean:
 		Sources/_license_internal.h Sources/all.h
 
 cleanall: clean
-	rm -rf .build config.defs config.target.defs docs
+	rm -rf .build config.defs config.target.defs docs .prereqs

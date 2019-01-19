@@ -129,7 +129,7 @@ namespace kss { namespace io { namespace file {
         f.readFully(&rec, sizeof(rec));
 
         // postconditions
-        if (!(f.tell() == (pos + sizeof(rec)))) {
+        if (!(f.tell() == (pos + (off_t)sizeof(rec)))) {
             _KSSIO_POSTCONDITIONS_FAILED
         }
         return rec;
@@ -153,7 +153,7 @@ namespace kss { namespace io { namespace file {
         f.writeFully(&rec, sizeof(rec));
 
         // postconditions
-        if (!(f.isOpenFor(BinaryFile::appending) || (f.tell() == (pos + sizeof(rec))))) {
+        if (!(f.isOpenFor(BinaryFile::appending) || (f.tell() == (pos + (off_t)sizeof(rec))))) {
             _KSSIO_POSTCONDITIONS_FAILED
         }
     }
@@ -265,7 +265,7 @@ namespace kss { namespace io { namespace file {
             kss::io::file::write(*this, r);
 
             // postconditions
-            if (!(position() == (pos+1))) {
+            if (position() != (pos+1)) {
                 _KSSIO_POSTCONDITIONS_FAILED
             }
         }

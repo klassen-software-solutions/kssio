@@ -19,7 +19,7 @@
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::io::contract;
+namespace contract = kss::io::_private::contract;
 
 
 // MARK: BinaryFile
@@ -60,6 +60,17 @@ BinaryFile::BinaryFile(const string& filename, mode_t openMode) {
         throw system_error(errno, system_category(), "fopen");
     }
     _autoclose = true;
+
+#if defined(__linux)
+    // It seems linux does not position the file at the end when opened for appending,
+    // at least not after the fopen. Perhaps it does on the first write. In any event
+    // we perform the necessary seek.
+    if (isOpenFor(appending)) {
+        if (fseek(_fp, 0L, SEEK_END) == -1) {
+            throw system_error(errno, system_category(), "fseek");
+        }
+    }
+#endif
 
     contract::postconditions({
         KSS_EXPR(_fp != nullptr),
@@ -162,7 +173,7 @@ size_t BinaryFile::read(void *buf, size_t n) {
     const auto nRead = singleRead(buf, n, _fp);
 
     contract::postconditions({
-        KSS_EXPR(tell() == (pos + nRead))
+        KSS_EXPR(static_cast<size_t>(tell()) == (pos + nRead))
     });
     return nRead;
 }
@@ -194,7 +205,7 @@ void BinaryFile::readFully(void *buf, size_t n) {
     }
 
     contract::postconditions({
-        KSS_EXPR(tell() == (startPos + n))
+        KSS_EXPR(static_cast<size_t>(tell()) == (startPos + n))
     });
 }
 
@@ -211,7 +222,9 @@ size_t BinaryFile::write(const void *buf, size_t n) {
     size_t bytesWritten = singleWrite(buf, n, _fp);
 
     contract::postconditions({
-        KSS_EXPR(isOpenFor(appending) ? true : tell() == (pos + bytesWritten))
+        KSS_EXPR(isOpenFor(appending)
+                 ? true
+                 : static_cast<size_t>(tell()) == (pos + bytesWritten))
     });
     return bytesWritten;
 }
@@ -238,7 +251,9 @@ void BinaryFile::writeFully(const void *buf, size_t n) {
     }
 
     contract::postconditions({
-        KSS_EXPR(isOpenFor(appending) ? true : tell() == (startingPos + n))
+        KSS_EXPR(isOpenFor(appending)
+                 ? true
+                 : static_cast<size_t>(tell()) == (startingPos + n))
     });
 }
 
@@ -337,7 +352,7 @@ void BinaryFile::fastForward() {
 bool BinaryFile::isOpenFor(mode_t mode) const {
     if (_fp) {
         const int fd = fileno(_fp);
-        contract::condition(KSS_EXPR(fd >= 0));
+        contract::conditions({ KSS_EXPR(fd >= 0) });
 
         const int flags = fcntl(fd, F_GETFL);
         if ((mode & reading) && (flags & O_WRONLY)) {
