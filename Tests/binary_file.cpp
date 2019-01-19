@@ -35,7 +35,8 @@ namespace {
 static TestSuite ts("file::binary_file", {
     make_pair("Constructors", [] {
         int filedes = open(temporaryFilename("/tmp/filedes").c_str(),
-                           O_WRONLY | O_CREAT | O_APPEND);
+                           O_WRONLY | O_CREAT | O_APPEND,
+                           S_IRUSR | S_IWUSR);
         FILE* fp = temporaryFile("/tmp/fp");
         FiledesGuard g1(filedes);
         FileGuard g2(fp);

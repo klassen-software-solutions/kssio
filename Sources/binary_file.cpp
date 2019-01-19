@@ -61,6 +61,17 @@ BinaryFile::BinaryFile(const string& filename, mode_t openMode) {
     }
     _autoclose = true;
 
+#if defined(__linux)
+    // It seems linux does not position the file at the end when opened for appending,
+    // at least not after the fopen. Perhaps it does on the first write. In any event
+    // we perform the necessary seek.
+    if (isOpenFor(appending)) {
+        if (fseek(_fp, 0L, SEEK_END) == -1) {
+            throw system_error(errno, system_category(), "fseek");
+        }
+    }
+#endif
+
     contract::postconditions({
         KSS_EXPR(_fp != nullptr),
         KSS_EXPR(_autoclose == true),

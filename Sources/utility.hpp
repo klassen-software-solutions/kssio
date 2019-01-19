@@ -213,7 +213,7 @@ namespace kss {
             /*!
              Byte packing. Given an array of N bytes, pack it into a single unsigned integer
              of type UInt. They are packed such that byte 0 in the array is the most
-             significantbyte and byte N-1 is the least significant.
+             significant byte and byte N-1 is the least significant.
 
              Note that UInt must be large enough to hold N bytes. In debug mode this is
              checked via an assertion. In release mode the result is undefined.
@@ -221,7 +221,7 @@ namespace kss {
              @param ar the array to be packed
              @return the packed value
              */
-            template <class UInt, size_t N>
+            template <class UInt, size_t N = sizeof(UInt)>
             UInt pack(const uint8_t ar[N]) noexcept {
                 static_assert(N <= sizeof(UInt), "UInt must contain at least N bytes");
 
@@ -251,7 +251,7 @@ namespace kss {
              @param ar The output array.
              @return a reference to ar.
              */
-            template <class UInt, size_t N>
+            template <class UInt, size_t N = sizeof(UInt)>
             uint8_t* unpack(UInt value, uint8_t ar[N]) noexcept {
                 static_assert(N <= sizeof(UInt), "UInt must contain at least N bytes");
                 assert(value <= (std::numeric_limits<UInt>::max() >> ((sizeof(UInt)-N)*8)));

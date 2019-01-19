@@ -139,6 +139,7 @@ static TestSuite ts("file::fileutil", {
     }),
     make_pair("path manipulation", [] {
         // basename
+        using kss::io::file::basename;
         KSS_ASSERT(basename("") == "");
         KSS_ASSERT(basename("/////") == "");
         KSS_ASSERT(basename("/this/is/a/directory/") == "");

@@ -265,7 +265,7 @@ namespace kss { namespace io { namespace file {
             kss::io::file::write(*this, r);
 
             // postconditions
-            if (!(position() == (pos+1))) {
+            if (position() != (pos+1)) {
                 _KSSIO_POSTCONDITIONS_FAILED
             }
         }
