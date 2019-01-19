@@ -46,7 +46,7 @@ namespace kss {
          This is the interface for the poller delegate. A delegate must be provided
          for a poller to do anything useful. The delegate is divided into two sections,
          one that controls the operation of the poller and one that responds to the
-         availbility of the resources.
+         availability of the resources.
 
          It is best that the methods of this interface do not throw exceptions. However
          if they do they will be automatically caught and ignored.
@@ -134,9 +134,6 @@ namespace kss {
          on that. (It would be possible to provide an implementation based on select
          if necessary, but at present poll is available on all the architectures that
          are of interest to me.)
-
-         Note that this class is intended to be a "final" class and should in general
-         not be subclassed. Instead you modify its behaviour by using its delegate.
          */
         class Poller final {
         public:
@@ -224,7 +221,6 @@ namespace kss {
              (typically, but not limited to, the internal poll call).
              */
             void run();
-
 
         private:
             struct Impl;

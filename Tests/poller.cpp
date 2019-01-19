@@ -7,11 +7,12 @@
 //  Licensing follows the MIT License.
 //
 
+#include <atomic>
 #include <cstdio>
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <string>
-#include <thread>
 
 #include <unistd.h>
 
@@ -43,21 +44,31 @@ namespace {
 			numBytesWritten = 0;
 		}
 
-		ssize_t numRead() const noexcept { return numBytesRead; }
+		size_t numRead() const noexcept { return numBytesRead; }
 
-		virtual bool pollerShouldStop() const { return shouldStop; }
+		bool pollerShouldStop() const override { return shouldStop; }
 
-		virtual void pollerResourceReadIsReady(Poller& p, const PolledResource& resource) {
+        void pollerHasStarted(Poller&) override {
+            log("poller has started");
+        }
+
+        void pollerWillStop(Poller&) override {
+            log("poller will stop");
+        }
+
+		void pollerResourceReadIsReady(Poller& p, const PolledResource& resource) override {
 			log("read is ready: " + resource.name);
 			char buffer[100];
 			auto numRead = read(resource.filedes, buffer, 100);
-			if (numRead > 0) numBytesRead += numRead;
+            if (numRead > 0) { numBytesRead += numRead; }
 			while (numRead == 100) {
 				numRead = read(resource.filedes, buffer, 100);
-				if (numRead > 0) numBytesRead += numRead;
+                if (numRead > 0) { numBytesRead += numRead; }
 			}
+            log("read so far: " + to_string(numBytesRead));
 			if (numRead == 0) {
 				// Indicates eof, so let's remove the resource.
+                log("eof");
 				p.remove(resource.name);
 			}
 
@@ -68,7 +79,7 @@ namespace {
 			}
 		}
 
-		virtual void pollerResourceWriteIsReady(Poller& p, const PolledResource& resource) {
+		void pollerResourceWriteIsReady(Poller& p, const PolledResource& resource) override {
 			log("write is ready: " + resource.name);
 			const string mydata = "this is a test";
 			size_t remain = mydata.length();
@@ -80,18 +91,18 @@ namespace {
 			}
 		}
 
-		virtual void pollerResourceErrorHasOccurred(Poller& p, const PolledResource& resource) {
+		void pollerResourceErrorHasOccurred(Poller& p, const PolledResource& resource) override {
 			log("error on: " + resource.name);
 		}
 
-		virtual void pollerResourceHasDisconnected(Poller& p, const PolledResource& resource) {
+		void pollerResourceHasDisconnected(Poller& p, const PolledResource& resource) override {
 			log("disconnect on: " + resource.name);
 		}
 
 	private:
-		bool shouldStop { false };
-		ssize_t numBytesRead { 0 };
-		ssize_t numBytesWritten { 0 };
+		bool    shouldStop { false };
+		size_t  numBytesRead { 0 };
+		size_t  numBytesWritten { 0 };
 	};
 }
 
@@ -108,34 +119,36 @@ static TestSuite ts("io::poller", {
         KSS_ASSERT(true);    // Nothing to check other than it exited.
     }),
     make_pair("file read test", [] {
-        // Setup the file.
-        file::FileGuard fg(tmpfile());
+        static const string mydata = "this is my write test data";
+        static constexpr size_t numWrites = 5;
 
-        Poller p;
-        MyDelegate d;
-        p.setDelegate(&d);
+        KSS_ASSERT(isEqualTo<size_t>(mydata.length() * numWrites, [] {
+            // Setup the file.
+            file::FileGuard fg(tmpfile());
+            log("before write");
+            for (size_t i = 0; i < numWrites; ++i) {
+                fwrite(mydata.data(), mydata.size(), 1, fg.file());
+            }
+            fflush(fg.file());
+            rewind(fg.file());
+            log("after write");
 
-        PolledResource r;
-        r.name = "readTest";
-        r.filedes = fileno(fg.file());
-        r.event = PolledResource::Event::read;
-        r.payload = reinterpret_cast<void*>(0x0A);
-        p.add(r);
+            Poller p;
+            MyDelegate d;
+            p.setDelegate(&d);
 
-        thread th { [&] {
-            p.run();
-        }};
+            PolledResource r;
+            r.name = "readTest";
+            r.filedes = fileno(fg.file());
+            r.event = PolledResource::Event::read;
+            r.payload = reinterpret_cast<void*>(0x0A);
+            p.add(r);
 
-        const string mydata = "this is my write test data";
-        fwrite(mydata.data(), mydata.size(), 1, fg.file());
-        fwrite(mydata.data(), mydata.size(), 1, fg.file());
-        fwrite(mydata.data(), mydata.size(), 1, fg.file());
-        fwrite(mydata.data(), mydata.size(), 1, fg.file());
-        fwrite(mydata.data(), mydata.size(), 1, fg.file());
-        fflush(fg.file());
-        rewind(fg.file());
-
-        th.join();
-        KSS_ASSERT(d.numRead() == static_cast<ssize_t>(mydata.size() * 5));
+            auto fut = async([&] {
+                p.run();
+                return d.numRead();
+            });
+            return fut.get();
+        }));
     })
 });
