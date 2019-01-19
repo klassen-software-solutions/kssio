@@ -1,6 +1,13 @@
 # kssio
 C++ I/O library (networking, files, and streams)
 
+## What is it?
+
+This is a C++ library containing a number of methods and classes to help with basic network,
+file, and stream input/output operations.
+
+[API Documentation](http://www.kss.cc/apis/kssio/docs/index.html) 
+
 ## Prerequisites
 
 This library has no prerequisites other than a C++14 compiler and the standard library.
