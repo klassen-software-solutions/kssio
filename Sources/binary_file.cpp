@@ -341,7 +341,7 @@ void BinaryFile::fastForward() {
 bool BinaryFile::isOpenFor(mode_t mode) const {
     if (_fp) {
         const int fd = fileno(_fp);
-        contract::condition(KSS_EXPR(fd >= 0));
+        contract::conditions({ KSS_EXPR(fd >= 0) });
 
         const int flags = fcntl(fd, F_GETFL);
         if ((mode & reading) && (flags & O_WRONLY)) {
