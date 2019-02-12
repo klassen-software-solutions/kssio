@@ -107,7 +107,7 @@ namespace {
 }
 
 
-static TestSuite ts("io::poller", {
+static TestSuite ts("poller", {
     make_pair("basic tests", [] {
         Poller p;
         KSS_ASSERT(throwsException<runtime_error>([&] { p.run(); }));
