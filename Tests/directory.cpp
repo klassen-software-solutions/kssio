@@ -84,6 +84,8 @@ static MyTestSuite ts("file::directory", {
         size_t dircount = 0;
         size_t filecount = 0;
         Directory d(srcdir);
+        KSS_ASSERT(d == d);
+        
         for (Directory::const_iterator it = d.begin(), last = d.end(); it != last; ++it) {
             string name = d.name() + "/" + *it;
             if (isFile(name)) { ++filecount; }

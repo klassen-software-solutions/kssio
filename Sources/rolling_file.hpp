@@ -33,6 +33,14 @@ namespace kss { namespace io { namespace file {
      */
     class RollingFileListener {
     public:
+        // Since we need to make the destructor virtual, we define all the rule-of-6 items.
+        RollingFileListener() = default;
+        RollingFileListener(const RollingFileListener&) = default;
+        RollingFileListener(RollingFileListener&&) = default;
+        RollingFileListener& operator=(const RollingFileListener&) = default;
+        RollingFileListener& operator=(RollingFileListener&&) = default;
+        virtual ~RollingFileListener() = default;
+
         /*!
          This method will be called just before a file is opened.
          @param rf the RollingFile that is calling the method

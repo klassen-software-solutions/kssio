@@ -49,6 +49,8 @@ namespace {
 
     class MyListener : public RollingFileListener {
     public:
+        ~MyListener() override = default;
+        
         void willOpen(RollingFile&, const string&) override { ++willOpenCount; }
         void didClose(RollingFile&, const string&) override { ++didCloseCount; }
 
