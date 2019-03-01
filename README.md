@@ -96,7 +96,8 @@ navigable in the IDEs (e.g. MARK: and TODO:).
 * "Private" items: This refers to things that should be treated as private but for technical reasons cannot be 
 explicitly made private. They should either be placed in a sub-namespace named `_private` or just given a 
 single underscore prefix.
-* Type aliases: lowercase_t (e.g. `use requestlist_t = list<Request>;`)
+* Type aliases: lowercase_t (e.g. `use requestlist_t = list<Request>;`) Use `_fn` instead of `_t`
+if the type is a function.
 * Macros: ALL_UPPERCASE - but keep macros scarce. Work hard to avoid them if possible,
 and be prepared to justify their use.
 

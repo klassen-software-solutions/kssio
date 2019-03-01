@@ -23,6 +23,7 @@
 #include <kss/io/fileutil.hpp>
 
 #include "ksstest.hpp"
+#include "testutils.hpp"
 
 using namespace std;
 using namespace kss::io::file;
@@ -41,44 +42,20 @@ namespace {
 			return buf.st_mode & 0777;
 		}
 	}
-
-    class MyTestSuite : public TestSuite, public HasBeforeAll {
-    public:
-        MyTestSuite(const string& name, test_case_list_t fns) : TestSuite(name, fns) {}
-
-        void beforeAll() override {
-            currentWorkingDirectory = getCwd();
-
-            // Determine the location of the project directory
-            projectDirectory = ".";    // when run from make check
-            if (endsWith(currentWorkingDirectory, "/kssio/Build/Products/Debug")
-                || endsWith(currentWorkingDirectory, "/kssio/Build/Products/Release"))
-            {
-                // when run from Xcode
-                projectDirectory = "../../..";
-            }
-
-            testSourcesDirectory = projectDirectory + "/Tests";
-        }
-
-        string currentWorkingDirectory;
-        string testSourcesDirectory;
-        string projectDirectory;
-    };
 }
 
 
-static MyTestSuite ts("file::directory", {
+static TestSuiteWithDirectories ts("file::directory", {
     make_pair("getCwd", [] {
-        auto& ts = dynamic_cast<MyTestSuite&>(TestSuite::get());
+        auto& ts = dynamic_cast<TestSuiteWithDirectories&>(TestSuite::get());
         const auto cwd = ts.currentWorkingDirectory;
         KSS_ASSERT(endsWith(cwd, "/kssio")                              // when run from make check
                    || endsWith(cwd, "/kssio/Build/Products/Debug")      // when run from Xcode (Debug)
                    || endsWith(cwd, "/kssio/Build/Products/Release"));  // when run from Xcode (Release)
     }),
     make_pair("Directory", [] {
-        auto& ts = dynamic_cast<MyTestSuite&>(TestSuite::get());
-        const auto srcdir = ts.testSourcesDirectory;
+        auto& ts = dynamic_cast<TestSuiteWithDirectories&>(TestSuite::get());
+        const auto srcdir = ts.projectDirectory + "/Tests";
 
         // Test the iterators.
         size_t dircount = 0;
@@ -179,7 +156,7 @@ static MyTestSuite ts("file::directory", {
     make_pair("Enhancement17 Ignore hidden files", [] {
         // The project directory will have at least the hidden entries of ".git",
         // ".gitignore", and ".prereqs".
-        auto& ts = dynamic_cast<MyTestSuite&>(TestSuite::get());
+        auto& ts = dynamic_cast<TestSuiteWithDirectories&>(TestSuite::get());
         Directory allEntries(ts.projectDirectory);
         Directory nonHiddenEntries(ts.projectDirectory, true);
         KSS_ASSERT(allEntries.size() >= (nonHiddenEntries.size() + 3));
