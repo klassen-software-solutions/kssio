@@ -60,9 +60,7 @@ static TestSuiteWithDirectories ts("file::directory", {
         // Test the iterators.
         size_t dircount = 0;
         size_t filecount = 0;
-cerr << "!! srcdir=" << srcdir << endl;
         Directory d(srcdir);
-cerr << "!! after constructor" << endl;
         KSS_ASSERT(d == d);
         
         for (Directory::const_iterator it = d.begin(), last = d.end(); it != last; ++it) {
