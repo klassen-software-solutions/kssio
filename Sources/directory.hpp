@@ -132,6 +132,10 @@ namespace kss { namespace io { namespace file {
 			const_iterator(const std::string& dirName,
                            bool ignoreHidden,
                            bool endFlag = false);
+            const_iterator(const const_iterator&) = default;
+            const_iterator(const_iterator&&) = default;
+            const_iterator& operator=(const const_iterator&) = default;
+            const_iterator& operator=(const_iterator&&) = default;
 			~const_iterator() noexcept;
 			reference operator*() const noexcept { return currentValue; }
 			pointer operator->() const noexcept  { return &currentValue; }
