@@ -121,7 +121,7 @@ namespace kss { namespace io { namespace file {
 
         // Moving is allowed, copying is not.
         RollingFile(RollingFile&&) = default;
-        RollingFile& operator=(RollingFile&&) = default;
+        RollingFile& operator=(RollingFile&&) = delete;
 
         /*!
          Set the optional listener if you need to be informed about when the individual

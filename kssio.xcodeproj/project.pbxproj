@@ -350,7 +350,7 @@
 		AA47806A2188E29F006D635F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Klassen Software Solutions";
 				TargetAttributes = {
 					AA4780712188E29F006D635F = {
@@ -600,6 +600,7 @@
 		AA47808A2188E416006D635F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";
@@ -610,6 +611,7 @@
 		AA47808B2188E416006D635F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23FN26LWBV;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/.build/Darwin-x86_64/include";

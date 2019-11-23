@@ -82,7 +82,7 @@ namespace kss { namespace io { namespace file {
         Directory(const Directory&) = delete;
         Directory& operator=(const Directory&) = delete;
         Directory(Directory&&) = default;
-        Directory& operator=(Directory&&) noexcept = default;
+        Directory& operator=(Directory&&) noexcept = delete;
 
         /*!
          Obtain the iterators.
@@ -134,8 +134,8 @@ namespace kss { namespace io { namespace file {
                            bool endFlag = false);
             const_iterator(const const_iterator&) = default;
             const_iterator(const_iterator&&) = default;
-            const_iterator& operator=(const const_iterator&) = default;
-            const_iterator& operator=(const_iterator&&) = default;
+            const_iterator& operator=(const const_iterator&) = delete;
+            const_iterator& operator=(const_iterator&&) = delete;
 			~const_iterator() noexcept;
 			reference operator*() const noexcept { return currentValue; }
 			pointer operator->() const noexcept  { return &currentValue; }
