@@ -7,9 +7,16 @@
 //  Licensing follows the MIT License.
 //
 
+#include "ksstest.hpp"
+
+#include <cxxabi.h>
+#include <getopt.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 #include <algorithm>
 #include <cassert>
-#include <cstdlib>
 #include <ctime>
 #include <exception>
 #include <fstream>
@@ -23,14 +30,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include <cxxabi.h>
-#include <getopt.h>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
-#include "ksstest.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -914,6 +913,12 @@ namespace {
 
     template <class T, class Node>
     struct AbstractGenerator {
+        virtual ~AbstractGenerator() = default;
+        AbstractGenerator(const AbstractGenerator&) = default;
+        AbstractGenerator(AbstractGenerator&&) = default;
+        AbstractGenerator& operator=(const AbstractGenerator&) = default;
+        AbstractGenerator& operator=(AbstractGenerator&&) = default;
+
         Node* operator()() {
             if (_it == _items.end()) {
                 return nullptr;
@@ -925,13 +930,15 @@ namespace {
                 return &_n;
             }
         }
+
         virtual void populate() = 0;
+
     protected:
         AbstractGenerator(const vector<T>& items) : _items(items) {
             _it = _items.begin();
         }
         const vector<T>&                    _items;
-        typename vector<T>::const_iterator    _it;
+        typename vector<T>::const_iterator  _it;
         Node                                _n;
     };
 
@@ -939,6 +946,8 @@ namespace {
     : public AbstractGenerator<pair<string, string>, xml::simple_writer::node>
     {
         FailureXmlGenerator(const failures_t& failures) : AbstractGenerator(failures) {}
+        virtual ~FailureXmlGenerator() = default;
+
         virtual void populate() override {
             _n.name = "failure";
             _n["message"] = _it->first;
@@ -950,6 +959,8 @@ namespace {
 
     struct ErrorXmlGenerator : public AbstractGenerator<TestError, xml::simple_writer::node> {
         ErrorXmlGenerator(const vector<TestError>& errors) : AbstractGenerator(errors) {}
+        virtual ~ErrorXmlGenerator() = default;
+
         virtual void populate() override {
             _n.name = "error";
             _n["message"] = _it->errorMessage;
@@ -959,6 +970,8 @@ namespace {
 
     struct TestCaseXmlGenerator : public AbstractGenerator<TestCaseWrapper, xml::simple_writer::node> {
         TestCaseXmlGenerator(const vector<TestCaseWrapper>& testCases) : AbstractGenerator(testCases) {}
+        virtual ~TestCaseXmlGenerator() = default;
+
         virtual void populate() override {
             _n.name = "testcase";
             _n["name"] = _it->name;
@@ -976,6 +989,8 @@ namespace {
 
     struct TestSuiteXmlGenerator : public AbstractGenerator<TestSuiteWrapper, xml::simple_writer::node> {
         TestSuiteXmlGenerator(const vector<TestSuiteWrapper>& suites) : AbstractGenerator(suites) {}
+        virtual ~TestSuiteXmlGenerator() = default;
+
         virtual void populate() override {
             _n.name = "testsuite";
             _n["name"] = _it->suite->name();
@@ -989,6 +1004,7 @@ namespace {
             _n["timestamp"] = _it->timestamp;
             _n.children = { TestCaseXmlGenerator(_it->suite->_implementation()->tests) };
         }
+
     private:
         int id = 0;
     };
@@ -1028,6 +1044,8 @@ namespace {
     : public AbstractGenerator<pair<string, string>, json::simple_writer::node>
     {
         FailureJsonGenerator(const failures_t& failures) : AbstractGenerator(failures) {}
+        virtual ~FailureJsonGenerator() = default;
+
         virtual void populate() override {
             _n["message"] = _it->first;
             if (!_it->second.empty()) {
@@ -1038,6 +1056,8 @@ namespace {
 
     struct TestCaseJsonGenerator : public AbstractGenerator<TestCaseWrapper, json::simple_writer::node> {
         TestCaseJsonGenerator(const vector<TestCaseWrapper>& tests) : AbstractGenerator(tests) {}
+        virtual ~TestCaseJsonGenerator() = default;
+
         virtual void populate() override {
             _n["name"] = _it->name;
             _n["status"] = (_it->skipped ? "NOTRUN" : "RUN");
@@ -1051,6 +1071,8 @@ namespace {
 
     struct TestSuiteJsonGenerator : public AbstractGenerator<TestSuiteWrapper, json::simple_writer::node> {
         TestSuiteJsonGenerator(const vector<TestSuiteWrapper>& suites) : AbstractGenerator(suites) {}
+        virtual ~TestSuiteJsonGenerator() = default;
+
         virtual void populate() override {
             _n["name"] = _it->suite->name();
             _n["tests"] = to_string(_it->suite->_implementation()->tests.size());
