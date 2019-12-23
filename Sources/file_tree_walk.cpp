@@ -15,16 +15,16 @@
 
 #include <fts.h>
 #include <sys/types.h>
+#include <kss/contract/all.h>
+#include <kss/util/all.h>
 
-#include "_contract.hpp"
-#include "_raii.hpp"
 #include "file_tree_walk.hpp"
 #include "fileutil.hpp"
 
 using namespace std;
 using namespace kss::io::file;
-namespace contract = kss::io::_private::contract;
-using kss::io::_private::finally;
+namespace contract = kss::contract;
+using kss::util::Finally;
 
 
 namespace {
@@ -50,7 +50,7 @@ namespace {
         });
 
         FTS* fts = nullptr;
-        finally cleanup([&] {
+        Finally cleanup([&] {
             if (fts) {
                 if (fts_close(fts) == -1) {
                     throw system_error(errno, system_category(), "fts_close");

@@ -17,20 +17,19 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <kss/io/_raii.hpp>
-#include <kss/io/_stringutil.hpp>
 #include <kss/io/directory.hpp>
 #include <kss/io/fileutil.hpp>
+#include <kss/test/all.h>
+#include <kss/util/all.h>
 
-#include "ksstest.hpp"
 #include "testutils.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 using namespace kss::test;
 
-using kss::io::_private::endsWith;
-using kss::io::_private::finally;
+using kss::util::Finally;
+using kss::util::strings::endsWith;
 
 namespace {
 	mode_t getPermissions(const string& path) {
@@ -108,11 +107,11 @@ static TestSuiteWithDirectories ts("file::directory", {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 
-        finally cleanup([]{
+        Finally cleanup([]{
             system("rm -rf /tmp/kssutiltest");
             system("rm -rf aaa");
             system("rm -rf hi");
-            system("rm -f tmp/kssutiltest_file.dat");
+            system("rm -f /tmp/kssutiltest_file.dat");
         });
 
         string path = "/tmp/kssiotest/one/two/three/four";
@@ -145,7 +144,7 @@ static TestSuiteWithDirectories ts("file::directory", {
     make_pair("Bug16 Improper handling of empty directories", [] {
         KSS_ASSERT(isTrue([&] {
             const string path = temporaryFilename("/tmp/KSSIODirectoryTest");
-            finally cleanup([&path] {
+            Finally cleanup([&path] {
                 removePath(path, true);
             });
             ensurePath(path);
@@ -183,7 +182,7 @@ static TestSuiteWithDirectories ts("file::directory", {
         // An exception is thrown if the path refers to something other than a directory.
         KSS_ASSERT(throwsException<invalid_argument>([] {
             string fileName = temporaryFilename("/tmp/KSSIORemovePathTest");
-            finally cleanup([&] {
+            Finally cleanup([&] {
                 if (isFile(fileName)) {
                     unlink(fileName.c_str());
                 }

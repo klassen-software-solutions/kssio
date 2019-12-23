@@ -16,8 +16,8 @@
 #include <kss/io/binary_file.hpp>
 #include <kss/io/fileutil.hpp>
 #include <kss/io/utility.hpp>
+#include <kss/test/all.h>
 
-#include "ksstest.hpp"
 
 using namespace std;
 using namespace kss::io::file;

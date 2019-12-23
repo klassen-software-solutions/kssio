@@ -21,8 +21,7 @@
 
 #include <kss/io/fileutil.hpp>
 #include <kss/io/poller.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io;

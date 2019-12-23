@@ -12,8 +12,8 @@
 
 #include <kss/io/file_tree_walk.hpp>
 #include <kss/io/fileutil.hpp>
+#include <kss/test/all.h>
 
-#include "ksstest.hpp"
 #include "testutils.hpp"
 
 using namespace std;

@@ -15,8 +15,7 @@
 #include <vector>
 
 #include <kss/io/utility.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io::net;
