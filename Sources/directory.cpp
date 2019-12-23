@@ -17,22 +17,20 @@
 #include <unistd.h>
 
 #include <sys/param.h>
+#include <kss/contract/all.h>
+#include <kss/util/all.h>
 
-#include "_contract.hpp"
-#include "_raii.hpp"
-#include "_stringutil.hpp"
-#include "_tokenizer.hpp"
 #include "directory.hpp"
 #include "fileutil.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
-using kss::io::_private::endsWith;
-using kss::io::_private::finally;
-using kss::io::_private::Tokenizer;
+using kss::util::Finally;
+using kss::util::strings::endsWith;
+using kss::util::strings::Tokenizer;
 
 
 namespace {
@@ -230,7 +228,7 @@ Directory::size_type Directory::size() const {
 
     Directory::size_type count = 0;
     DIR* dir = openDir(directoryName);
-    finally cleanup([&]{
+    Finally cleanup([&]{
         if (dir) {
             closedir(dir);
         }
@@ -256,7 +254,7 @@ bool Directory::empty() const {
     });
 
     DIR* dir = openDir(directoryName);
-    finally cleanup([&]{
+    Finally cleanup([&]{
         if (dir) {
             closedir(dir);
         }
@@ -291,7 +289,7 @@ bool Directory::operator==(const Directory& rhs) const {
     // Otherwise we must traverse the directories, comparing their entries.
     DIR* dir1 = nullptr;
     DIR* dir2 = nullptr;
-    finally cleanup([&]{
+    Finally cleanup([&]{
         if (dir2 != nullptr) { closedir(dir2); }
         if (dir1 != nullptr) { closedir(dir1); }
     });

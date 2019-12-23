@@ -13,12 +13,13 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "_contract.hpp"
+#include <kss/contract/all.h>
+
 #include "eai_error_category.hpp"
 
 using namespace std;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
 namespace {
     class EaiErrorCategory : public error_category {

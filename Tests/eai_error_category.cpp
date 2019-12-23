@@ -11,7 +11,7 @@
 #include <iostream>
 #include <netdb.h>
 #include <kss/io/eai_error_category.hpp>
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io::net;

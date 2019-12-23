@@ -31,9 +31,9 @@
 #   include <sys/ioctl.h>
 #endif
 
-#include "_contract.hpp"
-#include "_raii.hpp"
-#include "_tokenizer.hpp"
+#include <kss/contract/all.h>
+#include <kss/util/all.h>
+
 #include "interface.hpp"
 #include "utility.hpp"
 
@@ -41,10 +41,10 @@
 using namespace std;
 using namespace kss::io::net;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
-using kss::io::_private::finally;
-using kss::io::_private::Tokenizer;
+using kss::util::Finally;
+using kss::util::strings::Tokenizer;
 
 
 ///
@@ -81,22 +81,20 @@ IpV4Address::IpV4Address(const string& addrStr) {
     Tokenizer tok(addrStr, ".", false);
     uint8_t ar[4];
 
+    auto it = tok.begin();
     for (size_t i = 0; i < 4U; ++i) {
-        if (tok.eof()) { throwInvalidIp(addrStr); }
-
-        string s;
-        tok >> s;
-        if (s.empty()) { throwInvalidIp(addrStr); }
+        if (it == tok.end()) { throwInvalidIp(addrStr); }
+        if (it->empty()) { throwInvalidIp(addrStr); }
 
         size_t numCharsParsed = 0;
-        const unsigned long ul = stoul(s, &numCharsParsed, 10);
+        const unsigned long ul = stoul(*it, &numCharsParsed, 10);
         if (numCharsParsed == 0) { throwInvalidIp(addrStr); }
         if (ul > 255) { throwInvalidIp(addrStr); }
 
         ar[i] = (uint8_t)ul;
+        ++it;
     }
-
-    if (!tok.eof()) { throwInvalidIp(addrStr); }
+    if (it != tok.end()) { throwInvalidIp(addrStr); }
 
     _addr = pack<uint32_t, 4>(ar);
 }
@@ -156,22 +154,20 @@ MacAddress::MacAddress(const string& addrStr) {
     Tokenizer tok(addrStr, ":", false);
     uint8_t ar[6];
 
+    auto it = tok.begin();
     for (size_t i = 0; i < 6U; ++i) {
-        if (tok.eof()) { throwInvalidMac(addrStr); }
-
-        string s;
-        tok >> s;
-        if (s.empty()) { throwInvalidMac(addrStr); }
+        if (it == tok.end()) { throwInvalidMac(addrStr); }
+        if (it->empty()) { throwInvalidMac(addrStr); }
 
         size_t numCharsParsed = 0;
-        const unsigned long ul = stoul(s, &numCharsParsed, 16);
+        const unsigned long ul = stoul(*it, &numCharsParsed, 16);
         if (numCharsParsed == 0) { throwInvalidMac(addrStr); }
         if (ul > 255) { throwInvalidMac(addrStr); }
 
         ar[i] = (uint8_t)ul;
+        ++it;
     }
-
-    if (!tok.eof()) { throwInvalidMac(addrStr); }
+    if (it != tok.end()) { throwInvalidMac(addrStr); }
     
     _addr = pack<uint64_t, 6>(ar);
 }
@@ -219,7 +215,7 @@ namespace {
         mac_addr_map_t ret;
 #if defined(__APPLE__)
         struct ifaddrs* addrs = nullptr;
-        finally cleanup([&]{
+        Finally cleanup([&]{
             if (addrs) { freeifaddrs(addrs); }
         });
 
@@ -241,7 +237,7 @@ namespace {
         if (sock == -1) {
             throw system_error(errno, system_category(), "socket");
         }
-        finally cleanup([&] {
+        Finally cleanup([&] {
             if (sock != -1) { close(sock); }
         });
 
@@ -284,7 +280,7 @@ namespace {
     // function.
     void forEachInterface(function<bool(NetworkInterface&)> cb) {
         struct ifaddrs* addrs = nullptr;
-        finally cleanup([&]{
+        Finally cleanup([&]{
             if (addrs) { freeifaddrs(addrs); }
         });
 

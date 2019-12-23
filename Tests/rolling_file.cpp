@@ -9,18 +9,18 @@
 
 #include <sstream>
 
-#include <kss/io/_stringutil.hpp>
+
 #include <kss/io/directory.hpp>
 #include <kss/io/fileutil.hpp>
 #include <kss/io/rolling_file.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
+#include <kss/util/all.h>
 
 using namespace std;
 using namespace kss::io::file;
 using namespace kss::test;
-using kss::io::_private::startsWith;
-using kss::io::_private::endsWith;
+using kss::util::strings::startsWith;
+using kss::util::strings::endsWith;
 
 namespace {
     class MyTestSuite : public TestSuite, public HasBeforeEach, public HasAfterEach {

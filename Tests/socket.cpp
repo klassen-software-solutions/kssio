@@ -15,8 +15,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <kss/io/socket.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io::net;

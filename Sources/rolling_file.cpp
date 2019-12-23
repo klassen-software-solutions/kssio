@@ -15,17 +15,17 @@
 #include <system_error>
 
 #include <syslog.h>
+#include <kss/contract/all.h>
+#include <kss/util/all.h>
 
-#include "_contract.hpp"
-#include "_rtti.hpp"
 #include "fileutil.hpp"
 #include "rolling_file.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::io::_private::contract;
-namespace rtti = kss::io::_private::rtti;
+namespace contract = kss::contract;
+namespace rtti = kss::util::rtti;
 
 namespace {
     // Close the current stream, calling the listeners if necessary.

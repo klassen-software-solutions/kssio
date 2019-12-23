@@ -11,19 +11,21 @@
 
 #include <string>
 
-#include <kss/io/_stringutil.hpp>
 #include <kss/io/directory.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
+#include <kss/util/all.h>
 
 // A test suite that adds information about where the program is running and the
 // relative location of the project directory.
-class TestSuiteWithDirectories : public kss::test::TestSuite, public kss::test::HasBeforeAll {
+class TestSuiteWithDirectories : public kss::test::TestSuite,
+    public kss::test::HasBeforeAll,
+    public kss::test::MustNotBeParallel
+{
 public:
     TestSuiteWithDirectories(const std::string& name, test_case_list_t fns) : TestSuite(name, fns) {}
 
     void beforeAll() override {
-        using kss::io::_private::endsWith;
+        using kss::util::strings::endsWith;
 
         currentWorkingDirectory = kss::io::file::getCwd();
 
