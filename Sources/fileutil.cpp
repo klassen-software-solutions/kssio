@@ -17,14 +17,14 @@
 #include <system_error>
 
 #include <unistd.h>
+#include <kss/contract/all.h>
 
-#include "_contract.hpp"
 #include "fileutil.hpp"
 
 using namespace std;
 using namespace kss::io::file;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
 
 namespace {

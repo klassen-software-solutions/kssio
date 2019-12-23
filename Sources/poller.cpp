@@ -19,16 +19,18 @@
 
 #include <poll.h>
 #include <syslog.h>
+#include <kss/contract/all.h>
+#include <kss/util/all.h>
 
-#include "_contract.hpp"
 #include "poller.hpp"
 
 using namespace std;
 using namespace kss::io;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
 using std::chrono::milliseconds;
+using kss::util::containers::eraseIf;
 
 
 ///
@@ -68,13 +70,6 @@ namespace {
 			return static_cast<int>(count);
 		}
 	}
-
-    // "borrowed" from kssutil
-    template <class Container, class UnaryPredicate>
-    void eraseIf(Container& c, UnaryPredicate pred) {
-        c.erase(std::remove_if(c.begin(), c.end(), pred), c.end());
-    }
-
 }
 
 ///

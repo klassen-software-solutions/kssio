@@ -10,7 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <kss/io/simple_xml_writer.hpp>
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io::stream::xml;

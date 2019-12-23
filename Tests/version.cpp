@@ -7,7 +7,7 @@
 //
 
 #include <kss/io/version.hpp>
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::test;

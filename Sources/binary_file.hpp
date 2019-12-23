@@ -16,6 +16,8 @@
 #include <stdexcept>
 #include <string>
 
+#include <kss/contract/all.h>
+
 #include "iterator.hpp"
 #include "utility.hpp"
 
@@ -120,18 +122,17 @@ namespace kss { namespace io { namespace file {
      */
     template <class Record>
     Record read(BinaryFile& f, const Record& arg_type = Record()) {
-        if (!f.isOpenFor(BinaryFile::reading)) {
-            throw std::invalid_argument("file is not open for reading");
-        }
+        kss::contract::parameters({
+            KSS_EXPR(f.isOpenFor(BinaryFile::reading))
+        });
 
         const auto pos = f.tell();
         Record rec;
         f.readFully(&rec, sizeof(rec));
 
-        // postconditions
-        if (!(f.tell() == (pos + (off_t)sizeof(rec)))) {
-            _KSSIO_POSTCONDITIONS_FAILED
-        }
+        kss::contract::postconditions({
+            KSS_EXPR(f.tell() == (pos + (off_t)sizeof(rec)))
+        });
         return rec;
     }
 
@@ -145,17 +146,17 @@ namespace kss { namespace io { namespace file {
      */
     template <class Record>
     void write(BinaryFile& f, const Record& rec) {
-        if (!f.isOpenFor(BinaryFile::writing)) {
-            throw std::invalid_argument("file is not open for writing");
-        }
+        kss::contract::parameters({
+            KSS_EXPR(f.isOpenFor(BinaryFile::writing))
+        });
 
         const auto pos = f.tell();
         f.writeFully(&rec, sizeof(rec));
 
-        // postconditions
-        if (!(f.isOpenFor(BinaryFile::appending) || (f.tell() == (pos + (off_t)sizeof(rec))))) {
-            _KSSIO_POSTCONDITIONS_FAILED
-        }
+        kss::contract::postconditions({
+            KSS_EXPR(f.isOpenFor(BinaryFile::appending) || (f.tell() == (pos + (off_t)sizeof(rec))))
+        });
+
     }
 
 
@@ -191,21 +192,21 @@ namespace kss { namespace io { namespace file {
         explicit FileOf(const std::string& filename, mode_t openMode = BinaryFile::reading)
         : BinaryFile(filename, openMode)
         {
-            if (!(isOpenFor(BinaryFile::appending) || (position() == 0))) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
+            });
         }
 
         explicit FileOf(FILE* fp) : BinaryFile(fp) {
-            if (!(isOpenFor(BinaryFile::appending) || (position() == 0))) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
+            });
         }
 
         explicit FileOf(int filedes) : BinaryFile(filedes) {
-            if (!(isOpenFor(BinaryFile::appending) || (position() == 0))) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(isOpenFor(BinaryFile::appending) || (position() == 0))
+            });
         }
 
         FileOf(FileOf&& f) = default;
@@ -230,18 +231,16 @@ namespace kss { namespace io { namespace file {
          @throws std::system_error if the underlying C routines return an error code
          */
         Record read() {
-            // preconditions
-            if (!(isOpenFor(reading))) {
-                _KSSIO_PRECONDITIONS_FAILED
-            }
+            kss::contract::preconditions({
+                KSS_EXPR(isOpenFor(reading))
+            });
 
             const auto pos = position();
             Record r = kss::io::file::read(*this, Record());
 
-            // postconditions
-            if (!(position() == (pos+1))) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(position() == (pos+1))
+            });
             return r;
         }
 
@@ -256,18 +255,16 @@ namespace kss { namespace io { namespace file {
         }
 
         void write(const Record& r) {
-            // preconditions
-            if (!(isOpenFor(writing))) {
-                _KSSIO_PRECONDITIONS_FAILED
-            }
+            kss::contract::preconditions({
+                KSS_EXPR(isOpenFor(writing))
+            });
 
             const auto pos = position();
             kss::io::file::write(*this, r);
 
-            // postconditions
-            if (position() != (pos+1)) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(position() == (pos+1))
+            });
         }
 
         /*!
@@ -276,12 +273,10 @@ namespace kss { namespace io { namespace file {
          will append to the end of the file.
          */
         inline void write(const Record& r, size_t recNo) {
-            // preconditions
-            if (!(isOpenFor(writing))
-                || !(!isOpenFor(appending)))
-            {
-                _KSSIO_PRECONDITIONS_FAILED
-            }
+            kss::contract::preconditions({
+                KSS_EXPR(isOpenFor(writing)),
+                KSS_EXPR(!isOpenFor(appending))
+            });
 
             setPosition(recNo);
             write(r);
@@ -308,10 +303,9 @@ namespace kss { namespace io { namespace file {
          @throws std::system_error if the underlying C routines return an error code
          */
         input_iterator begin() {
-            // preconditions
-            if (!(isOpenFor(BinaryFile::reading))) {
-                _KSSIO_PRECONDITIONS_FAILED
-            }
+            kss::contract::preconditions({
+                KSS_EXPR(isOpenFor(BinaryFile::reading))
+            });
 
             rewind();
             return input_iterator(*this);
@@ -332,10 +326,9 @@ namespace kss { namespace io { namespace file {
          @throws std::system_error if the underlying C routines return an error code.
          */
         output_iterator obegin() {
-            // preconditions
-            if (!(isOpenFor(BinaryFile::writing) || isOpenFor(BinaryFile::appending))) {
-                _KSSIO_PRECONDITIONS_FAILED
-            }
+            kss::contract::preconditions({
+                KSS_EXPR(isOpenFor(BinaryFile::writing) || isOpenFor(BinaryFile::appending))
+            });
 
             fastForward();
             return output_iterator(*this);
@@ -354,10 +347,9 @@ namespace kss { namespace io { namespace file {
         void setPosition(size_t recNo)  {
             BinaryFile::seek(recNo * sizeof(Record));
 
-            // postconditions
-            if (!(position() == recNo)) {
-                _KSSIO_POSTCONDITIONS_FAILED
-            }
+            kss::contract::postconditions({
+                KSS_EXPR(position() == recNo)
+            });
         }
         void rewind() noexcept      { BinaryFile::rewind(); }
         void fastForward()          { BinaryFile::fastForward(); }

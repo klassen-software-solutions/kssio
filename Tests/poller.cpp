@@ -21,8 +21,7 @@
 
 #include <kss/io/fileutil.hpp>
 #include <kss/io/poller.hpp>
-
-#include "ksstest.hpp"
+#include <kss/test/all.h>
 
 using namespace std;
 using namespace kss::io;
@@ -107,7 +106,7 @@ namespace {
 }
 
 
-static TestSuite ts("io::poller", {
+static TestSuite ts("poller", {
     make_pair("basic tests", [] {
         Poller p;
         KSS_ASSERT(throwsException<runtime_error>([&] { p.run(); }));

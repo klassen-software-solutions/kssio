@@ -17,6 +17,7 @@
 #include <vector>
 
 #include <net/if.h>
+#include <kss/util/all.h>
 
 #include "utility.hpp"
 
@@ -28,7 +29,7 @@ namespace kss {
             /*!
              Class to hold an description of an IPV4 address.
              */
-            class IpV4Address : public kss::io::_private::AddRelOps<IpV4Address> {
+            class IpV4Address : public kss::util::AddRelOps<IpV4Address> {
             public:
                 /*!
                  Construct an address.
@@ -85,7 +86,7 @@ namespace kss {
             /*!
              Class to hold and description a MAC (HW) address.
              */
-            class MacAddress : public kss::io::_private::AddRelOps<MacAddress> {
+            class MacAddress : public kss::util::AddRelOps<MacAddress> {
             public:
                 /*!
                  Construct an address from the C structure interface or from a string

@@ -20,6 +20,8 @@
 #include <string>
 #include <system_error>
 
+#include <kss/contract/all.h>
+
 #include <sys/stat.h>
 
 namespace kss {
@@ -129,9 +131,9 @@ namespace kss {
 #if defined(S_IFWHT)
                 return kss::io::file::_private::doStat(path, followLinks, S_IFWHT);
 #else
-                if (path.empty()) {
-                    throw std::invalid_argument("path is empty");
-                }
+                kss::contract::parameters({
+                    KSS_EXPR(!path.empty())
+                });
                 return false;
 #endif
             }

@@ -15,14 +15,14 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <kss/contract/all.h>
 
-#include "_contract.hpp"
 #include "socket.hpp"
 
 using namespace std;
 using namespace kss::io::net;
 
-namespace contract = kss::io::_private::contract;
+namespace contract = kss::contract;
 
 
 namespace {
